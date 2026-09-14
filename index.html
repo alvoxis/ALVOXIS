@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080706">
+  <meta name="description" content="ALVOXIS — personalized gifts made from your memories.">
+  <meta property="og:title" content="ALVOXIS — More Than a Gift">
+  <meta property="og:description" content="Your photo. Your memory. Your story.">
+  <title>ALVOXIS — More Than a Gift</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+  <a class="logo" href="#top" aria-label="ALVOXIS home">
+    ALVOXIS<span>♡</span>
+  </a>
+
+  <nav class="desktop-nav">
+    <a href="#products" data-i18n="navProducts">Products</a>
+    <a href="#how" data-i18n="navHow">How it works</a>
+    <a href="#contact" data-i18n="navContact">Contact</a>
+  </nav>
+
+  <div class="header-actions">
+
+    <select id="language" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="lv">LV</option>
+      <option value="ru">RU</option>
+    </select>
+
+    <button class="icon-btn" id="accountBtn" aria-label="Account">
+      ♙
+    </button>
+
+    <button class="icon-btn cart-btn" id="cartBtn" aria-label="Cart">
+      ♡
+      <b id="cartCount">0</b>
+    </button>
+
+  </div>
+
+</header>
+
+
+<main id="top">
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="hero-video hero-video-a">
+    <video
+      id="heroVideoA"
+      autoplay
+      muted
+      playsinline
+      preload="auto"
+      poster="video/video1.jpg">
+
+      <source src="video/video1.mp4" type="video/mp4">
+
+    </video>
+  </div>
+
+  <div class="hero-video hero-video-b">
+
+    <video
+      id="heroVideoB"
+      muted
+      playsinline
+      preload="auto"
+      poster="video/video2.jpg">
+
+      <source src="video/video2.mp4" type="video/mp4">
+
+    </video>
+
+  </div>
+
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+
+    <p class="eyebrow">
+      MORE THAN A GIFT
+    </p>
+
+    <h1>
+      Your photo.<br>
+      <em>Your memory.</em><br>
+      Your story.
+    </h1>
+
+    <p class="hero-copy" data-i18n="heroCopy">
+      Turn a special moment into a gift they will remember.
+    </p>
+
+    <a
+      class="primary-btn"
+      href="#products"
+      data-i18n="explore">
+
+      Explore gifts
+
+    </a>
+
+  </div>
+
+  <div class="scroll-note">
+    SCROLL <span>↓</span>
+  </div>
+
+</section>
+
+
+<!-- INTRO -->
+
+<section class="intro section">
+
+  <p class="eyebrow" data-i18n="eyebrow">
+    PERSONALIZED GIFTS
+  </p>
+
+  <h2 data-i18n="introTitle">
+    Some moments deserve to be remembered.
+  </h2>
+
+  <p class="lead" data-i18n="introText">
+    Choose a box, add your photo and write the words that matter.
+  </p>
+
+</section>
+
+
+<!-- PRODUCTS -->
+
+<section id="products" class="products section">
+
+  <div class="section-head">
+
+    <div>
+
+      <p class="eyebrow" data-i18n="collection">
+        THE COLLECTION
+      </p>
+
+      <h2 data-i18n="chooseBox">
+        Choose your box.
+      </h2>
+
+    </div>
+
+  </div>
+
+
+  <div class="product-grid">
+
+
+    <!-- MINI -->
+
+    <article class="product-card">
+
+      <div class="product-image">
+
+        <img
+          src="images/mini.jpg"
+          alt="ALVOXIS Mini gift box">
+
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-top">
+
+          <h3>Mini</h3>
+
+          <strong>€49,99</strong>
+
+        </div>
+
+        <p data-i18n="miniDesc">
+          A small box with a big emotion.
+        </p>
+
+        <ul>
+
+          <li data-i18n="puzzle">
+            A4 puzzle · 120 pieces
+          </li>
+
+          <li data-i18n="candle">
+            Candle
+          </li>
+
+          <li data-i18n="card">
+            Personalized card
+          </li>
+
+        </ul>
+
+        <button
+          class="outline-btn personalize"
+          data-product="mini"
+          data-price="49.99"
+          data-i18n="choose">
+
+          Personalize
+
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <!-- CLASSIC -->
+
+    <article class="product-card featured">
+
+      <div class="badge" data-i18n="popular">
+        MOST LOVED
+      </div>
+
+      <div class="product-image">
+
+        <img
+          src="images/classic.jpg"
+          alt="ALVOXIS Classic gift box">
+
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-top">
+
+          <h3>Classic</h3>
+
+          <strong>€59,99</strong>
+
+        </div>
+
+        <p data-i18n="classicDesc">
+          More sweetness, more memories.
+        </p>
+
+        <ul>
+
+          <li data-i18n="puzzle">
+            A4 puzzle · 120 pieces
+          </li>
+
+          <li data-i18n="candle">
+            Candle
+          </li>
+
+          <li data-i18n="card">
+            Personalized card
+          </li>
+
+          <li data-i18n="sweets">
+            Assorted sweets
+          </li>
+
+        </ul>
+
+        <button
+          class="outline-btn personalize"
+          data-product="classic"
+          data-price="59.99"
+          data-i18n="choose">
+
+          Personalize
+
+        </button>
+
+      </div>
+
+    </article>
+
+
+    <!-- POWERBANK -->
+
+    <article class="product-card">
+
+      <div class="product-image">
+
+        <img
+          src="images/powerbank.jpg"
+          alt="ALVOXIS Powerbank gift box">
+
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-top">
+
+          <h3>Powerbank</h3>
+
+          <strong>€75,99</strong>
+
+        </div>
+
+        <p data-i18n="powerDesc">
+          A memory with something useful to keep.
+        </p>
+
+        <ul>
+
+          <li data-i18n="puzzle">
+            A4 puzzle · 120 pieces
+          </li>
+
+          <li data-i18n="candle">
+            Candle
+          </li>
+
+          <li data-i18n="card">
+            Personalized card
+          </li>
+
+          <li data-i18n="power">
+            Magnetic powerbank
+          </li>
+
+        </ul>
+
+        <button
+          class="outline-btn personalize"
+          data-product="powerbank"
+          data-price="75.99"
+          data-i18n="choose">
+
+          Personalize
+
+        </button>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+
+<section id="how" class="steps section">
+
+  <p class="eyebrow" data-i18n="simple">
+    SIMPLE
+  </p>
+
+  <h2 data-i18n="howTitle">
+    Make it yours in three steps.
+  </h2>
+
+
+  <div class="step-grid">
+
+    <div>
+
+      <span>01</span>
+
+      <h3 data-i18n="step1Title">
+        Choose a box
+      </h3>
+
+      <p data-i18n="step1Text">
+        Pick the gift that fits your moment.
+      </p>
+
+    </div>
+
+
+    <div>
+
+      <span>02</span>
+
+      <h3 data-i18n="step2Title">
+        Add your photo
+      </h3>
+
+      <p data-i18n="step2Text">
+        Upload the photo that makes the memory yours.
+      </p>
+
+    </div>
+
+
+    <div>
+
+      <span>03</span>
+
+      <h3 data-i18n="step3Title">
+        Write a message
+      </h3>
+
+      <p data-i18n="step3Text">
+        Add a personal message for the card.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- WORLDWIDE -->
+
+<section class="world section">
+
+  <div>
+
+    <p class="eyebrow">
+      ALVOXIS
+    </p>
+
+    <h2 data-i18n="worldTitle">
+      Made to travel across the world.
+    </h2>
+
+    <p class="lead" data-i18n="worldText">
+      We deliver worldwide. Shipping is calculated separately according to the destination and delivery method.
+    </p>
+
+  </div>
+
+  <div class="world-mark">
+
+    ♡
+
+    <br>
+
+    <small>
+      WORLDWIDE
+    </small>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer id="contact">
+
+  <div>
+
+    <a class="logo" href="#top">
+      ALVOXIS<span>♡</span>
+    </a>
+
+    <p>
+      More than a gift.
+    </p>
+
+  </div>
+
+
+  <div>
+
+    <strong data-i18n="contact">
+      Contact
+    </strong>
+
+    <a href="mailto:alvoxis8@gmail.com">
+      alvoxis8@gmail.com
+    </a>
+
+    <a
+      href="https://instagram.com/alvoxis"
+      target="_blank"
+      rel="noopener">
+
+      @alvoxis
+
+    </a>
+
+  </div>
+
+
+  <div>
+
+    <strong data-i18n="shipping">
+      Shipping
+    </strong>
+
+    <p data-i18n="worldwide">
+      Worldwide delivery
+    </p>
+
+    <p data-i18n="shippingSeparate">
+      Shipping cost calculated separately.
+    </p>
+
+  </div>
+
+
+  <div>
+
+    <strong>
+      © 2026 ALVOXIS
+    </strong>
+
+    <p data-i18n="rights">
+      All rights reserved.
+    </p>
+
+  </div>
+
+</footer>
+
+
+<!-- PERSONALIZATION MODAL -->
+
+<div
+  class="modal"
+  id="personalizeModal"
+  aria-hidden="true">
+
+  <div class="modal-panel">
+
+    <button
+      class="close"
+      data-close="personalizeModal">
+
+      ×
+
+    </button>
+
+    <p
+      class="eyebrow"
+      data-i18n="personalizeEyebrow">
+
+      MAKE IT PERSONAL
+
+    </p>
+
+    <h2 id="modalProductName">
+      Mini
+    </h2>
+
+
+    <div class="upload-box">
+
+      <label
+        for="photoInput"
+        class="upload-label">
+
+        <span class="upload-icon">
+          ＋
+        </span>
+
+        <b data-i18n="upload">
+          Upload your photo
+        </b>
+
+        <small>
+          JPG, PNG, WEBP · max 10 MB
+        </small>
+
+        <input
+          id="photoInput"
+          type="file"
+          accept="image/jpeg,image/png,image/webp">
+
+      </label>
+
+      <img
+        id="photoPreview"
+        alt="Photo preview"
+        hidden>
+
+    </div>
+
+
+    <label class="field">
+
+      <span data-i18n="cardMessage">
+        Message for the card
+      </span>
+
+      <textarea
+        id="cardMessage"
+        maxlength="300"
+        placeholder="Write something meaningful...">
+      </textarea>
+
+      <small>
+        <span id="charCount">0</span>/300
+      </small>
+
+    </label>
+
+
+    <button
+      class="primary-btn full"
+      id="addToCart"
+      data-i18n="addCart">
+
+      Add to cart
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- CART -->
+
+<div
+  class="modal"
+  id="cartModal"
+  aria-hidden="true">
+
+  <div class="modal-panel">
+
+    <button
+      class="close"
+      data-close="cartModal">
+
+      ×
+
+    </button>
+
+    <p class="eyebrow">
+      ALVOXIS
+    </p>
+
+    <h2 data-i18n="yourCart">
+      Your cart
+    </h2>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-total">
+
+      <span data-i18n="total">
+        Total
+      </span>
+
+      <strong id="cartTotal">
+        €0,00
+      </strong>
+
+    </div>
+
+    <button
+      class="primary-btn full"
+      id="checkoutBtn"
+      data-i18n="checkout">
+
+      Checkout
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ACCOUNT -->
+
+<div
+  class="modal"
+  id="accountModal"
+  aria-hidden="true">
+
+  <div class="modal-panel account-panel">
+
+    <button
+      class="close"
+      data-close="accountModal">
+
+      ×
+
+    </button>
+
+    <p class="eyebrow">
+      ALVOXIS
+    </p>
+
+    <h2 data-i18n="account">
+      Your account
+    </h2>
+
+    <p
+      class="muted"
+      data-i18n="accountText">
+
+      Sign in to keep your orders and personalization details together.
+
+    </p>
+
+
+    <button class="social-btn">
+
+      
+
+      <span data-i18n="apple">
+        Continue with Apple
+      </span>
+
+    </button>
+
+
+    <button class="social-btn">
+
+      G
+
+      <span data-i18n="google">
+        Continue with Google
+      </span>
+
+    </button>
+
+
+    <button class="social-btn">
+
+      ✉
+
+      <span data-i18n="email">
+        Continue with Email
+      </span>
+
+    </button>
+
+
+    <small
+      class="muted"
+      data-i18n="oauthNote">
+
+      Authentication will be connected in the next backend stage.
+
+    </small>
+
+  </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
