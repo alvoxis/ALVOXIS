@@ -751,29 +751,3 @@ function renderCart() {
 
               €${item.price
                 .toFixed(2)
-               
-              const videoA = document.getElementById("heroVideoA");
-const videoB = document.getElementById("heroVideoB");
-
-const heroA = document.querySelector(".hero-video-a");
-const heroB = document.querySelector(".hero-video-b");
-
-if (videoA && videoB && heroA && heroB) {
-
-  videoA.addEventListener("ended", () => {
-    heroA.style.opacity = "0";
-    heroB.style.opacity = "1";
-
-    videoB.currentTime = 0;
-    videoB.play();
-  });
-
-  videoB.addEventListener("ended", () => {
-    heroB.style.opacity = "0";
-    heroA.style.opacity = "1";
-
-    videoA.currentTime = 0;
-    videoA.play();
-  });
-
-}
