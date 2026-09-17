@@ -750,4 +750,5 @@ function renderCart() {
             <small>
 
               €${item.price
-                .toFixed(2)
+                .toFixed(2);
+  }
