@@ -261,9 +261,8 @@ if(checkoutBtn){
       return;
     }
 
-    alert(
-      "Checkout will be connected to secure payment and order processing in the next backend stage."
-    );
+    closeModal("cartModal");
+    openModal("checkoutModal");
   });
 }
 
