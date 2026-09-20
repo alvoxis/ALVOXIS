@@ -6,6 +6,21 @@ const PRODUCTS = {
 };
 
 exports.handler = async (event) => {
+  const headers = {
+    "Access-Control-Allow-Origin": "https://alvoxis.github.io",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json"
+  };
+
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers,
+      body: ""
+    };
+  }
+
   try {
     if (event.httpMethod !== "POST") {
       return {
@@ -155,11 +170,8 @@ exports.handler = async (event) => {
     }
 
     return {
-      return {
   statusCode: 200,
-  headers: {
-    "Content-Type": "application/json"
-  },
+  headers,
   body: JSON.stringify({
     url: session.url
   })
