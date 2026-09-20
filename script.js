@@ -155,7 +155,83 @@ function saveCart(){
 
   renderCart();
 }
+const placeOrderBtn = $("#placeOrderBtn");
 
+if (placeOrderBtn) {
+  placeOrderBtn.addEventListener("click", async () => {
+    const customer = {
+      name: $("#checkoutName")?.value.trim() || "",
+      email: $("#checkoutEmail")?.value.trim() || "",
+      phone: $("#checkoutPhone")?.value.trim() || "",
+      country: $("#checkoutCountry")?.value.trim() || "",
+      city: $("#checkoutCity")?.value.trim() || "",
+      address: $("#checkoutAddress")?.value.trim() || "",
+      postal: $("#checkoutPostal")?.value.trim() || "",
+      comment: $("#checkoutComment")?.value.trim() || ""
+    };
+
+    if (
+      !customer.name ||
+      !customer.email ||
+      !customer.phone ||
+      !customer.country ||
+      !customer.city ||
+      !customer.address ||
+      !customer.postal
+    ) {
+      alert("Please complete all required fields.");
+      return;
+    }
+
+    const productNames = {
+      mini: "ALVOXIS Mini Gift Box",
+      classic: "ALVOXIS Classic Gift Box",
+      powerbank: "ALVOXIS Powerbank Gift Box",
+      "ALVOXIS Mini Gift Box": "ALVOXIS Mini Gift Box",
+      "ALVOXIS Classic Gift Box": "ALVOXIS Classic Gift Box",
+      "ALVOXIS Powerbank Gift Box": "ALVOXIS Powerbank Gift Box"
+    };
+
+    const items = cart.map(item => ({
+      product: productNames[item.product] || item.product,
+      quantity: 1
+    }));
+
+    placeOrderBtn.disabled = true;
+    placeOrderBtn.textContent = "Processing...";
+
+    try {
+      const response = await fetch(
+        "https://funny-strudel-054314.netlify.app/.netlify/functions/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            items,
+            customer
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || "Payment error");
+      }
+
+      window.location.href = data.url;
+
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Unable to start payment. Please try again.");
+
+      placeOrderBtn.disabled = false;
+      placeOrderBtn.textContent = "Continue to payment";
+    }
+  });
+}
 function renderCart(){
   const cartCount=$("#cartCount");
   const box=$("#cartItems");
