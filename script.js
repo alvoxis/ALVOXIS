@@ -154,6 +154,9 @@ function saveCart(){
   );
 
   renderCart();
+}
+
+  renderCart();
   const placeOrderBtn = $("#placeOrderBtn");
 
 if (placeOrderBtn) {
