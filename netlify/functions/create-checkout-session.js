@@ -155,10 +155,15 @@ exports.handler = async (event) => {
     }
 
     return {
-      statusCode: 303,
-      headers: {
-        Location: session.url
-      },
+      return {
+  statusCode: 200,
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    url: session.url
+  })
+};
       body: ""
     };
 
