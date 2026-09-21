@@ -488,31 +488,14 @@ renderCart();
   }
 
   
-
 function startEffect() {
-  const container = document.createElement("div");
-
-  container.className = "book-sparkle-container";
-
   const bookRect = book.getBoundingClientRect();
 
   const originX = bookRect.left + bookRect.width / 2;
   const originY = bookRect.top + bookRect.height / 2;
 
-  Object.assign(container.style, {
-    position: "fixed",
-    left: `${originX}px`,
-    top: `${originY}px`,
-    width: "0px",
-    height: "0px",
-    overflow: "visible",
-    pointerEvents: "none",
-    zIndex: "99999"
-  });
-
-  document.body.appendChild(container);
-
   const symbols = ["✦", "✧", "⋆", "✶", "•"];
+  const particles = [];
 
   for (let i = 0; i < 70; i++) {
     const particle = document.createElement("span");
@@ -530,15 +513,18 @@ function startEffect() {
       symbols[Math.floor(Math.random() * symbols.length)];
 
     Object.assign(particle.style, {
-      position: "absolute",
-      left: "0px",
-      top: "0px",
+      position: "fixed",
+      left: `${originX}px`,
+      top: `${originY}px`,
+      width: "max-content",
       color: Math.random() > 0.4
         ? "#f6d477"
         : "#fff4bd",
       fontSize: `${size}px`,
       fontWeight: "bold",
       opacity: "0",
+      pointerEvents: "none",
+      zIndex: "99999",
       transform: "translate(-50%, -50%) scale(0)",
       textShadow: `
         0 0 5px #fff4bd,
@@ -551,15 +537,16 @@ function startEffect() {
       `
     });
 
-    container.appendChild(particle);
+    document.body.appendChild(particle);
+    particles.push(particle);
 
     requestAnimationFrame(() => {
       particle.style.opacity = "1";
 
       particle.style.transform = `
         translate(
-          ${x}px,
-          ${y}px
+          calc(-50% + ${x}px),
+          calc(-50% + ${y}px)
         )
         scale(${0.7 + Math.random() * 1.5})
         rotate(${Math.random() * 720 - 360}deg)
@@ -572,6 +559,12 @@ function startEffect() {
   void book.offsetWidth;
 
   book.classList.add("is-flipping");
+
+  const container = {
+    remove() {
+      particles.forEach(particle => particle.remove());
+    }
+  };
 
   return container;
 }
