@@ -1417,3 +1417,463 @@ footer a:hover {
     transition-duration: .01ms !important;
   }
 }
+/* =========================================
+   ALVOXIS — INTERACTIVE BOOK
+========================================= */
+
+.book-section {
+  position: relative;
+  overflow: hidden;
+  padding-top: 110px;
+  padding-bottom: 100px;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(217, 178, 125, .09),
+      transparent 55%
+    ),
+    #0a0807;
+}
+
+.book-heading {
+  max-width: 850px;
+  margin: 0 auto 45px;
+  text-align: center;
+}
+
+.book-heading h2 {
+  margin: 0 0 18px;
+
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(48px, 6vw, 78px);
+  font-weight: 400;
+  line-height: .95;
+}
+
+.book-hint {
+  margin: 0;
+
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* BOOK FRAME */
+
+.book {
+  position: relative;
+
+  width: min(100%, 560px);
+  min-height: 700px;
+
+  margin: 0 auto;
+
+  perspective: 1800px;
+}
+
+/* PAGES */
+
+.book-page {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, .035),
+      transparent 40%
+    ),
+    #17120e;
+
+  border: 1px solid rgba(217, 178, 125, .25);
+  border-radius: 4px;
+
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, .45),
+    inset 0 0 0 1px rgba(255, 255, 255, .025);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateX(35px) rotateY(-8deg) scale(.98);
+
+  transition:
+    opacity .55s ease,
+    transform .7s cubic-bezier(.2, .65, .3, 1),
+    visibility .55s ease;
+
+  pointer-events: none;
+}
+
+.book-page.active {
+  position: relative;
+
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateX(0) rotateY(0) scale(1);
+
+  pointer-events: auto;
+
+  z-index: 2;
+}
+
+/* BOOK COVER */
+
+.book-cover {
+  min-height: 700px;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(217, 178, 125, .12),
+      transparent 35%
+    ),
+    radial-gradient(
+      ellipse at center,
+      rgba(217, 178, 125, .08),
+      transparent 60%
+    ),
+    #100c09;
+}
+
+.book-cover::before {
+  content: "";
+
+  position: absolute;
+  inset: 20px;
+
+  border: 1px solid rgba(217, 178, 125, .25);
+
+  pointer-events: none;
+}
+
+.book-page-content {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  padding: 45px 35px;
+}
+
+.book-page-content h2 {
+  margin: 0 0 30px;
+
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(52px, 8vw, 78px);
+  font-weight: 400;
+  line-height: .88;
+  letter-spacing: -.03em;
+}
+
+.book-page-content h2 em {
+  color: var(--gold-light);
+  font-style: italic;
+}
+
+.book-description {
+  max-width: 320px;
+  margin: 0 auto 30px;
+
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.book-cover-line {
+  width: 70px;
+  height: 1px;
+
+  margin: 30px auto;
+
+  background: var(--gold);
+}
+
+/* PRODUCT PAGE */
+
+.book-product-image {
+  position: relative;
+
+  width: 100%;
+  height: 360px;
+
+  overflow: hidden;
+
+  background: #0d0b09;
+}
+
+.book-product-image::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      0deg,
+      rgba(10, 8, 7, .45),
+      transparent 45%
+    );
+
+  pointer-events: none;
+}
+
+.book-product-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 1.2s ease;
+}
+
+.book-page.active .book-product-image img {
+  animation: bookImageReveal 1s ease both;
+}
+
+@keyframes bookImageReveal {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.book-product-content {
+  position: relative;
+
+  flex: 1;
+
+  padding: 30px 35px 35px;
+}
+
+.book-product-content h2 {
+  display: inline-block;
+
+  margin: 0 15px 15px 0;
+
+  font-family: "Cormorant Garamond", serif;
+  font-size: 52px;
+  font-weight: 400;
+  line-height: .9;
+}
+
+.book-price {
+  color: var(--gold-light);
+
+  font-size: 17px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.book-product-content > p:not(.eyebrow) {
+  margin: 8px 0 18px;
+
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.book-product-content ul {
+  padding: 0;
+  margin: 0 0 24px;
+
+  list-style: none;
+
+  color: #d7cec2;
+  font-size: 11px;
+  line-height: 2;
+}
+
+.book-product-content li::before {
+  content: "♡";
+
+  margin-right: 8px;
+  color: var(--gold);
+}
+
+.book-product-content .primary-btn {
+  margin-top: auto;
+}
+
+/* PAGE NUMBER */
+
+.book-page-number {
+  position: absolute;
+
+  right: 30px;
+  bottom: 25px;
+
+  color: var(--gold);
+
+  font-size: 10px;
+  letter-spacing: .2em;
+}
+
+/* FINAL PAGE */
+
+.book-final {
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(217, 178, 125, .1),
+      transparent 65%
+    ),
+    #100c09;
+}
+
+.book-final .book-description {
+  margin-bottom: 35px;
+}
+
+/* NAVIGATION */
+
+.book-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 28px;
+
+  margin-top: 30px;
+}
+
+.book-navigation span {
+  min-width: 65px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-align: center;
+}
+
+.book-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  background: transparent;
+  color: var(--cream);
+
+  border: 1px solid var(--line);
+  border-radius: 50%;
+
+  font-size: 18px;
+
+  transition:
+    color var(--transition),
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.book-arrow:hover {
+  color: #111;
+  background: var(--gold);
+  border-color: var(--gold);
+
+  transform: translateY(-2px);
+}
+
+/* MOBILE BOOK */
+
+@media (max-width: 800px) {
+  .book-section {
+    padding: 85px 20px;
+  }
+
+  .book-heading {
+    margin-bottom: 30px;
+  }
+
+  .book {
+    min-height: 650px;
+  }
+
+  .book-cover {
+    min-height: 650px;
+  }
+
+  .book-page-content {
+    padding: 35px 25px;
+  }
+
+  .book-product-image {
+    height: 310px;
+  }
+
+  .book-product-content {
+    padding: 25px 25px 35px;
+  }
+
+  .book-product-content h2 {
+    font-size: 48px;
+  }
+
+  .book-product-content > p:not(.eyebrow) {
+    font-size: 12px;
+  }
+
+  .book-product-content ul {
+    margin-bottom: 20px;
+    line-height: 1.9;
+  }
+
+  .book-page-number {
+    right: 22px;
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .book {
+    min-height: 610px;
+  }
+
+  .book-cover {
+    min-height: 610px;
+  }
+
+  .book-product-image {
+    height: 270px;
+  }
+
+  .book-product-content {
+    padding: 22px 20px 30px;
+  }
+
+  .book-product-content h2 {
+    font-size: 43px;
+  }
+
+  .book-product-content ul {
+    font-size: 10px;
+  }
+}
