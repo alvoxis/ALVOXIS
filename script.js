@@ -528,15 +528,15 @@ const originY = bookRect.top + bookRect.height / 2;
 
     Object.assign(particle.style, {
       position: "absolute",
-      left: `${originX}px`,
-      top: `${originY}px`,
+      left: "0px",
+      top: "0px",
       color: Math.random() > 0.4
         ? "#f6d477"
         : "#fff4bd",
       fontSize: `${size}px`,
       fontWeight: "bold",
       opacity: "0",
-      transform: "translate(-50%, -50%) scale(0)",
+      transform: `translate(${originX - size / 2}px, ${originY - size / 2}px) scale(0)`,
       textShadow: `
         0 0 5px #fff4bd,
         0 0 12px #e8b84e,
