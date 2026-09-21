@@ -582,30 +582,36 @@ function finishEffect(container) {
 }
 
 function turnForward() {
-    if (isAnimating) return;
+  if (isAnimating) return;
 
-    if (currentPage >= pages.length - 1) {
-      return;
-    }
+  if (currentPage >= pages.length - 1) {
+    return;
+  }
 
-    isAnimating = true;
+  isAnimating = true;
 
-    const particles = startEffect();
+  const particles = startEffect();
 
-    const current = pages[currentPage];
-    const next = pages[currentPage + 1];
+  const current = pages[currentPage];
+  const next = pages[currentPage + 1];
 
-    current.classList.remove("active");
+  current.classList.remove("active");
+  current.classList.add("turning-forward");
+
+  next.classList.remove("before");
+  next.classList.add("active");
+
+  currentPage++;
+
+  updateCounter();
+
+  setTimeout(() => {
+    current.classList.remove("turning-forward");
     current.classList.add("flipped");
 
-    next.classList.remove("before");
-    next.classList.add("active");
-
-    currentPage++;
-
-    updateCounter();
     finishEffect(particles);
-  }
+  }, 1100);
+}
 
   function turnBackward() {
     if (isAnimating) return;
