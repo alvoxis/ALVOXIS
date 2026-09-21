@@ -490,89 +490,96 @@ renderCart();
   
 
 function startEffect() {
+  const container = document.createElement("div");
+
+  container.className = "book-sparkle-container";
+
+  Object.assign(container.style, {
+    position: "fixed",
+    inset: "0",
+    width: "100vw",
+    height: "100vh",
+    overflow: "visible",
+    pointerEvents: "none",
+    zIndex: "99999"
+  });
+
+  document.body.appendChild(container);
+
+  const symbols = ["✦", "✧", "⋆", "✶", "•"];
+
+  for (let i = 0; i < 70; i++) {
+    const particle = document.createElement("span");
+
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 100 + Math.random() * 350;
+
+    const x = Math.cos(angle) * distance;
+    const y = Math.sin(angle) * distance;
+
+    const size = 5 + Math.random() * 14;
+    const duration = 700 + Math.random() * 600;
+
+    particle.textContent =
+      symbols[Math.floor(Math.random() * symbols.length)];
+
+    Object.assign(particle.style, {
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      color: Math.random() > 0.4
+        ? "#f6d477"
+        : "#fff4bd",
+      fontSize: `${size}px`,
+      fontWeight: "bold",
+      opacity: "0",
+      transform: "translate(-50%, -50%) scale(0)",
+      textShadow: `
+        0 0 5px #fff4bd,
+        0 0 12px #e8b84e,
+        0 0 25px #d49a35
+      `,
+      transition: `
+        transform ${duration}ms cubic-bezier(0.15, 0.8, 0.3, 1),
+        opacity ${duration}ms ease-out
+      `
+    });
+
+    container.appendChild(particle);
+
+    requestAnimationFrame(() => {
+      particle.style.opacity = "1";
+
+      particle.style.transform = `
+        translate(
+          calc(-50% + ${x}px),
+          calc(-50% + ${y}px)
+        )
+        scale(${0.7 + Math.random() * 1.5})
+        rotate(${Math.random() * 720 - 360}deg)
+      `;
+    });
+  }
+
   book.classList.remove("is-flipping");
 
   void book.offsetWidth;
 
   book.classList.add("is-flipping");
 
-  const container = document.createElement("div");
+  return container;
+}
 
-  container.className = "book-sparkle-container";
+function finishEffect(container) {
+  setTimeout(() => {
+    book.classList.remove("is-flipping");
 
-  Object.assign(container.style, {
-    position: "absolute",
-    inset: "0",
-    overflow: "hidden",
-    pointerEvents: "none",
-    zIndex: "100"
-  });
+    if (container) {
+      container.remove();
+    }
 
-  book.appendChild(container);
-
-  const symbols = ["✦", "✧", "⋆", "✶", "•", "·"];
-
-  for (let i = 0; i < 65; i++) {
-    const particle = document.createElement("span");
-
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 80 + Math.random() * 280;
-
-    const moveX = Math.cos(angle) * distance;
-    const moveY = Math.sin(angle) * distance;
-
-    const size = 3 + Math.random() * 13;
-    const delay = Math.random() * 180;
-    const duration = 650 + Math.random() * 600;
-    const rotation = Math.random() * 720 - 360;
-
-    const isStar = Math.random() > 0.55;
-
-    particle.textContent = isStar
-      ? symbols[Math.floor(Math.random() * symbols.length)]
-      : "•";
-
-    Object.assign(particle.style, {
-      position: "absolute",
-      left: "50%",
-      top: "50%",
-      color: Math.random() > 0.35
-        ? "#f6d477"
-        : "#fff1b0",
-      fontSize: size + "px",
-      fontWeight: "bold",
-      lineHeight: "1",
-      opacity: "0",
-      transform: "translate(-50%, -50%) scale(0.1)",
-      textShadow:
-        "0 0 4px #fff4bd, 0 0 10px #e8b84e, 0 0 22px #d49a35",
-      transition:
-        "transform " + duration + "ms cubic-bezier(0.15, 0.8, 0.3, 1), " +
-        "opacity " + duration + "ms ease-out"
-    });
-
-    container.appendChild(particle);
-
-    setTimeout(function () {
-      particle.style.opacity =
-        String(0.55 + Math.random() * 0.45);
-
-      particle.style.transform =
-        "translate(calc(-50% + " +
-        moveX +
-        "px), calc(-50% + " +
-        moveY +
-        "px)) scale(" +
-        (0.7 + Math.random() * 1.5) +
-        ") rotate(" +
-        rotation +
-        "deg)";
-    }, delay);
-  }
-
-  setTimeout(function () {
-    container.remove();
-  }, 1500);
+    isAnimating = false;
+  }, 1400);
 }
 function finishEffect() {
   setTimeout(() => {
@@ -599,7 +606,7 @@ function turnForward() {
 
     isAnimating = true;
 
-    startEffect();
+    const particles = startEffect();
 
     const current = pages[currentPage];
     const next = pages[currentPage + 1];
@@ -613,7 +620,7 @@ function turnForward() {
     currentPage++;
 
     updateCounter();
-    finishEffect();
+    finishEffect(particles);
   }
 
   function turnBackward() {
