@@ -417,8 +417,9 @@ applyLang();
 
 renderCart();
 
+
 /* =========================================
-   ALVOXIS — INTERACTIVE BOOK NAVIGATION
+   ALVOXIS — BOOK FLIP + MAGICAL EFFECTS
 ========================================= */
 
 (function () {
@@ -431,17 +432,35 @@ renderCart();
   const nextButton = document.getElementById("bookNext");
   const counter = document.getElementById("bookCounter");
 
-  if (!book || !pages.length || !prevButton || !nextButton || !counter) {
+  if (
+    !book ||
+    !pages.length ||
+    !prevButton ||
+    !nextButton ||
+    !counter
+  ) {
     return;
   }
 
   let currentPage = 0;
   let touchStartX = 0;
-  let touchEndX = 0;
+  let isAnimating = false;
 
   function updateBook() {
-    pages.forEach((page, index) => {
-      page.classList.toggle("active", index === currentPage);
+    pages.forEach(function (page, index) {
+      page.classList.remove(
+        "active",
+        "flipped",
+        "before"
+      );
+
+      if (index === currentPage) {
+        page.classList.add("active");
+      } else if (index < currentPage) {
+        page.classList.add("flipped");
+      } else {
+        page.classList.add("before");
+      }
     });
 
     counter.textContent =
@@ -450,12 +469,30 @@ renderCart();
       String(pages.length).padStart(2, "0");
 
     prevButton.disabled = currentPage === 0;
-    nextButton.disabled = currentPage === pages.length - 1;
+    nextButton.disabled =
+      currentPage === pages.length - 1;
   }
 
-  function goToPage(pageIndex) {
-    currentPage = Math.max(0, Math.min(pageIndex, pages.length - 1));
+  function goToPage(nextPage) {
+    if (isAnimating) return;
+
+    if (nextPage < 0 || nextPage >= pages.length) {
+      return;
+    }
+
+    if (nextPage === currentPage) return;
+
+    isAnimating = true;
+
+    book.classList.add("is-flipping");
+
+    currentPage = nextPage;
     updateBook();
+
+    setTimeout(function () {
+      book.classList.remove("is-flipping");
+      isAnimating = false;
+    }, 1100);
   }
 
   prevButton.addEventListener("click", function () {
@@ -466,31 +503,48 @@ renderCart();
     goToPage(currentPage + 1);
   });
 
-  book.addEventListener("touchstart", function (event) {
-    touchStartX = event.changedTouches[0].screenX;
-  }, { passive: true });
+  book.addEventListener(
+    "touchstart",
+    function (event) {
+      touchStartX =
+        event.changedTouches[0].screenX;
+    },
+    { passive: true }
+  );
 
-  book.addEventListener("touchend", function (event) {
-    touchEndX = event.changedTouches[0].screenX;
+  book.addEventListener(
+    "touchend",
+    function (event) {
+      const touchEndX =
+        event.changedTouches[0].screenX;
 
-    const swipeDistance = touchEndX - touchStartX;
+      const swipeDistance =
+        touchEndX - touchStartX;
 
-    if (Math.abs(swipeDistance) < 50) return;
+      if (Math.abs(swipeDistance) < 50) {
+        return;
+      }
 
-    if (swipeDistance < 0) {
-      goToPage(currentPage + 1);
-    } else {
-      goToPage(currentPage - 1);
-    }
-  }, { passive: true });
+      if (swipeDistance < 0) {
+        goToPage(currentPage + 1);
+      } else {
+        goToPage(currentPage - 1);
+      }
+    },
+    { passive: true }
+  );
 
-  const exploreAgain = document.querySelector(".book-final a");
+  const exploreAgain =
+    document.querySelector(".book-final a");
 
   if (exploreAgain) {
-    exploreAgain.addEventListener("click", function (event) {
-      event.preventDefault();
-      goToPage(0);
-    });
+    exploreAgain.addEventListener(
+      "click",
+      function (event) {
+        event.preventDefault();
+        goToPage(0);
+      }
+    );
   }
 
   updateBook();
