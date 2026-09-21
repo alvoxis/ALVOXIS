@@ -512,7 +512,7 @@ function startEffect() {
     const particle = document.createElement("span");
 
     const angle = Math.random() * Math.PI * 2;
-    const distance = 100 + Math.random() * 350;
+    const distance = 60 + Math.random() * 230;
 
     const x = Math.cos(angle) * distance;
     const y = Math.sin(angle) * distance;
