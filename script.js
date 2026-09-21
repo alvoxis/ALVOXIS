@@ -581,21 +581,6 @@ function finishEffect(container) {
     isAnimating = false;
   }, 1400);
 }
-function finishEffect() {
-  setTimeout(() => {
-    book.classList.remove("is-flipping");
-
-    const particles = book.querySelector(
-      ".book-sparkle-container"
-    );
-
-    if (particles) {
-      particles.remove();
-    }
-
-    isAnimating = false;
-  }, 1500);
-}
 
 function turnForward() {
     if (isAnimating) return;
@@ -632,7 +617,7 @@ function turnForward() {
 
     isAnimating = true;
 
-    startEffect();
+    const particles = startEffect();
 
     const current = pages[currentPage];
     const previous = pages[currentPage - 1];
@@ -646,7 +631,7 @@ function turnForward() {
     currentPage--;
 
     updateCounter();
-    finishEffect();
+    finishEffect(particles);
   }
 
   nextButton.addEventListener(
