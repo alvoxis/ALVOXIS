@@ -1877,3 +1877,98 @@ footer a:hover {
     font-size: 10px;
   }
 }
+/* =========================================
+   ALVOXIS — PAGE TURN ANIMATION
+========================================= */
+
+.book {
+  perspective: 1800px;
+  transform-style: preserve-3d;
+  overflow: visible !important;
+}
+
+.book-page {
+  position: absolute !important;
+  inset: 0 !important;
+
+  transform-origin: left center !important;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+
+  transition:
+    transform 1s cubic-bezier(.45, .05, .2, 1),
+    opacity .35s ease,
+    box-shadow 1s ease !important;
+}
+
+/* Текущая страница */
+.book-page.active {
+  position: relative !important;
+
+  transform:
+    perspective(1800px)
+    rotateY(0deg)
+    rotateX(0deg)
+    skewY(0deg)
+    translateX(0) !important;
+
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 10 !important;
+  pointer-events: auto !important;
+
+  box-shadow:
+    5px 5px 25px rgba(0, 0, 0, .2) !important;
+}
+
+/* Страница перелистывается */
+.book-page.flipped {
+  transform:
+    perspective(1800px)
+    rotateY(-180deg)
+    rotateX(4deg)
+    skewY(-1.5deg)
+    translateX(-10px) !important;
+
+  opacity: 0 !important;
+  visibility: visible !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+
+  box-shadow:
+    -12px 5px 30px rgba(0, 0, 0, .08) !important;
+}
+
+/* Страницы впереди */
+.book-page.before {
+  transform:
+    perspective(1800px)
+    rotateY(0deg)
+    rotateX(0deg)
+    translateX(0) !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+/* Более естественный край бумаги */
+.book-page::after {
+  content: "" !important;
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, .14),
+      transparent 16%,
+      transparent 84%,
+      rgba(255, 255, 255, .025)
+    );
+}
