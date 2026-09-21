@@ -1499,8 +1499,8 @@ footer a:hover {
     0 25px 80px rgba(0, 0, 0, .45),
     inset 0 0 0 1px rgba(255, 255, 255, .025);
 
-  opacity: 0;
-  visibility: hidden;
+  opacity: 1;
+  visibility: visible;
 
   transform: translateX(35px) rotateY(-8deg) scale(.98);
 
