@@ -555,12 +555,12 @@ const originY = bookRect.top + bookRect.height / 2;
 
       particle.style.transform = `
         translate(
-          calc(-50% + ${x}px),
-          calc(-50% + ${y}px)
-        )
-        scale(${0.7 + Math.random() * 1.5})
-        rotate(${Math.random() * 720 - 360}deg)
-      `;
+    ${originX + x - size / 2}px,
+    ${originY + y - size / 2}px
+  )
+  scale(${0.7 + Math.random() * 1.5})
+  rotate(${Math.random() * 720 - 360}deg)
+`;
     });
   }
 
