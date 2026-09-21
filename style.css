@@ -2217,3 +2217,96 @@ footer a:hover {
       rgba(0, 0, 0, 0.035)
     ) !important;
 }
+/* ========================================
+   ALVOXIS — FLEXIBLE PAPER PAGES
+======================================== */
+
+.book {
+  perspective: 1800px;
+  transform-style: preserve-3d;
+  overflow: visible !important;
+}
+
+.book-page {
+  transform-origin: left center !important;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+
+  transition:
+    transform 1.05s cubic-bezier(0.45, 0.05, 0.2, 1),
+    box-shadow 1.05s ease !important;
+
+  border-radius: 3px 12px 12px 3px;
+  box-shadow:
+    5px 4px 18px rgba(0, 0, 0, 0.08);
+
+  overflow: hidden;
+}
+
+/* Мягкая деформация уходящей страницы */
+.book-page.flipped {
+  transform:
+    perspective(1800px)
+    rotateY(-180deg)
+    rotateX(3deg)
+    skewY(-1deg)
+    translateX(-12px) !important;
+
+  box-shadow:
+    -10px 5px 25px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Страница перед глазами */
+.book-page.active {
+  transform:
+    perspective(1800px)
+    rotateY(0deg)
+    rotateX(0deg)
+    skewY(0deg) !important;
+
+  box-shadow:
+    5px 4px 20px rgba(0, 0, 0, 0.09) !important;
+}
+
+/* Тонкая тень вдоль корешка */
+.book-page::after {
+  content: "" !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 24px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.035),
+    transparent
+  );
+
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 51;
+}
+
+/* На телефоне — более мягкий изгиб */
+@media (max-width: 768px) {
+
+  .book-page {
+    border-radius: 2px 8px 8px 2px;
+
+    transition:
+      transform 0.95s cubic-bezier(0.45, 0.05, 0.2, 1),
+      box-shadow 0.95s ease !important;
+  }
+
+  .book-page.flipped {
+    transform:
+      perspective(1400px)
+      rotateY(-180deg)
+      rotateX(2deg)
+      skewY(-0.6deg)
+      translateX(-6px) !important;
+  }
+
+}
