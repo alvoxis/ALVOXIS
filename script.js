@@ -419,286 +419,98 @@ renderCart();
 
 
 
+
 /* =========================================
-   ALVOXIS — TRUE BOOK PAGE TURNING
+   ALVOXIS — REALISTIC PAGE FLIP
 ========================================= */
 
 (function () {
-  if (window.__alvoxisBookInitialized) return;
+  if (window.__alvoxisPageFlipInitialized) return;
 
-  window.__alvoxisBookInitialized = true;
+  window.__alvoxisPageFlipInitialized = true;
 
   const book = document.querySelector(".book");
-
   const pages = Array.from(
     document.querySelectorAll(".book-page")
   );
 
-  const prevButton =
-    document.getElementById("bookPrev");
-
-  const nextButton =
-    document.getElementById("bookNext");
-
-  const counter =
-    document.getElementById("bookCounter");
+  const prevButton = document.getElementById("bookPrev");
+  const nextButton = document.getElementById("bookNext");
+  const counter = document.getElementById("bookCounter");
 
   if (
     !book ||
     !pages.length ||
     !prevButton ||
     !nextButton ||
-    !counter
+    !counter ||
+    typeof St === "undefined" ||
+    !St.PageFlip
   ) {
+    console.error("ALVOXIS PageFlip could not be initialized.");
     return;
   }
 
-  let currentPage = 0;
-  let isAnimating = false;
-  let touchStartX = 0;
+  pages.forEach((page) => {
+    page.classList.remove("active", "before", "flipped");
+    page.style.position = "relative";
+    page.style.opacity = "1";
+    page.style.visibility = "visible";
+    page.style.pointerEvents = "auto";
+  });
 
-  function preparePages() {
-    pages.forEach(function (page, index) {
-      page.classList.remove(
-        "active",
-        "flipped",
-        "before"
-      );
+  const pageFlip = new St.PageFlip(book, {
+    width: 420,
+    height: 620,
+    size: "stretch",
+    minWidth: 280,
+    maxWidth: 700,
+    minHeight: 420,
+    maxHeight: 900,
+    drawShadow: true,
+    flippingTime: 1100,
+    usePortrait: true,
+    startPage: 0,
+    autoSize: true,
+    maxShadowOpacity: 0.45,
+    showCover: false,
+    mobileScrollSupport: true,
+    swipeDistance: 30
+  });
 
-      page.style.zIndex = pages.length - index;
-
-      if (index === 0) {
-        page.classList.add("active");
-      } else {
-        page.classList.add("before");
-      }
-    });
-  }
+  pageFlip.loadFromHTML(pages);
 
   function updateCounter() {
+    const current = pageFlip.getCurrentPageIndex();
+    const total = pages.length;
+
     counter.textContent =
-      String(currentPage + 1).padStart(2, "0") +
+      String(current + 1).padStart(2, "0") +
       " / " +
-      String(pages.length).padStart(2, "0");
+      String(total).padStart(2, "0");
 
-    prevButton.disabled = currentPage === 0;
-
-    nextButton.disabled =
-      currentPage === pages.length - 1;
+    prevButton.disabled = current === 0;
+    nextButton.disabled = current === total - 1;
   }
 
-  
-function startEffect() {
-  const bookRect = book.getBoundingClientRect();
+  nextButton.addEventListener("click", () => {
+    pageFlip.flipNext();
+  });
 
-  const originX = bookRect.left + bookRect.width / 2;
-  const originY = bookRect.top + bookRect.height / 2;
+  prevButton.addEventListener("click", () => {
+    pageFlip.flipPrev();
+  });
 
-  const symbols = ["✦", "✧", "⋆", "✶", "•"];
-  const particles = [];
+  pageFlip.on("flip", updateCounter);
 
-  for (let i = 0; i < 70; i++) {
-    const particle = document.createElement("span");
-
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 60 + Math.random() * 230;
-
-    const x = Math.cos(angle) * distance;
-    const y = Math.sin(angle) * distance;
-
-    const size = 5 + Math.random() * 14;
-    const duration = 500 + Math.random() * 400;
-
-    particle.textContent =
-      symbols[Math.floor(Math.random() * symbols.length)];
-
-    Object.assign(particle.style, {
-      position: "fixed",
-      left: `${originX}px`,
-      top: `${originY}px`,
-      width: "max-content",
-      color: Math.random() > 0.4
-        ? "#f6d477"
-        : "#fff4bd",
-      fontSize: `${size}px`,
-      fontWeight: "bold",
-      opacity: "0",
-      pointerEvents: "none",
-      zIndex: "99999",
-      transform: "translate(-50%, -50%) scale(0)",
-      textShadow: `
-        0 0 5px #fff4bd,
-        0 0 12px #e8b84e,
-        0 0 25px #d49a35
-      `,
-      transition: `
-        transform ${duration}ms cubic-bezier(0.15, 0.8, 0.3, 1),
-        opacity ${duration}ms ease-out
-      `
-    });
-
-    document.body.appendChild(particle);
-    particles.push(particle);
-
-    requestAnimationFrame(() => {
-      particle.style.opacity = "1";
-
-      particle.style.transform = `
-        translate(
-          calc(-50% + ${x}px),
-          calc(-50% + ${y}px)
-        )
-        scale(${0.7 + Math.random() * 1.5})
-        rotate(${Math.random() * 720 - 360}deg)
-      `;
-    });
-  }
-
-  book.classList.remove("is-flipping");
-
-  void book.offsetWidth;
-
-  book.classList.add("is-flipping");
-
-  const container = {
-    remove() {
-      particles.forEach(particle => particle.remove());
-    }
-  };
-
-  return container;
-}
-
-function finishEffect(container) {
-  setTimeout(() => {
-    book.classList.remove("is-flipping");
-
-    if (container) {
-      container.remove();
-    }
-
-    isAnimating = false;
-  }, 900);
-}
-
-function turnForward() {
-  if (isAnimating) return;
-
-  if (currentPage >= pages.length - 1) {
-    return;
-  }
-
-  isAnimating = true;
-
-  const particles = startEffect();
-
-  const current = pages[currentPage];
-  const next = pages[currentPage + 1];
-
-  current.classList.remove("active");
-  current.classList.add("turning-forward");
-
-  next.classList.remove("before");
-  next.classList.add("active");
-
-  currentPage++;
-
-  updateCounter();
-
-  setTimeout(() => {
-    current.classList.remove("turning-forward");
-    current.classList.add("flipped");
-
-    finishEffect(particles);
-  }, 1100);
-}
-
-  function turnBackward() {
-    if (isAnimating) return;
-
-    if (currentPage <= 0) {
-      return;
-    }
-
-    isAnimating = true;
-
-    const particles = startEffect();
-
-    const current = pages[currentPage];
-    const previous = pages[currentPage - 1];
-
-    current.classList.remove("active");
-    current.classList.add("before");
-
-    previous.classList.remove("flipped");
-    previous.classList.add("active");
-
-    currentPage--;
-
-    updateCounter();
-    finishEffect(particles);
-  }
-
-  nextButton.addEventListener(
-    "click",
-    turnForward
-  );
-
-  prevButton.addEventListener(
-    "click",
-    turnBackward
-  );
-
-  book.addEventListener(
-    "touchstart",
-    function (event) {
-      touchStartX =
-        event.changedTouches[0].screenX;
-    },
-    { passive: true }
-  );
-
-  book.addEventListener(
-    "touchend",
-    function (event) {
-      const touchEndX =
-        event.changedTouches[0].screenX;
-
-      const distance =
-        touchEndX - touchStartX;
-
-      if (Math.abs(distance) < 60) {
-        return;
-      }
-
-      if (distance < 0) {
-        turnForward();
-      } else {
-        turnBackward();
-      }
-    },
-    { passive: true }
-  );
-
-  const exploreAgain =
-    document.querySelector(".book-final a");
+  const exploreAgain = document.querySelector(".book-final a");
 
   if (exploreAgain) {
-    exploreAgain.addEventListener(
-      "click",
-      function (event) {
-        event.preventDefault();
-
-        if (isAnimating) return;
-
-        currentPage = 0;
-
-        preparePages();
-        updateCounter();
-      }
-    );
+    exploreAgain.addEventListener("click", (event) => {
+      event.preventDefault();
+      pageFlip.turnToPage(0);
+    });
   }
 
-  preparePages();
   updateCounter();
 })();
