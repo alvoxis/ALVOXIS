@@ -574,8 +574,23 @@ function startEffect() {
     container.remove();
   }, 1500);
 }
+function finishEffect() {
+  setTimeout(() => {
+    book.classList.remove("is-flipping");
 
-  function turnForward() {
+    const particles = book.querySelector(
+      ".book-sparkle-container"
+    );
+
+    if (particles) {
+      particles.remove();
+    }
+
+    isAnimating = false;
+  }, 1500);
+}
+
+function turnForward() {
     if (isAnimating) return;
 
     if (currentPage >= pages.length - 1) {
