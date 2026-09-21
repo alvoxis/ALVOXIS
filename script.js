@@ -505,7 +505,10 @@ function startEffect() {
   });
 
   document.body.appendChild(container);
+const bookRect = book.getBoundingClientRect();
 
+const originX = bookRect.left + bookRect.width / 2;
+const originY = bookRect.top + bookRect.height / 2;
   const symbols = ["✦", "✧", "⋆", "✶", "•"];
 
   for (let i = 0; i < 70; i++) {
@@ -525,8 +528,8 @@ function startEffect() {
 
     Object.assign(particle.style, {
       position: "absolute",
-      left: "50%",
-      top: "50%",
+      left: `${originX}px`,
+      top: `${originY}px`,
       color: Math.random() > 0.4
         ? "#f6d477"
         : "#fff4bd",
