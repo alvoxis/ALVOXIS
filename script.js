@@ -494,21 +494,24 @@ function startEffect() {
 
   container.className = "book-sparkle-container";
 
+  const bookRect = book.getBoundingClientRect();
+
+  const originX = bookRect.left + bookRect.width / 2;
+  const originY = bookRect.top + bookRect.height / 2;
+
   Object.assign(container.style, {
     position: "fixed",
-    inset: "0",
-    width: "100vw",
-    height: "100vh",
+    left: `${originX}px`,
+    top: `${originY}px`,
+    width: "0px",
+    height: "0px",
     overflow: "visible",
     pointerEvents: "none",
     zIndex: "99999"
   });
 
   document.body.appendChild(container);
-const bookRect = book.getBoundingClientRect();
 
-const originX = bookRect.left + bookRect.width / 2;
-const originY = bookRect.top + bookRect.height / 2;
   const symbols = ["✦", "✧", "⋆", "✶", "•"];
 
   for (let i = 0; i < 70; i++) {
@@ -536,7 +539,7 @@ const originY = bookRect.top + bookRect.height / 2;
       fontSize: `${size}px`,
       fontWeight: "bold",
       opacity: "0",
-      transform: `translate(${originX - size / 2}px, ${originY - size / 2}px) scale(0)`,
+      transform: "translate(-50%, -50%) scale(0)",
       textShadow: `
         0 0 5px #fff4bd,
         0 0 12px #e8b84e,
@@ -555,12 +558,12 @@ const originY = bookRect.top + bookRect.height / 2;
 
       particle.style.transform = `
         translate(
-    ${originX + x - size / 2}px,
-    ${originY + y - size / 2}px
-  )
-  scale(${0.7 + Math.random() * 1.5})
-  rotate(${Math.random() * 720 - 360}deg)
-`;
+          ${x}px,
+          ${y}px
+        )
+        scale(${0.7 + Math.random() * 1.5})
+        rotate(${Math.random() * 720 - 360}deg)
+      `;
     });
   }
 
