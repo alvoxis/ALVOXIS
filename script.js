@@ -488,6 +488,7 @@ renderCart();
   }
 
   
+
 function startEffect() {
   book.classList.remove("is-flipping");
 
@@ -495,64 +496,83 @@ function startEffect() {
 
   book.classList.add("is-flipping");
 
-  // Create magical golden particles
-  const sparkleContainer = document.createElement("div");
+  const container = document.createElement("div");
 
-  sparkleContainer.className = "book-sparkle-container";
+  container.className = "book-sparkle-container";
 
-  sparkleContainer.style.position = "absolute";
-  sparkleContainer.style.inset = "0";
-  sparkleContainer.style.overflow = "hidden";
-  sparkleContainer.style.pointerEvents = "none";
-  sparkleContainer.style.zIndex = "100";
+  Object.assign(container.style, {
+    position: "absolute",
+    inset: "0",
+    overflow: "hidden",
+    pointerEvents: "none",
+    zIndex: "100"
+  });
 
-  book.appendChild(sparkleContainer);
+  book.appendChild(container);
 
-  const symbols = ["✦", "✧", "⋆", "✶", "✷"];
+  const symbols = ["✦", "✧", "⋆", "✶", "•", "·"];
 
-  for (let i = 0; i < 28; i++) {
-    const sparkle = document.createElement("span");
+  for (let i = 0; i < 65; i++) {
+    const particle = document.createElement("span");
 
-    sparkle.textContent =
-      symbols[Math.floor(Math.random() * symbols.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 80 + Math.random() * 280;
 
-    const startX = 35 + Math.random() * 30;
-    const startY = 25 + Math.random() * 50;
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
 
-    const moveX = (Math.random() - 0.5) * 260;
-    const moveY = (Math.random() - 0.5) * 240;
-
-    const size = 8 + Math.random() * 14;
+    const size = 3 + Math.random() * 13;
     const delay = Math.random() * 180;
+    const duration = 650 + Math.random() * 600;
+    const rotation = Math.random() * 720 - 360;
 
-    sparkle.style.position = "absolute";
-    sparkle.style.left = startX + "%";
-    sparkle.style.top = startY + "%";
-    sparkle.style.color = "#f7d889";
-    sparkle.style.fontSize = size + "px";
-    sparkle.style.textShadow =
-      "0 0 6px #fff1b0, 0 0 18px #d9a441";
-    sparkle.style.opacity = "0";
-    sparkle.style.transform = "scale(0.2)";
-    sparkle.style.transition =
-      "transform 900ms ease-out, opacity 900ms ease-out";
+    const isStar = Math.random() > 0.55;
 
-    sparkleContainer.appendChild(sparkle);
+    particle.textContent = isStar
+      ? symbols[Math.floor(Math.random() * symbols.length)]
+      : "•";
+
+    Object.assign(particle.style, {
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      color: Math.random() > 0.35
+        ? "#f6d477"
+        : "#fff1b0",
+      fontSize: size + "px",
+      fontWeight: "bold",
+      lineHeight: "1",
+      opacity: "0",
+      transform: "translate(-50%, -50%) scale(0.1)",
+      textShadow:
+        "0 0 4px #fff4bd, 0 0 10px #e8b84e, 0 0 22px #d49a35",
+      transition:
+        "transform " + duration + "ms cubic-bezier(0.15, 0.8, 0.3, 1), " +
+        "opacity " + duration + "ms ease-out"
+    });
+
+    container.appendChild(particle);
 
     setTimeout(function () {
-      sparkle.style.opacity = "1";
-      sparkle.style.transform =
-        "translate(" +
+      particle.style.opacity =
+        String(0.55 + Math.random() * 0.45);
+
+      particle.style.transform =
+        "translate(calc(-50% + " +
         moveX +
-        "px, " +
+        "px), calc(-50% + " +
         moveY +
-        "px) scale(1.4) rotate(180deg)";
+        "px)) scale(" +
+        (0.7 + Math.random() * 1.5) +
+        ") rotate(" +
+        rotation +
+        "deg)";
     }, delay);
   }
 
   setTimeout(function () {
-    sparkleContainer.remove();
-  }, 1200);
+    container.remove();
+  }, 1500);
 }
 
   function turnForward() {
