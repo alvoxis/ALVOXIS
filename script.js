@@ -518,7 +518,7 @@ function startEffect() {
     const y = Math.sin(angle) * distance;
 
     const size = 5 + Math.random() * 14;
-    const duration = 700 + Math.random() * 600;
+    const duration = 500 + Math.random() * 400;
 
     particle.textContent =
       symbols[Math.floor(Math.random() * symbols.length)];
@@ -579,7 +579,7 @@ function finishEffect(container) {
     }
 
     isAnimating = false;
-  }, 1400);
+  }, 900);
 }
 
 function turnForward() {
