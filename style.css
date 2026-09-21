@@ -1877,3 +1877,77 @@ footer a:hover {
     font-size: 10px;
   }
 }
+
+/* =========================================
+   ALVOXIS — REALISTIC BOOK PAGE FLIP
+========================================= */
+
+.book {
+  position: relative;
+  perspective: 1800px;
+  transform-style: preserve-3d;
+}
+
+.book-page {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-height: 620px;
+  opacity: 1;
+  visibility: visible;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition:
+    transform 0.9s cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.book-page.active {
+  position: relative;
+  transform: rotateY(0deg);
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 5;
+}
+
+.book-page.flipped {
+  transform: rotateY(-180deg);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.book-page.before {
+  transform: rotateY(180deg);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.book-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.18),
+    transparent 22%,
+    transparent 78%,
+    rgba(0, 0, 0, 0.08)
+  );
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .book-page {
+    min-height: 680px;
+  }
+
+  .book {
+    perspective: 1200px;
+  }
+}
