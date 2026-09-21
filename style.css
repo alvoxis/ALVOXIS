@@ -2165,3 +2165,12 @@ footer a:hover {
     min-height: 680px;
   }
 }
+
+/* Remove old static sparkle row */
+.book::after {
+  content: none !important;
+}
+
+.book::before {
+  pointer-events: none;
+}
