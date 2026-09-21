@@ -416,3 +416,82 @@ startHeroVideos();
 applyLang();
 
 renderCart();
+
+/* =========================================
+   ALVOXIS — INTERACTIVE BOOK NAVIGATION
+========================================= */
+
+(function () {
+  if (window.__alvoxisBookInitialized) return;
+  window.__alvoxisBookInitialized = true;
+
+  const book = document.querySelector(".book");
+  const pages = document.querySelectorAll(".book-page");
+  const prevButton = document.getElementById("bookPrev");
+  const nextButton = document.getElementById("bookNext");
+  const counter = document.getElementById("bookCounter");
+
+  if (!book || !pages.length || !prevButton || !nextButton || !counter) {
+    return;
+  }
+
+  let currentPage = 0;
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  function updateBook() {
+    pages.forEach((page, index) => {
+      page.classList.toggle("active", index === currentPage);
+    });
+
+    counter.textContent =
+      String(currentPage + 1).padStart(2, "0") +
+      " / " +
+      String(pages.length).padStart(2, "0");
+
+    prevButton.disabled = currentPage === 0;
+    nextButton.disabled = currentPage === pages.length - 1;
+  }
+
+  function goToPage(pageIndex) {
+    currentPage = Math.max(0, Math.min(pageIndex, pages.length - 1));
+    updateBook();
+  }
+
+  prevButton.addEventListener("click", function () {
+    goToPage(currentPage - 1);
+  });
+
+  nextButton.addEventListener("click", function () {
+    goToPage(currentPage + 1);
+  });
+
+  book.addEventListener("touchstart", function (event) {
+    touchStartX = event.changedTouches[0].screenX;
+  }, { passive: true });
+
+  book.addEventListener("touchend", function (event) {
+    touchEndX = event.changedTouches[0].screenX;
+
+    const swipeDistance = touchEndX - touchStartX;
+
+    if (Math.abs(swipeDistance) < 50) return;
+
+    if (swipeDistance < 0) {
+      goToPage(currentPage + 1);
+    } else {
+      goToPage(currentPage - 1);
+    }
+  }, { passive: true });
+
+  const exploreAgain = document.querySelector(".book-final a");
+
+  if (exploreAgain) {
+    exploreAgain.addEventListener("click", function (event) {
+      event.preventDefault();
+      goToPage(0);
+    });
+  }
+
+  updateBook();
+})();
