@@ -2310,3 +2310,29 @@ footer a:hover {
   }
 
 }
+/* ========================================
+   ALVOXIS — FLEXIBLE PAPER MOVEMENT
+======================================== */
+
+.book-page {
+  transform-origin: left center !important;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.book-page.flipped {
+  transform:
+    perspective(1800px)
+    rotateY(-180deg)
+    rotateX(4deg)
+    skewY(-1deg)
+    translateX(-10px) !important;
+}
+
+.book-page.active {
+  transform:
+    perspective(1800px)
+    rotateY(0deg)
+    rotateX(0deg)
+    skewY(0deg) !important;
+}
