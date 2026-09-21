@@ -1877,3 +1877,76 @@ footer a:hover {
     font-size: 10px;
   }
 }
+
+/* =========================================
+   ALVOXIS — PAGEFLIP OVERRIDE
+========================================= */
+
+.book {
+  position: relative;
+  min-height: 700px;
+  perspective: none;
+}
+
+.book .book-page {
+  position: relative;
+  inset: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  min-height: 700px;
+
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+
+  pointer-events: auto;
+
+  transition: none;
+}
+
+.book .book-page.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+}
+
+.book .book-page.before,
+.book .book-page.flipped {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.stf__parent {
+  margin: 0 auto;
+}
+
+.stf__block {
+  background: transparent;
+}
+
+@media (max-width: 800px) {
+  .book {
+    min-height: 650px;
+  }
+
+  .book .book-page {
+    min-height: 650px;
+  }
+}
+
+@media (max-width: 380px) {
+  .book {
+    min-height: 610px;
+  }
+
+  .book .book-page {
+    min-height: 610px;
+  }
+}
