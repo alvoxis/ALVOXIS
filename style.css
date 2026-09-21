@@ -2057,3 +2057,111 @@ footer a:hover {
     transform: scale(1.5) rotate(8deg);
   }
 }
+
+/* =========================================
+   ALVOXIS — TRUE 3D BOOK STRUCTURE
+========================================= */
+
+.book {
+  position: relative !important;
+  display: block !important;
+  width: 100%;
+  min-height: 620px;
+  perspective: 2200px;
+  transform-style: preserve-3d;
+  overflow: visible !important;
+}
+
+/* Every page is placed in the same book stack */
+.book-page {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  min-height: 620px;
+  margin: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  backface-visibility: hidden;
+  transition:
+    transform 1s cubic-bezier(0.645, 0.045, 0.355, 1),
+    box-shadow 1s ease;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* First page occupies the normal layout space */
+.book-page:first-child {
+  position: relative !important;
+}
+
+/* Current visible page */
+.book-page.active {
+  transform: rotateY(0deg) !important;
+  z-index: 10;
+  pointer-events: auto;
+  box-shadow:
+    8px 0 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Pages already turned */
+.book-page.flipped {
+  transform: rotateY(-180deg) !important;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+/* Pages waiting to be turned */
+.book-page.before {
+  transform: rotateY(0deg) !important;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Page surface */
+.book-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.13),
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.06)
+    );
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Light along the book spine */
+.book-page::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.18),
+    transparent
+  );
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 51;
+}
+
+@media (max-width: 768px) {
+  .book {
+    min-height: 680px;
+    perspective: 1400px;
+  }
+
+  .book-page {
+    min-height: 680px;
+  }
+}
