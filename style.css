@@ -1950,3 +1950,31 @@ footer a:hover {
     min-height: 610px;
   }
 }
+/* FIX — SHOW BOOK CONTENT */
+
+.book-page,
+.book-page * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.book-page {
+  color: #f5f0e8 !important;
+  background: #111 !important;
+}
+
+.book-page img {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  max-width: 100%;
+}
+
+.book-page-content,
+.book-product-content,
+.book-product-image {
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 10;
+}
