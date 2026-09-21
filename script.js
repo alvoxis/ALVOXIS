@@ -487,20 +487,73 @@ renderCart();
       currentPage === pages.length - 1;
   }
 
-  function startEffect() {
-    book.classList.remove("is-flipping");
+  
+function startEffect() {
+  book.classList.remove("is-flipping");
 
-    void book.offsetWidth;
+  void book.offsetWidth;
 
-    book.classList.add("is-flipping");
-  }
+  book.classList.add("is-flipping");
 
-  function finishEffect() {
+  // Create magical golden particles
+  const sparkleContainer = document.createElement("div");
+
+  sparkleContainer.className = "book-sparkle-container";
+
+  sparkleContainer.style.position = "absolute";
+  sparkleContainer.style.inset = "0";
+  sparkleContainer.style.overflow = "hidden";
+  sparkleContainer.style.pointerEvents = "none";
+  sparkleContainer.style.zIndex = "100";
+
+  book.appendChild(sparkleContainer);
+
+  const symbols = ["✦", "✧", "⋆", "✶", "✷"];
+
+  for (let i = 0; i < 28; i++) {
+    const sparkle = document.createElement("span");
+
+    sparkle.textContent =
+      symbols[Math.floor(Math.random() * symbols.length)];
+
+    const startX = 35 + Math.random() * 30;
+    const startY = 25 + Math.random() * 50;
+
+    const moveX = (Math.random() - 0.5) * 260;
+    const moveY = (Math.random() - 0.5) * 240;
+
+    const size = 8 + Math.random() * 14;
+    const delay = Math.random() * 180;
+
+    sparkle.style.position = "absolute";
+    sparkle.style.left = startX + "%";
+    sparkle.style.top = startY + "%";
+    sparkle.style.color = "#f7d889";
+    sparkle.style.fontSize = size + "px";
+    sparkle.style.textShadow =
+      "0 0 6px #fff1b0, 0 0 18px #d9a441";
+    sparkle.style.opacity = "0";
+    sparkle.style.transform = "scale(0.2)";
+    sparkle.style.transition =
+      "transform 900ms ease-out, opacity 900ms ease-out";
+
+    sparkleContainer.appendChild(sparkle);
+
     setTimeout(function () {
-      book.classList.remove("is-flipping");
-      isAnimating = false;
-    }, 1000);
+      sparkle.style.opacity = "1";
+      sparkle.style.transform =
+        "translate(" +
+        moveX +
+        "px, " +
+        moveY +
+        "px) scale(1.4) rotate(180deg)";
+    }, delay);
   }
+
+  setTimeout(function () {
+    sparkleContainer.remove();
+  }, 1200);
+}
 
   function turnForward() {
     if (isAnimating) return;
