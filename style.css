@@ -2174,3 +2174,46 @@ footer a:hover {
 .book::before {
   pointer-events: none;
 }
+/* Мягкое перелистывание страниц */
+.book-page {
+  transform-origin: left center !important;
+  transition:
+    transform 1.25s cubic-bezier(0.45, 0.05, 0.25, 1),
+    box-shadow 1.25s ease !important;
+  will-change: transform;
+}
+
+/* Страница уходит плавно, как бумага */
+.book-page.flipped {
+  transform:
+    perspective(2200px)
+    rotateY(-180deg)
+    rotateZ(-1deg)
+    translateX(-8px) !important;
+
+  box-shadow:
+    -12px 0 28px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Следующая страница появляется мягче */
+.book-page.active {
+  transform:
+    perspective(2200px)
+    rotateY(0deg)
+    rotateZ(0deg) !important;
+
+  box-shadow:
+    5px 0 18px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Лёгкая текстура бумажного края */
+.book-page::before {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.09),
+      transparent 12%,
+      transparent 88%,
+      rgba(0, 0, 0, 0.035)
+    ) !important;
+}
