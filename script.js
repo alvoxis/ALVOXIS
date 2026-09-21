@@ -418,19 +418,30 @@ applyLang();
 renderCart();
 
 
+
 /* =========================================
-   ALVOXIS — BOOK FLIP + MAGICAL EFFECTS
+   ALVOXIS — TRUE BOOK PAGE TURNING
 ========================================= */
 
 (function () {
   if (window.__alvoxisBookInitialized) return;
+
   window.__alvoxisBookInitialized = true;
 
   const book = document.querySelector(".book");
-  const pages = document.querySelectorAll(".book-page");
-  const prevButton = document.getElementById("bookPrev");
-  const nextButton = document.getElementById("bookNext");
-  const counter = document.getElementById("bookCounter");
+
+  const pages = Array.from(
+    document.querySelectorAll(".book-page")
+  );
+
+  const prevButton =
+    document.getElementById("bookPrev");
+
+  const nextButton =
+    document.getElementById("bookNext");
+
+  const counter =
+    document.getElementById("bookCounter");
 
   if (
     !book ||
@@ -443,10 +454,10 @@ renderCart();
   }
 
   let currentPage = 0;
-  let touchStartX = 0;
   let isAnimating = false;
+  let touchStartX = 0;
 
-  function updateBook() {
+  function preparePages() {
     pages.forEach(function (page, index) {
       page.classList.remove(
         "active",
@@ -454,54 +465,104 @@ renderCart();
         "before"
       );
 
-      if (index === currentPage) {
+      page.style.zIndex = pages.length - index;
+
+      if (index === 0) {
         page.classList.add("active");
-      } else if (index < currentPage) {
-        page.classList.add("flipped");
       } else {
         page.classList.add("before");
       }
     });
+  }
 
+  function updateCounter() {
     counter.textContent =
       String(currentPage + 1).padStart(2, "0") +
       " / " +
       String(pages.length).padStart(2, "0");
 
     prevButton.disabled = currentPage === 0;
+
     nextButton.disabled =
       currentPage === pages.length - 1;
   }
 
-  function goToPage(nextPage) {
-    if (isAnimating) return;
+  function startEffect() {
+    book.classList.remove("is-flipping");
 
-    if (nextPage < 0 || nextPage >= pages.length) {
-      return;
-    }
-
-    if (nextPage === currentPage) return;
-
-    isAnimating = true;
+    void book.offsetWidth;
 
     book.classList.add("is-flipping");
+  }
 
-    currentPage = nextPage;
-    updateBook();
-
+  function finishEffect() {
     setTimeout(function () {
       book.classList.remove("is-flipping");
       isAnimating = false;
-    }, 1100);
+    }, 1000);
   }
 
-  prevButton.addEventListener("click", function () {
-    goToPage(currentPage - 1);
-  });
+  function turnForward() {
+    if (isAnimating) return;
 
-  nextButton.addEventListener("click", function () {
-    goToPage(currentPage + 1);
-  });
+    if (currentPage >= pages.length - 1) {
+      return;
+    }
+
+    isAnimating = true;
+
+    startEffect();
+
+    const current = pages[currentPage];
+    const next = pages[currentPage + 1];
+
+    current.classList.remove("active");
+    current.classList.add("flipped");
+
+    next.classList.remove("before");
+    next.classList.add("active");
+
+    currentPage++;
+
+    updateCounter();
+    finishEffect();
+  }
+
+  function turnBackward() {
+    if (isAnimating) return;
+
+    if (currentPage <= 0) {
+      return;
+    }
+
+    isAnimating = true;
+
+    startEffect();
+
+    const current = pages[currentPage];
+    const previous = pages[currentPage - 1];
+
+    current.classList.remove("active");
+    current.classList.add("before");
+
+    previous.classList.remove("flipped");
+    previous.classList.add("active");
+
+    currentPage--;
+
+    updateCounter();
+    finishEffect();
+  }
+
+  nextButton.addEventListener(
+    "click",
+    turnForward
+  );
+
+  prevButton.addEventListener(
+    "click",
+    turnBackward
+  );
 
   book.addEventListener(
     "touchstart",
@@ -518,17 +579,17 @@ renderCart();
       const touchEndX =
         event.changedTouches[0].screenX;
 
-      const swipeDistance =
+      const distance =
         touchEndX - touchStartX;
 
-      if (Math.abs(swipeDistance) < 50) {
+      if (Math.abs(distance) < 60) {
         return;
       }
 
-      if (swipeDistance < 0) {
-        goToPage(currentPage + 1);
+      if (distance < 0) {
+        turnForward();
       } else {
-        goToPage(currentPage - 1);
+        turnBackward();
       }
     },
     { passive: true }
@@ -542,10 +603,17 @@ renderCart();
       "click",
       function (event) {
         event.preventDefault();
-        goToPage(0);
+
+        if (isAnimating) return;
+
+        currentPage = 0;
+
+        preparePages();
+        updateCounter();
       }
     );
   }
 
-  updateBook();
+  preparePages();
+  updateCounter();
 })();
