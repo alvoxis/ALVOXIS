@@ -487,8 +487,12 @@ renderCart();
 
   pageFlip.loadFromHTML(pages);
 
-  function updateCounter() {
-    const currentPage = pageFlip.getCurrentPageIndex();
+    function updateCounter(pageIndex) {
+    const currentPage =
+      typeof pageIndex === "number"
+        ? pageIndex
+        : pageFlip.getCurrentPageIndex();
+
     const totalPages = pages.length;
 
     counter.textContent =
@@ -499,6 +503,7 @@ renderCart();
     prevButton.disabled = currentPage === 0;
     nextButton.disabled = currentPage >= totalPages - 1;
   }
+
 
   nextButton.addEventListener("click", function (event) {
     event.preventDefault();
@@ -532,8 +537,8 @@ renderCart();
     });
   }
 
-  pageFlip.on("flip", function () {
-    updateCounter();
+    pageFlip.on('flip', function (e) {
+    updateCounter(e.data);
   });
 
   updateCounter();
