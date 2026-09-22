@@ -117,8 +117,8 @@ if(photoInput){
 
     if(!file)return;
 
-    if(file.size>10*1024*1024){
-      alert("Please choose an image up to 10 MB.");
+        if(file.size>10*1024*1024){
+      alert(t("photoSizeError"));
       e.target.value="";
       return;
     }
@@ -182,7 +182,7 @@ if (placeOrderBtn) {
       !customer.address ||
       !customer.postal
     ) {
-      alert("Please complete all required fields.");
+            alert(t("requiredFields"));
       return;
     }
 
@@ -201,7 +201,7 @@ if (placeOrderBtn) {
     }));
 
     placeOrderBtn.disabled = true;
-    placeOrderBtn.textContent = "Processing...";
+        placeOrderBtn.textContent = t("processing");
 
     try {
       const response = await fetch(
@@ -228,10 +228,10 @@ if (placeOrderBtn) {
 
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Unable to start payment. Please try again.");
+            alert(t("paymentError"));
 
       placeOrderBtn.disabled = false;
-      placeOrderBtn.textContent = "Continue to payment";
+      placeOrderBtn.textContent = t("continuePayment");
     }
   });
 }
@@ -336,8 +336,8 @@ const checkoutBtn=$("#checkoutBtn");
 
 if(checkoutBtn){
   checkoutBtn.addEventListener("click",()=>{
-    if(!cart.length){
-      alert("Your cart is empty.");
+        if(!cart.length){
+      alert(t("cartEmpty"));
       return;
     }
 
