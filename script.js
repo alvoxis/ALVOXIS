@@ -529,4 +529,5 @@ prevButton.addEventListener("click", function (event) {
   }
 
   updateCounter();
+  pageFlip.on("flip", updateCounter);
 })();
