@@ -421,13 +421,11 @@ renderCart();
 
 
 /* =========================================
-   ALVOXIS — REALISTIC PAGE FLIP
+   ALVOXIS — STABLE PAGE FLIP
 ========================================= */
 
 (function () {
   if (window.__alvoxisPageFlipInitialized) return;
-
-  window.__alvoxisPageFlipInitialized = true;
 
   const book = document.querySelector(".book");
   const pages = Array.from(
@@ -451,62 +449,80 @@ renderCart();
     return;
   }
 
-  pages.forEach((page) => {
-    page.classList.remove("active", "before", "flipped");
-    page.style.position = "relative";
-    page.style.opacity = "1";
-    page.style.visibility = "visible";
-    page.style.pointerEvents = "auto";
-  });
+  window.__alvoxisPageFlipInitialized = true;
 
   const pageFlip = new St.PageFlip(book, {
     width: 420,
     height: 620,
+
     size: "stretch",
+
     minWidth: 280,
     maxWidth: 700,
+
     minHeight: 420,
     maxHeight: 900,
+
     drawShadow: true,
-    flippingTime: 1100,
+    maxShadowOpacity: 0.4,
+
+    flippingTime: 850,
+
     usePortrait: true,
     startPage: 0,
     autoSize: true,
-    maxShadowOpacity: 0.45,
+
     showCover: false,
-    mobileScrollSupport: true,
-    swipeDistance: 30
+
+    // Книга управляется отдельно от обычного скролла
+    mobileScrollSupport: false,
+
+    // Увеличиваем расстояние для свайпа
+    swipeDistance: 60,
+
+    // Не перелистывать случайно по нажатию
+    clickEventForward: false
   });
 
   pageFlip.loadFromHTML(pages);
 
   function updateCounter() {
-    const current = pageFlip.getCurrentPageIndex();
-    const total = pages.length;
+    const currentPage = pageFlip.getCurrentPageIndex();
+    const totalPages = pages.length;
 
     counter.textContent =
-      String(current + 1).padStart(2, "0") +
+      String(currentPage + 1).padStart(2, "0") +
       " / " +
-      String(total).padStart(2, "0");
+      String(totalPages).padStart(2, "0");
 
-    prevButton.disabled = current === 0;
-    nextButton.disabled = current === total - 1;
+    prevButton.disabled = currentPage <= 0;
+    nextButton.disabled = currentPage >= totalPages - 1;
   }
 
-  nextButton.addEventListener("click", () => {
-    pageFlip.flipNext();
+  nextButton.addEventListener("click", function () {
+    const currentPage = pageFlip.getCurrentPageIndex();
+
+    if (currentPage < pages.length - 1) {
+      pageFlip.flipNext();
+    }
   });
 
-  prevButton.addEventListener("click", () => {
-    pageFlip.flipPrev();
+  prevButton.addEventListener("click", function () {
+    const currentPage = pageFlip.getCurrentPageIndex();
+
+    if (currentPage > 0) {
+      pageFlip.flipPrev();
+    }
   });
 
-  pageFlip.on("flip", updateCounter);
+  pageFlip.on("flip", function () {
+    updateCounter();
+  });
 
   const exploreAgain = document.querySelector(".book-final a");
 
   if (exploreAgain) {
-    exploreAgain.addEventListener("click", (event) => {
+    exploreAgain.addEventListener("click", function (event) {
       event.preventDefault();
       pageFlip.turnToPage(0);
     });
