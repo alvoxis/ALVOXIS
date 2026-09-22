@@ -511,7 +511,7 @@ renderCart();
     event.stopPropagation();
 
     if (currentPageIndex < totalPages - 1) {
-      pageFlip.flipNext("bottom");
+      pageFlip.flipNext("top");
       currentPageIndex += 1;
       updateCounter();
     }
