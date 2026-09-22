@@ -421,7 +421,7 @@ renderCart();
 
 
 /* =========================================
-   ALVOXIS — STABLE PAGE FLIP
+   ALVOXIS — PAGE FLIP
 ========================================= */
 
 (function () {
@@ -473,14 +473,10 @@ renderCart();
     autoSize: true,
 
     showCover: false,
-
-    // Книга управляется отдельно от обычного скролла
     mobileScrollSupport: false,
 
-    // Увеличиваем расстояние для свайпа
     swipeDistance: 60,
 
-    // Не перелистывать случайно по нажатию
     clickEventForward: false,
     disableFlipByClick: true
   });
@@ -496,40 +492,46 @@ renderCart();
       " / " +
       String(totalPages).padStart(2, "0");
 
-    prevButton.disabled = currentPage <= 0;
+    prevButton.disabled = currentPage === 0;
     nextButton.disabled = currentPage >= totalPages - 1;
   }
 
-nextButton.addEventListener("click", function (event) {
-  event.preventDefault();
-  event.stopPropagation();
+  nextButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-  pageFlip.flipNext();
-});
+    if (!nextButton.disabled) {
+      pageFlip.flipNext();
+    }
+  });
 
-prevButton.addEventListener("click", function (event) {
-  event.preventDefault();
-  event.stopPropagation();
+  prevButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-  const currentPage = pageFlip.getCurrentPageIndex();
-
-  if (currentPage > 0) {
-    pageFlip.flipPrev("top");
-  }
-});
+    if (!prevButton.disabled) {
+      pageFlip.flipPrev();
+    }
+  });
 
   const exploreAgain = document.querySelector(".book-final a");
 
   if (exploreAgain) {
     exploreAgain.addEventListener("click", function (event) {
       event.preventDefault();
+
       pageFlip.turnToPage(0);
-      updateCounter();
+
+      setTimeout(() => {
+        updateCounter();
+      }, 100);
     });
   }
 
-  updateCounter();
   pageFlip.on("flip", function () {
+    updateCounter();
+  });
+
   updateCounter();
-});
+
 })();
