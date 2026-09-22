@@ -500,10 +500,7 @@ renderCart();
     nextButton.disabled = currentPage >= totalPages - 1;
   }
 
-  let isFlipping = false;
-
 nextButton.addEventListener("click", function () {
-  if (isFlipping) return;
 
   const currentPage = pageFlip.getCurrentPageIndex();
 
@@ -514,7 +511,6 @@ nextButton.addEventListener("click", function () {
 });
 
 prevButton.addEventListener("click", function () {
-  if (isFlipping) return;
 
   const currentPage = pageFlip.getCurrentPageIndex();
 
@@ -526,10 +522,6 @@ prevButton.addEventListener("click", function () {
 
 pageFlip.on("flip", function () {
   updateCounter();
-
-  setTimeout(function () {
-    isFlipping = false;
-  }, 900);
 });
 
   pageFlip.on("flip", function () {
