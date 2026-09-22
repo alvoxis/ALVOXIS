@@ -517,12 +517,12 @@ renderCart();
     }
   });
 
-  prevButton.addEventListener("click", function (event) {
+    prevButton.addEventListener("click", function (event) {
     event.preventDefault();
     event.stopPropagation();
 
     if (currentPageIndex > 0) {
-      pageFlip.flipPrev("bottom");
+      pageFlip.flip(currentPageIndex - 1, "top");
       currentPageIndex -= 1;
       updateCounter();
     }
