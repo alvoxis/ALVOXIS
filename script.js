@@ -246,9 +246,9 @@ function renderCart(){
 
   if(!box||!totalEl)return;
 
-  if(!cart.length){
+    if(!cart.length){
     box.innerHTML=
-      '<p class="muted">Your cart is empty.</p>';
+      `<p class="muted">${t("cartEmpty")}</p>`;
 
     totalEl.textContent="€0,00";
     return;
@@ -260,16 +260,17 @@ function renderCart(){
         <b>${x.product}</b>
         <small>
           €${x.price.toFixed(2).replace(".",",")}
-          ${x.message?" · personalized card":""}
-          ${x.hasPhoto?" · photo added":""}
+          ${x.message?" · "+t("personalizedCard"):""}
+          ${x.hasPhoto?" · "+t("photoAdded"):""}
         </small>
       </div>
 
       <button class="remove" data-remove="${i}">
-        Remove
+        ${t("remove")}
       </button>
     </div>
   `).join("");
+
 
   const total=cart.reduce(
     (sum,x)=>sum+x.price,
