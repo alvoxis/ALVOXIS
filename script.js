@@ -500,24 +500,18 @@ renderCart();
     nextButton.disabled = currentPage >= totalPages - 1;
   }
 
-nextButton.addEventListener("click", function () {
-  const currentPage = pageFlip.getCurrentPageIndex();
+nextButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  event.stopPropagation();
 
-  if (currentPage < pages.length - 1) {
-    pageFlip.turnToPage(currentPage + 1);
-  }
+  pageFlip.flipNext();
 });
 
-prevButton.addEventListener("click", function () {
-  const currentPage = pageFlip.getCurrentPageIndex();
+prevButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  event.stopPropagation();
 
-  if (currentPage > 0) {
-    pageFlip.turnToPage(currentPage - 1);
-  }
-});
-
-pageFlip.on("flip", function () {
-  updateCounter();
+  pageFlip.flipPrev();
 });
 
   const exploreAgain = document.querySelector(".book-final a");
