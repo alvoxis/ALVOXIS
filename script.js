@@ -511,7 +511,7 @@ renderCart();
     event.stopPropagation();
 
     if (currentPageIndex < totalPages - 1) {
-      pageFlip.flipNext("top");
+      pageFlip.flipNext("bottom");
       currentPageIndex += 1;
       updateCounter();
     }
@@ -522,7 +522,7 @@ renderCart();
     event.stopPropagation();
 
     if (currentPageIndex > 0) {
-      pageFlip.flipPrev("top");
+      pageFlip.flipPrev("bottom");
       currentPageIndex -= 1;
       updateCounter();
     }
