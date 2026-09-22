@@ -481,8 +481,9 @@ renderCart();
 
     swipeDistance: 60,
 
-    clickEventForward: false,
+        clickEventForward: true,
     disableFlipByClick: true
+
   });
 
   pageFlip.loadFromHTML(pages);
@@ -505,12 +506,13 @@ renderCart();
   }
 
 
-  nextButton.addEventListener("click", function (event) {
+    nextButton.addEventListener("click", function (event) {
     event.preventDefault();
     event.stopPropagation();
 
     if (!nextButton.disabled) {
       pageFlip.flipNext();
+      updateCounter();
     }
   });
 
@@ -520,6 +522,7 @@ renderCart();
 
     if (!prevButton.disabled) {
       pageFlip.flipPrev();
+      updateCounter();
     }
   });
 
