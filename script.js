@@ -506,12 +506,12 @@ renderCart();
     nextButton.disabled = currentPageIndex >= totalPages - 1;
   }
 
-  nextButton.addEventListener("click", function (event) {
+    nextButton.addEventListener("click", function (event) {
     event.preventDefault();
     event.stopPropagation();
 
     if (currentPageIndex < totalPages - 1) {
-      pageFlip.flipNext();
+      pageFlip.flipNext("top");
       currentPageIndex += 1;
       updateCounter();
     }
@@ -522,7 +522,7 @@ renderCart();
     event.stopPropagation();
 
     if (currentPageIndex > 0) {
-      pageFlip.flipPrev();
+      pageFlip.flipPrev("top");
       currentPageIndex -= 1;
       updateCounter();
     }
