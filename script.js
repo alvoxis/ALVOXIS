@@ -481,7 +481,8 @@ renderCart();
     swipeDistance: 60,
 
     // Не перелистывать случайно по нажатию
-    clickEventForward: false
+    clickEventForward: false,
+    disableFlipByClick: true
   });
 
   pageFlip.loadFromHTML(pages);
