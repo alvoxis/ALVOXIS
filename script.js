@@ -504,7 +504,7 @@ nextButton.addEventListener("click", function () {
   const currentPage = pageFlip.getCurrentPageIndex();
 
   if (currentPage < pages.length - 1) {
-    pageFlip.flipNext();
+    pageFlip.turnToPage(currentPage + 1);
   }
 });
 
@@ -512,7 +512,7 @@ prevButton.addEventListener("click", function () {
   const currentPage = pageFlip.getCurrentPageIndex();
 
   if (currentPage > 0) {
-    pageFlip.flipPrev();
+    pageFlip.turnToPage(currentPage - 1);
   }
 });
 
@@ -526,6 +526,7 @@ pageFlip.on("flip", function () {
     exploreAgain.addEventListener("click", function (event) {
       event.preventDefault();
       pageFlip.turnToPage(0);
+      updateCounter();
     });
   }
 
