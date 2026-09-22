@@ -511,7 +511,11 @@ prevButton.addEventListener("click", function (event) {
   event.preventDefault();
   event.stopPropagation();
 
-  pageFlip.flipPrev();
+  const currentPage = pageFlip.getCurrentPageIndex();
+
+  if (currentPage > 0) {
+    pageFlip.flipPrev("top");
+  }
 });
 
   const exploreAgain = document.querySelector(".book-final a");
