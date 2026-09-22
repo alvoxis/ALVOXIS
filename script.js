@@ -529,15 +529,7 @@ prevButton.addEventListener("click", function (event) {
   }
 
   updateCounter();
-  pageFlip.on("flip", function (event) {
-  const currentPage = event.data;
-
-  counter.textContent =
-    String(currentPage + 1).padStart(2, "0") +
-    " / " +
-    String(pages.length).padStart(2, "0");
-
-  prevButton.disabled = currentPage <= 0;
-  nextButton.disabled = currentPage >= pages.length - 1;
+  pageFlip.on("flip", function () {
+  updateCounter();
 });
 })();
