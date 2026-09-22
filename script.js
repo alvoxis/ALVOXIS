@@ -499,21 +499,37 @@ renderCart();
     nextButton.disabled = currentPage >= totalPages - 1;
   }
 
-  nextButton.addEventListener("click", function () {
-    const currentPage = pageFlip.getCurrentPageIndex();
+  let isFlipping = false;
 
-    if (currentPage < pages.length - 1) {
-      pageFlip.flipNext();
-    }
-  });
+nextButton.addEventListener("click", function () {
+  if (isFlipping) return;
 
-  prevButton.addEventListener("click", function () {
-    const currentPage = pageFlip.getCurrentPageIndex();
+  const currentPage = pageFlip.getCurrentPageIndex();
 
-    if (currentPage > 0) {
-      pageFlip.flipPrev();
-    }
-  });
+  if (currentPage < pages.length - 1) {
+    isFlipping = true;
+    pageFlip.flipNext();
+  }
+});
+
+prevButton.addEventListener("click", function () {
+  if (isFlipping) return;
+
+  const currentPage = pageFlip.getCurrentPageIndex();
+
+  if (currentPage > 0) {
+    isFlipping = true;
+    pageFlip.flipPrev();
+  }
+});
+
+pageFlip.on("flip", function () {
+  updateCounter();
+
+  setTimeout(function () {
+    isFlipping = false;
+  }, 900);
+});
 
   pageFlip.on("flip", function () {
     updateCounter();
