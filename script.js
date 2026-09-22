@@ -481,37 +481,38 @@ renderCart();
 
     swipeDistance: 60,
 
-        clickEventForward: true,
+    clickEventForward: true,
     disableFlipByClick: true
-
   });
 
   pageFlip.loadFromHTML(pages);
 
-    function updateCounter(pageIndex) {
-    const currentPage =
-      typeof pageIndex === "number"
-        ? pageIndex
-        : pageFlip.getCurrentPageIndex();
+  // Свой собственный счётчик — не зависим от того,
+  // когда именно библиотека обновит внутреннее состояние
+  let currentPageIndex = 0;
+  const totalPages = pages.length;
 
-    const totalPages = pages.length;
+  function updateCounter(pageIndex) {
+    if (typeof pageIndex === "number") {
+      currentPageIndex = pageIndex;
+    }
 
     counter.textContent =
-      String(currentPage + 1).padStart(2, "0") +
+      String(currentPageIndex + 1).padStart(2, "0") +
       " / " +
       String(totalPages).padStart(2, "0");
 
-    prevButton.disabled = currentPage === 0;
-    nextButton.disabled = currentPage >= totalPages - 1;
+    prevButton.disabled = currentPageIndex <= 0;
+    nextButton.disabled = currentPageIndex >= totalPages - 1;
   }
 
-
-    nextButton.addEventListener("click", function (event) {
+  nextButton.addEventListener("click", function (event) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!nextButton.disabled) {
+    if (currentPageIndex < totalPages - 1) {
       pageFlip.flipNext();
+      currentPageIndex += 1;
       updateCounter();
     }
   });
@@ -520,8 +521,9 @@ renderCart();
     event.preventDefault();
     event.stopPropagation();
 
-    if (!prevButton.disabled) {
+    if (currentPageIndex > 0) {
       pageFlip.flipPrev();
+      currentPageIndex -= 1;
       updateCounter();
     }
   });
@@ -531,19 +533,19 @@ renderCart();
   if (exploreAgain) {
     exploreAgain.addEventListener("click", function (event) {
       event.preventDefault();
+      event.stopPropagation();
 
       pageFlip.turnToPage(0);
-
-      setTimeout(() => {
-        updateCounter();
-      }, 100);
+      updateCounter(0);
     });
   }
 
-    pageFlip.on('flip', function (e) {
+  // Свайпы — отдельный, "родной" путь библиотеки,
+  // синхронизируем наш счётчик с её данными
+  pageFlip.on("flip", function (e) {
     updateCounter(e.data);
   });
 
-  updateCounter();
+  updateCounter(0);
 
 })();
