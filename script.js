@@ -501,21 +501,17 @@ renderCart();
   }
 
 nextButton.addEventListener("click", function () {
-
   const currentPage = pageFlip.getCurrentPageIndex();
 
   if (currentPage < pages.length - 1) {
-    isFlipping = true;
     pageFlip.flipNext();
   }
 });
 
 prevButton.addEventListener("click", function () {
-
   const currentPage = pageFlip.getCurrentPageIndex();
 
   if (currentPage > 0) {
-    isFlipping = true;
     pageFlip.flipPrev();
   }
 });
@@ -523,10 +519,6 @@ prevButton.addEventListener("click", function () {
 pageFlip.on("flip", function () {
   updateCounter();
 });
-
-  pageFlip.on("flip", function () {
-    updateCounter();
-  });
 
   const exploreAgain = document.querySelector(".book-final a");
 
