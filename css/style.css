@@ -1,0 +1,554 @@
+
+/* =========================================
+   ALVOXIS — CINEMATIC SCROLL EXPERIENCE
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --background: #080808;
+  --text: #f5f3ef;
+  --muted: #aaa59d;
+  --gold: #c9b28a;
+  --line: rgba(255, 255, 255, 0.18);
+}
+
+html {
+  background: var(--background);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+
+  background: var(--background);
+  color: var(--text);
+
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.site-header {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: 28px 32px;
+
+  pointer-events: none;
+}
+
+.brand-logo {
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+
+  pointer-events: auto;
+}
+
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+
+  pointer-events: auto;
+}
+
+.menu-button span {
+  display: block;
+
+  width: 15px;
+  height: 1px;
+  margin: 0 auto;
+
+  background: #ffffff;
+}
+
+
+/* =========================================
+   SCROLL EXPERIENCE
+========================================= */
+
+.scroll-experience {
+  position: relative;
+
+  height: 400vh;
+
+  background: #080808;
+}
+
+.experience-sticky {
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+  height: 100svh;
+  min-height: 600px;
+
+  overflow: hidden;
+
+  background: #080808;
+  perspective: 1400px;
+  isolation: isolate;
+}
+
+
+/* =========================================
+   VIDEO
+========================================= */
+
+.video-scene {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.hero-video {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter: brightness(0.78) contrast(1.08);
+
+  will-change: transform;
+}
+
+
+/* =========================================
+   OVERLAYS
+========================================= */
+
+.cinematic-overlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.62) 0%,
+      rgba(0, 0, 0, 0.08) 38%,
+      rgba(0, 0, 0, 0.22) 60%,
+      rgba(0, 0, 0, 0.86) 100%
+    );
+}
+
+.cinematic-overlay::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    ellipse at center,
+    transparent 20%,
+    rgba(0, 0, 0, 0.42) 100%
+  );
+}
+
+
+/* =========================================
+   OPENING CONTENT
+========================================= */
+
+.opening-content {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+
+  width: min(900px, 90%);
+
+  text-align: center;
+
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.hero-label {
+  margin-bottom: 28px;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  line-height: 1.5;
+}
+
+.hero-title {
+  color: #ffffff;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 6.2vw, 96px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.hero-description {
+  margin-top: 34px;
+
+  color: rgba(255, 255, 255, 0.76);
+
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+}
+
+
+/* =========================================
+   DISTANCE TEXT
+========================================= */
+
+.distance-content {
+  position: absolute;
+  z-index: 6;
+  top: 50%;
+  left: 50%;
+
+  width: min(800px, 90%);
+
+  opacity: 0;
+  text-align: center;
+
+  transform: translate(-50%, -50%) scale(0.75);
+  transform-origin: center center;
+
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.section-label {
+  margin-bottom: 30px;
+
+  color: var(--gold);
+
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  line-height: 1.5;
+}
+
+.distance-content h2 {
+  color: #f5f3ef;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 7vw, 90px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+
+.distance-description {
+  margin-top: 34px;
+
+  color: rgba(255, 255, 255, 0.65);
+
+  font-size: 13px;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+}
+
+
+/* =========================================
+   SCROLL INDICATOR
+========================================= */
+
+.scroll-indicator {
+  position: absolute;
+  z-index: 10;
+  bottom: 34px;
+  left: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+
+  transform: translateX(-50%);
+
+  will-change: opacity;
+}
+
+.scroll-text {
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  white-space: nowrap;
+}
+
+.scroll-line {
+  position: relative;
+
+  display: block;
+
+  width: 1px;
+  height: 58px;
+
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.scroll-line::after {
+  content: "";
+
+  position: absolute;
+  top: -100%;
+  left: 0;
+
+  width: 1px;
+  height: 100%;
+
+  background: #ffffff;
+
+  animation: scrollLine 2.2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(100%);
+  }
+
+  50.01% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================
+   PROGRESS INDICATOR
+========================================= */
+
+.scroll-progress {
+  position: absolute;
+  z-index: 10;
+  right: 32px;
+  bottom: 34px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: rgba(255, 255, 255, 0.62);
+
+  font-size: 9px;
+  letter-spacing: 0.12em;
+
+  will-change: opacity;
+}
+
+.progress-divider {
+  display: block;
+
+  width: 24px;
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.4);
+}
+
+
+/* =========================================
+   NEXT SECTION
+========================================= */
+
+.next-stage {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100svh;
+  padding: 100px 28px;
+
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(75, 68, 58, 0.2),
+      transparent 45%
+    ),
+    #080808;
+}
+
+.next-stage-content {
+  text-align: center;
+}
+
+.next-stage h2 {
+  color: #f5f3ef;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 7vw, 90px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+
+.next-stage p:last-child {
+  margin-top: 30px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.site-footer {
+  padding: 35px 25px;
+
+  border-top: 1px solid var(--line);
+  background: #080808;
+
+  color: rgba(255, 255, 255, 0.42);
+
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-align: center;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .site-header {
+    padding: 22px 20px;
+  }
+
+  .brand-logo {
+    font-size: 16px;
+    letter-spacing: 0.22em;
+  }
+
+  .menu-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hero-label {
+    margin-bottom: 23px;
+
+    font-size: 8px;
+    letter-spacing: 0.23em;
+  }
+
+  .hero-title {
+    font-size: clamp(38px, 11vw, 62px);
+    line-height: 1;
+  }
+
+  .hero-description {
+    margin-top: 26px;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .section-label {
+    font-size: 8px;
+    letter-spacing: 0.22em;
+  }
+
+  .distance-content h2,
+  .next-stage h2 {
+    font-size: clamp(39px, 11vw, 58px);
+  }
+
+  .distance-description {
+    font-size: 11px;
+  }
+
+  .scroll-indicator {
+    bottom: 24px;
+  }
+
+  .scroll-text {
+    font-size: 8px;
+    letter-spacing: 0.18em;
+  }
+
+  .scroll-progress {
+    right: 20px;
+    bottom: 24px;
+  }
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .scroll-line::after {
+    animation: none;
+  }
+}
