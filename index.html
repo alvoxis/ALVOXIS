@@ -1,170 +1,159 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#080808" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
 
-  <title>ALVOXIS — Moments Worth Remembering</title>
+    <meta
+      name="description"
+      content="ALVOXIS — meaningful gifts, created to preserve special moments."
+    />
 
-  <meta
-    name="description"
-    content="ALVOXIS — personalized luxury gifts for unforgettable moments."
-  />
+    <title>ALVOXIS — Every Gift Begins With a Feeling</title>
 
-  <link rel="stylesheet" href="css/style.css" />
-</head>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<body>
+  <body>
+    <!-- HEADER -->
+    <header class="site-header">
+      <a href="#" class="brand-logo" aria-label="ALVOXIS homepage">
+        ALVOXIS
+      </a>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <a href="#" class="brand-logo">ALVOXIS</a>
+      <button
+        class="menu-button"
+        type="button"
+        aria-label="Open menu"
+      >
+        <span></span>
+        <span></span>
+      </button>
+    </header>
 
-    <button class="menu-button" type="button" aria-label="Open menu">
-      <span></span>
-      <span></span>
-    </button>
-  </header>
+    <main>
+      <!-- CINEMATIC INTRO -->
+      <section class="scroll-experience" id="experience">
+        <div class="experience-sticky" id="experienceSticky">
 
+          <!-- SCROLL-CONTROLLED VIDEO -->
+          <div class="video-scene" id="videoScene">
+            <video
+              class="hero-video"
+              id="titleVideo"
+              muted
+              playsinline
+              preload="auto"
+            >
+              <source
+                src="assets/videos/gemini_generated_video_C490D624.mp4"
+                type="video/mp4"
+              />
 
-  <!-- MAIN -->
-  <main>
+              Your browser does not support the video tag.
+            </video>
+          </div>
 
-    <!-- CINEMATIC SCROLL EXPERIENCE -->
-    <section class="scroll-experience" id="experience">
+          <!-- DARK CINEMATIC OVERLAY -->
+          <div class="cinematic-overlay"></div>
 
-      <!-- THIS AREA STAYS FIXED WHILE SCROLLING -->
-      <div class="experience-sticky" id="experienceSticky">
+          <!-- OPENING TEXT -->
+          <div class="opening-content" id="openingContent">
+            <p class="eyebrow">ALVOXIS</p>
 
-        <!-- VIDEO -->
-        <div class="video-scene" id="videoScene">
+            <h1>
+              Every gift<br />
+              begins with<br />
+              a feeling.
+            </h1>
+          </div>
 
-          <video
-            class="hero-video"
-            id="titleVideo"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-          >
-            <source
-              src="assets/videos/gemini_generated_video_C490D624.mp4"
-              type="video/mp4"
-            />
-          </video>
+          <!-- TEXT AFTER VIDEO -->
+          <div class="distance-content" id="distanceContent">
+            <p class="eyebrow">A MEANINGFUL MOMENT</p>
 
+            <h2>
+              Some moments<br />
+              deserve to be<br />
+              remembered.
+            </h2>
+
+            <p class="distance-description">
+              Thoughtfully created gifts for the moments
+              that matter most.
+            </p>
+          </div>
+
+          <!-- FUTURE GIFT SELECTION COVER -->
+          <div class="selection-cover" id="selectionCover">
+            <div class="selection-cover-glow"></div>
+
+            <div class="selection-cover-content">
+              <p class="eyebrow">THE ALVOXIS COLLECTION</p>
+
+              <h2>
+                Choose<br />
+                a feeling.
+              </h2>
+
+              <p>
+                Swipe sideways<br />
+                to discover your gift.
+              </p>
+
+              <div class="sideways-hint" aria-hidden="true">
+                <span class="hint-line"></span>
+
+                <span class="hint-arrow">↔</span>
+
+                <span class="hint-line"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCROLL INDICATOR -->
+          <div class="scroll-indicator" id="scrollIndicator">
+            <span class="scroll-indicator-line"></span>
+            <span>SCROLL TO DISCOVER</span>
+          </div>
+
+          <!-- PROGRESS INDICATOR -->
+          <div class="scroll-progress" id="scrollProgress">
+            <span id="progressValue">01</span>
+
+            <span class="progress-divider"></span>
+
+            <span>04</span>
+          </div>
         </div>
+      </section>
 
-
-        <!-- DARK CINEMATIC OVERLAY -->
-        <div class="cinematic-overlay"></div>
-
-
-        <!-- HERO TITLE -->
-        <div class="opening-content" id="openingContent">
-
-          <p class="hero-label">
-            PERSONALIZED LUXURY GIFTS
-          </p>
-
-          <h1 class="hero-title">
-            Some moments<br />
-            deserve to be<br />
-            remembered.
-          </h1>
-
-          <p class="hero-description">
-            A gift is more than an object.<br />
-            It is a memory you can hold.
-          </p>
-
-        </div>
-
-
-        <!-- SECOND SCENE -->
-        <div class="distance-content" id="distanceContent">
-
-          <p class="section-label">
-            THE ALVOXIS EXPERIENCE
-          </p>
+      <!-- NEXT STAGE -->
+      <section class="next-stage">
+        <div class="next-stage-content">
+          <p class="section-label">THE COLLECTION</p>
 
           <h2>
-            Every gift<br />
-            begins with<br />
-            a feeling.
+            A memory<br />
+            made tangible.
           </h2>
 
-          <p class="distance-description">
-            Thoughtfully created pieces<br />
-            for moments worth remembering.
+          <p>
+            Discover the first ALVOXIS gift collection.
           </p>
-
         </div>
+      </section>
+    </main>
 
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <p>© 2026 ALVOXIS</p>
+    </footer>
 
-        <!-- SCROLL INDICATOR -->
-        <div class="scroll-indicator" id="scrollIndicator">
-
-          <span class="scroll-text">
-            SCROLL TO EXPLORE
-          </span>
-
-          <span class="scroll-line"></span>
-
-        </div>
-
-
-        <!-- PROGRESS -->
-        <div class="scroll-progress" id="scrollProgress">
-
-          <span id="progressValue">01</span>
-
-          <span class="progress-divider"></span>
-
-          <span>04</span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- NEXT SECTION -->
-    <section class="next-stage">
-
-      <div class="next-stage-content">
-
-        <p class="section-label">
-          COMING NEXT
-        </p>
-
-        <h2>
-          A memory<br />
-          made tangible.
-        </h2>
-
-        <p>
-          Discover the first ALVOXIS gift collection.
-        </p>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <p>© 2026 ALVOXIS</p>
-  </footer>
-
-
-  <script src="js/main.js"></script>
-
-</body>
+    <script src="js/main.js"></script>
+  </body>
 </html>
