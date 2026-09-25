@@ -1,8 +1,4 @@
 
-/* =========================================
-   ALVOXIS — RESET
-========================================= */
-
 * {
   margin: 0;
   padding: 0;
@@ -23,16 +19,13 @@ html {
 
 body {
   min-width: 320px;
-
   overflow-x: hidden;
 
   background: var(--background);
   color: var(--text);
 
   font-family: Arial, Helvetica, sans-serif;
-
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -42,16 +35,10 @@ a {
 
 button {
   font: inherit;
-}
-
-button,
-a {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* =========================================
-   HEADER
-========================================= */
+/* HEADER */
 
 .site-header {
   position: fixed;
@@ -93,7 +80,6 @@ a {
   border-radius: 50%;
 
   background: rgba(0, 0, 0, 0.14);
-
   backdrop-filter: blur(10px);
 
   cursor: pointer;
@@ -109,13 +95,10 @@ a {
   background: #ffffff;
 }
 
-/* =========================================
-   SCROLL EXPERIENCE
-========================================= */
+/* MAIN SCROLL SCENE */
 
 .scroll-experience {
   position: relative;
-
   height: 400vh;
 }
 
@@ -127,7 +110,6 @@ a {
   width: 100%;
   height: 100vh;
   height: 100svh;
-
   min-height: 560px;
 
   overflow: hidden;
@@ -138,9 +120,7 @@ a {
   perspective: 1400px;
 }
 
-/* =========================================
-   VIDEO
-========================================= */
+/* VIDEO */
 
 .video-scene {
   position: absolute;
@@ -179,9 +159,7 @@ a {
   background: #080808;
 }
 
-/* =========================================
-   CINEMATIC OVERLAY
-========================================= */
+/* OVERLAY */
 
 .cinematic-overlay {
   position: absolute;
@@ -199,9 +177,7 @@ a {
     );
 }
 
-/* =========================================
-   TYPOGRAPHY
-========================================= */
+/* TYPOGRAPHY */
 
 .eyebrow {
   margin-bottom: 25px;
@@ -237,18 +213,14 @@ a {
   pointer-events: none;
 }
 
-/* =========================================
-   OPENING CONTENT
-========================================= */
+/* OPENING */
 
 .opening-content {
   z-index: 20;
 
   opacity: 1;
 
-  transform:
-    translate(-50%, -50%)
-    scale(1);
+  transform: translate(-50%, -50%) scale(1);
 
   will-change: transform, opacity;
 }
@@ -262,18 +234,14 @@ a {
   line-height: 0.98;
 }
 
-/* =========================================
-   DISTANCE CONTENT
-========================================= */
+/* DISTANCE TEXT */
 
 .distance-content {
   z-index: 21;
 
   opacity: 0;
 
-  transform:
-    translate(-50%, -50%)
-    scale(0.78);
+  transform: translate(-50%, -50%) scale(0.78);
 
   will-change: transform, opacity;
 }
@@ -297,18 +265,14 @@ a {
   line-height: 1.8;
 }
 
-/* =========================================
-   SELECTION COVER
-========================================= */
+/* SELECTION COVER */
 
 .selection-cover {
   z-index: 22;
 
   opacity: 0;
 
-  transform:
-    translate(-50%, -50%)
-    scale(0.84);
+  transform: translate(-50%, -50%) scale(0.84);
 
   will-change: transform, opacity;
 }
@@ -382,14 +346,10 @@ a {
 
 .hint-arrow {
   color: var(--gold);
-
   font-size: 23px;
-  font-weight: 300;
 }
 
-/* =========================================
-   SCROLL INDICATOR
-========================================= */
+/* SCROLL INDICATOR */
 
 .scroll-indicator {
   position: absolute;
@@ -411,7 +371,6 @@ a {
   transform: translateX(-50%);
 
   white-space: nowrap;
-
   will-change: opacity;
 }
 
@@ -428,9 +387,7 @@ a {
   );
 }
 
-/* =========================================
-   PROGRESS INDICATOR
-========================================= */
+/* PROGRESS */
 
 .scroll-progress {
   position: absolute;
@@ -446,8 +403,6 @@ a {
 
   font-size: 10px;
   letter-spacing: 0.16em;
-
-  will-change: opacity;
 }
 
 .progress-divider {
@@ -459,9 +414,7 @@ a {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* =========================================
-   NEXT STAGE
-========================================= */
+/* NEXT STAGE */
 
 .next-stage {
   position: relative;
@@ -517,9 +470,7 @@ a {
   line-height: 1.8;
 }
 
-/* =========================================
-   FOOTER
-========================================= */
+/* FOOTER */
 
 .site-footer {
   display: flex;
@@ -540,9 +491,7 @@ a {
   letter-spacing: 0.2em;
 }
 
-/* =========================================
-   MOBILE
-========================================= */
+/* MOBILE */
 
 @media (max-width: 700px) {
   .site-header {
@@ -572,14 +521,12 @@ a {
 
   .eyebrow {
     margin-bottom: 20px;
-
     font-size: 9px;
     letter-spacing: 0.25em;
   }
 
   .opening-content h1 {
     font-size: clamp(42px, 12vw, 74px);
-    line-height: 0.98;
   }
 
   .distance-content h2 {
@@ -589,7 +536,6 @@ a {
   .distance-description {
     max-width: 280px;
     margin-top: 25px;
-
     font-size: 12px;
   }
 
@@ -619,7 +565,6 @@ a {
   .scroll-progress {
     right: 20px;
     bottom: 25px;
-
     font-size: 9px;
   }
 
@@ -634,23 +579,5 @@ a {
 
   .next-stage h2 {
     font-size: clamp(42px, 12vw, 70px);
-  }
-}
-
-/* =========================================
-   REDUCED MOTION
-========================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
   }
 }
