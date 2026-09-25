@@ -20,7 +20,6 @@
   </head>
 
   <body>
-    <!-- HEADER -->
     <header class="site-header">
       <a
         href="#"
@@ -41,7 +40,6 @@
     </header>
 
     <main>
-      <!-- CINEMATIC EXPERIENCE -->
       <section
         class="scroll-experience"
         id="experience"
@@ -50,7 +48,6 @@
           class="experience-sticky"
           id="experienceSticky"
         >
-          <!-- SCROLL-CONTROLLED VIDEO -->
           <div
             class="video-scene"
             id="videoScene"
@@ -60,7 +57,8 @@
               id="titleVideo"
               muted
               playsinline
-              preload="auto"
+              preload="metadata"
+              autoplay="false"
             >
               <source
                 src="assets/videos/gemini_generated_video_C490D624.mp4"
@@ -71,10 +69,8 @@
             </video>
           </div>
 
-          <!-- CINEMATIC DARK OVERLAY -->
           <div class="cinematic-overlay"></div>
 
-          <!-- OPENING TEXT -->
           <div
             class="opening-content"
             id="openingContent"
@@ -88,7 +84,6 @@
             </h1>
           </div>
 
-          <!-- TEXT AFTER VIDEO -->
           <div
             class="distance-content"
             id="distanceContent"
@@ -109,7 +104,6 @@
             </p>
           </div>
 
-          <!-- GIFT SELECTION COVER -->
           <div
             class="selection-cover"
             id="selectionCover"
@@ -136,39 +130,31 @@
                 aria-hidden="true"
               >
                 <span class="hint-line"></span>
-
                 <span class="hint-arrow">↔</span>
-
                 <span class="hint-line"></span>
               </div>
             </div>
           </div>
 
-          <!-- SCROLL INDICATOR -->
           <div
             class="scroll-indicator"
             id="scrollIndicator"
           >
             <span class="scroll-indicator-line"></span>
-
             <span>SCROLL TO DISCOVER</span>
           </div>
 
-          <!-- PROGRESS INDICATOR -->
           <div
             class="scroll-progress"
             id="scrollProgress"
           >
             <span id="progressValue">01</span>
-
             <span class="progress-divider"></span>
-
             <span>04</span>
           </div>
         </div>
       </section>
 
-      <!-- NEXT SECTION -->
       <section class="next-stage">
         <div class="next-stage-content">
           <p class="section-label">
@@ -187,7 +173,6 @@
       </section>
     </main>
 
-    <!-- FOOTER -->
     <footer class="site-footer">
       <p>© 2026 ALVOXIS</p>
     </footer>
