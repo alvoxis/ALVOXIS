@@ -1,6 +1,6 @@
 
 /* =========================================
-   ALVOXIS — GLOBAL RESET
+   ALVOXIS — RESET
 ========================================= */
 
 * {
@@ -13,9 +13,7 @@
   --background: #080808;
   --text: #ffffff;
   --muted: rgba(255, 255, 255, 0.58);
-  --soft-muted: rgba(255, 255, 255, 0.36);
   --gold: #b9a078;
-  --border: rgba(255, 255, 255, 0.14);
 }
 
 html {
@@ -25,26 +23,30 @@ html {
 
 body {
   min-width: 320px;
+
+  overflow-x: hidden;
+
   background: var(--background);
   color: var(--text);
+
   font-family: Arial, Helvetica, sans-serif;
-  overflow-x: hidden;
+
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-button,
 a {
-  -webkit-tap-highlight-color: transparent;
+  color: inherit;
+  text-decoration: none;
 }
 
 button {
   font: inherit;
 }
 
+button,
 a {
-  color: inherit;
-  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* =========================================
@@ -69,15 +71,18 @@ a {
 
 .brand-logo {
   color: #ffffff;
+
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.34em;
+
   pointer-events: auto;
 }
 
 .menu-button {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 7px;
 
@@ -88,6 +93,7 @@ a {
   border-radius: 50%;
 
   background: rgba(0, 0, 0, 0.14);
+
   backdrop-filter: blur(10px);
 
   cursor: pointer;
@@ -96,40 +102,44 @@ a {
 
 .menu-button span {
   display: block;
+
   width: 14px;
   height: 1px;
-  margin: 0 auto;
+
   background: #ffffff;
 }
 
 /* =========================================
-   MAIN SCROLL EXPERIENCE
+   SCROLL EXPERIENCE
 ========================================= */
 
 .scroll-experience {
   position: relative;
+
   height: 400vh;
 }
 
 .experience-sticky {
-  position: sticky;
   position: -webkit-sticky;
+  position: sticky;
   top: 0;
 
   width: 100%;
   height: 100vh;
   height: 100svh;
+
   min-height: 560px;
 
   overflow: hidden;
-  isolation: isolate;
-  perspective: 1400px;
 
   background: #080808;
+
+  isolation: isolate;
+  perspective: 1400px;
 }
 
 /* =========================================
-   VIDEO SCENE
+   VIDEO
 ========================================= */
 
 .video-scene {
@@ -146,11 +156,15 @@ a {
 
   overflow: hidden;
 
+  opacity: 1;
+  visibility: visible;
+
+  transform: translate3d(0, 0, 0) scale(1);
   transform-origin: center center;
+
   will-change: transform, opacity;
 
   pointer-events: none;
-  visibility: visible;
 }
 
 .hero-video {
@@ -179,12 +193,10 @@ a {
   background:
     linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.28) 0%,
-      rgba(0, 0, 0, 0.04) 35%,
-      rgba(0, 0, 0, 0.38) 100%
+      rgba(0, 0, 0, 0.24) 0%,
+      rgba(0, 0, 0, 0.03) 40%,
+      rgba(0, 0, 0, 0.42) 100%
     );
-
-  mix-blend-mode: normal;
 }
 
 /* =========================================
@@ -200,6 +212,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.34em;
   line-height: 1.5;
+
   text-transform: uppercase;
 }
 
@@ -207,7 +220,8 @@ a {
 .distance-content,
 .selection-cover {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
 
   display: flex;
   flex-direction: column;
@@ -215,7 +229,7 @@ a {
   justify-content: center;
 
   width: 100%;
-  height: 100%;
+  height: auto;
 
   padding: 100px 24px;
 
@@ -223,15 +237,18 @@ a {
   pointer-events: none;
 }
 
+/* =========================================
+   OPENING CONTENT
+========================================= */
+
 .opening-content {
   z-index: 20;
 
-  transform: translate(-50%, -50%);
-  left: 50%;
-  top: 50%;
+  opacity: 1;
 
-  width: 100%;
-  height: auto;
+  transform:
+    translate(-50%, -50%)
+    scale(1);
 
   will-change: transform, opacity;
 }
@@ -245,17 +262,18 @@ a {
   line-height: 0.98;
 }
 
+/* =========================================
+   DISTANCE CONTENT
+========================================= */
+
 .distance-content {
   z-index: 21;
 
-  left: 50%;
-  top: 50%;
-
-  width: 100%;
-  height: auto;
-
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.72);
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.78);
 
   will-change: transform, opacity;
 }
@@ -276,7 +294,6 @@ a {
   color: var(--muted);
 
   font-size: 13px;
-  font-weight: 400;
   line-height: 1.8;
 }
 
@@ -287,18 +304,13 @@ a {
 .selection-cover {
   z-index: 22;
 
-  left: 50%;
-  top: 50%;
-
-  width: 100%;
-  height: auto;
-
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.82);
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.84);
 
   will-change: transform, opacity;
-
-  overflow: hidden;
 }
 
 .selection-cover-glow {
@@ -309,13 +321,13 @@ a {
   width: 420px;
   height: 420px;
 
-  transform: translate(-50%, -50%);
-
   border-radius: 50%;
+
+  transform: translate(-50%, -50%);
 
   background: radial-gradient(
     circle,
-    rgba(185, 160, 120, 0.12) 0%,
+    rgba(185, 160, 120, 0.13) 0%,
     rgba(185, 160, 120, 0.035) 35%,
     transparent 72%
   );
@@ -370,6 +382,7 @@ a {
 
 .hint-arrow {
   color: var(--gold);
+
   font-size: 23px;
   font-weight: 300;
 }
@@ -380,8 +393,8 @@ a {
 
 .scroll-indicator {
   position: absolute;
-  bottom: 34px;
   left: 50%;
+  bottom: 34px;
   z-index: 30;
 
   display: flex;
@@ -396,6 +409,7 @@ a {
   text-transform: uppercase;
 
   transform: translateX(-50%);
+
   white-space: nowrap;
 
   will-change: opacity;
@@ -471,6 +485,7 @@ a {
 .next-stage-content {
   width: 100%;
   max-width: 1000px;
+
   text-align: center;
 }
 
@@ -557,6 +572,7 @@ a {
 
   .eyebrow {
     margin-bottom: 20px;
+
     font-size: 9px;
     letter-spacing: 0.25em;
   }
@@ -573,6 +589,7 @@ a {
   .distance-description {
     max-width: 280px;
     margin-top: 25px;
+
     font-size: 12px;
   }
 
@@ -602,6 +619,7 @@ a {
   .scroll-progress {
     right: 20px;
     bottom: 25px;
+
     font-size: 9px;
   }
 
