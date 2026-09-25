@@ -1,88 +1,136 @@
 
-// =========================================
-// ALVOXIS — COMPLETE SCROLL ENGINE
-// =========================================
-
 const experience = document.querySelector("#experience");
+
 const videoScene = document.querySelector("#videoScene");
 const titleVideo = document.querySelector("#titleVideo");
+
 const openingContent = document.querySelector("#openingContent");
 const distanceContent = document.querySelector("#distanceContent");
+const selectionCover = document.querySelector("#selectionCover");
+
 const scrollIndicator = document.querySelector("#scrollIndicator");
 const scrollProgress = document.querySelector("#scrollProgress");
 const progressValue = document.querySelector("#progressValue");
 
 let animationFrame = null;
+let videoMetadataReady = false;
 
 
-// =========================================
-// VIDEO
-// =========================================
+/* =========================================
+   VIDEO INITIALIZATION
+========================================= */
 
 if (titleVideo) {
-
   titleVideo.muted = true;
   titleVideo.volume = 0;
 
-  const playVideo = () => {
-    titleVideo.play().catch(() => {
-      // Browser autoplay restrictions are ignored.
-    });
-  };
+  // Видео не запускается автоматически.
+  // Его временем управляет положение скролла.
+  titleVideo.pause();
 
-  if (titleVideo.readyState >= 2) {
-    playVideo();
-  } else {
-    titleVideo.addEventListener("canplay", playVideo, {
-      once: true
-    });
-  }
-
-  document.addEventListener("visibilitychange", () => {
-
-    if (document.hidden) {
-      titleVideo.pause();
-    } else {
-      playVideo();
-    }
-
+  titleVideo.addEventListener("loadedmetadata", () => {
+    videoMetadataReady = true;
+    updateExperience();
   });
 
+  titleVideo.addEventListener("canplay", () => {
+    videoMetadataReady = true;
+    updateExperience();
+  });
 }
 
 
-// =========================================
-// HELPERS
-// =========================================
+/* =========================================
+   HELPER FUNCTIONS
+========================================= */
 
 function clamp(value, minimum, maximum) {
   return Math.min(Math.max(value, minimum), maximum);
 }
 
+
 function easeInOut(value) {
-  return value * value * (3 - 2 * value);
+  const clampedValue = clamp(value, 0, 1);
+
+  return clampedValue < 0.5
+    ? 2 * clampedValue * clampedValue
+    : 1 - Math.pow(-2 * clampedValue + 2, 2) / 2;
 }
+
 
 function getProgress(value, start, end) {
-  return clamp(
-    (value - start) / (end - start),
-    0,
-    1
-  );
+  if (end <= start) {
+    return value >= end ? 1 : 0;
+  }
+
+  return clamp((value - start) / (end - start), 0, 1);
 }
 
 
-// =========================================
-// MAIN SCROLL ANIMATION
-// =========================================
+/* =========================================
+   SCROLL-DRIVEN VIDEO
+========================================= */
+
+function updateScrollVideo(progress) {
+  if (!titleVideo || !videoMetadataReady) {
+    return;
+  }
+
+  if (!Number.isFinite(titleVideo.duration)) {
+    return;
+  }
+
+  if (titleVideo.duration <= 0) {
+    return;
+  }
+
+  /*
+    Видео проигрывается в первой части сцены.
+
+    Скролл вниз:
+    currentTime увеличивается.
+
+    Скролл вверх:
+    currentTime уменьшается.
+
+    При остановке скролла:
+    видео остаётся на текущем кадре.
+  */
+
+  const videoPlaybackProgress = easeInOut(
+    getProgress(progress, 0, 0.34)
+  );
+
+  const targetTime =
+    videoPlaybackProgress * titleVideo.duration;
+
+  const currentTimeDifference =
+    Math.abs(titleVideo.currentTime - targetTime);
+
+  if (currentTimeDifference > 0.016) {
+    try {
+      titleVideo.currentTime = targetTime;
+    } catch (error) {
+      console.warn("Video time update failed:", error);
+    }
+  }
+
+  // Не даём видео автоматически проигрываться.
+  titleVideo.pause();
+}
+
+
+/* =========================================
+   MAIN EXPERIENCE ANIMATION
+========================================= */
 
 function updateExperience() {
-
   if (!experience) {
     return;
   }
 
-  const experienceRect = experience.getBoundingClientRect();
+  const experienceRect =
+    experience.getBoundingClientRect();
 
   const totalScrollDistance =
     experience.offsetHeight - window.innerHeight;
@@ -91,25 +139,26 @@ function updateExperience() {
     return;
   }
 
-  /*
-    Progress is calculated from the whole scroll section.
-    0 = beginning
-    1 = end
-  */
-
   const rawProgress =
     -experienceRect.top / totalScrollDistance;
 
-  const progress = clamp(rawProgress, 0, 1);
+  const progress =
+    clamp(rawProgress, 0, 1);
 
 
-  // =========================================
-  // SCENE 1 — VIDEO MOVES INTO THE DISTANCE
-  // =========================================
+  /* -----------------------------------------
+     1. VIDEO PLAYBACK
+  ----------------------------------------- */
 
-  const videoProgress = easeInOut(
-    getProgress(progress, 0, 0.34)
-  );
+  updateScrollVideo(progress);
+
+
+  /* -----------------------------------------
+     2. VIDEO MOVEMENT AND DISAPPEARANCE
+  ----------------------------------------- */
+
+  const videoProgress =
+    easeInOut(getProgress(progress, 0, 0.34));
 
   const videoScale =
     1 - videoProgress * 0.72;
@@ -120,23 +169,41 @@ function updateExperience() {
   const videoZ =
     videoProgress * -480;
 
+  /*
+    Видео начинает полностью исчезать
+    ближе к окончанию своей сцены.
+  */
+
   const videoOpacity =
-    1 - videoProgress * 0.88;
+    1 - easeInOut(
+      getProgress(progress, 0.16, 0.34)
+    );
 
-  videoScene.style.transform =
-    `translate3d(0, ${videoY}%, ${videoZ}px) scale(${videoScale})`;
+  videoScene.style.transform = `
+    translate3d(0, ${videoY}%, ${videoZ}px)
+    scale(${videoScale})
+  `;
 
-  videoScene.style.opacity =
-    videoOpacity;
+  videoScene.style.opacity = videoOpacity;
+
+  /*
+    После исчезновения видео полностью
+    скрываем его визуальный слой.
+  */
+
+  if (videoOpacity <= 0.01) {
+    videoScene.style.visibility = "hidden";
+  } else {
+    videoScene.style.visibility = "visible";
+  }
 
 
-  // =========================================
-  // SCENE 1 — HERO TEXT DISAPPEARS
-  // =========================================
+  /* -----------------------------------------
+     3. OPENING TEXT
+  ----------------------------------------- */
 
-  const openingProgress = easeInOut(
-    getProgress(progress, 0.04, 0.27)
-  );
+  const openingProgress =
+    easeInOut(getProgress(progress, 0.04, 0.27));
 
   const openingScale =
     1 - openingProgress * 0.22;
@@ -147,24 +214,24 @@ function updateExperience() {
   const openingOpacity =
     1 - openingProgress;
 
-  openingContent.style.transform =
-    `translate(-50%, calc(-50% + ${openingY}px)) scale(${openingScale})`;
+  openingContent.style.transform = `
+    translate(-50%, calc(-50% + ${openingY}px))
+    scale(${openingScale})
+  `;
 
   openingContent.style.opacity =
     openingOpacity;
 
 
-  // =========================================
-  // SCENE 2 — TEXT COMES FROM THE DISTANCE
-  // =========================================
+  /* -----------------------------------------
+     4. DISTANCE TEXT
+  ----------------------------------------- */
 
-  const textIn = easeInOut(
-    getProgress(progress, 0.22, 0.52)
-  );
+  const textIn =
+    easeInOut(getProgress(progress, 0.22, 0.52));
 
-  const textOut = easeInOut(
-    getProgress(progress, 0.65, 0.86)
-  );
+  const textOut =
+    easeInOut(getProgress(progress, 0.65, 0.86));
 
   const textOpacity =
     textIn * (1 - textOut);
@@ -175,16 +242,53 @@ function updateExperience() {
   const textY =
     60 - textIn * 60 - textOut * 35;
 
-  distanceContent.style.transform =
-    `translate(-50%, calc(-50% + ${textY}px)) scale(${textScale})`;
+  distanceContent.style.transform = `
+    translate(-50%, calc(-50% + ${textY}px))
+    scale(${textScale})
+  `;
 
   distanceContent.style.opacity =
     textOpacity;
 
 
-  // =========================================
-  // SCROLL INDICATORS
-  // =========================================
+  /* -----------------------------------------
+     5. SELECTION COVER
+  ----------------------------------------- */
+
+  /*
+    Обложка появляется после основного текста.
+
+    Позже здесь можно будет подключить
+    горизонтальный свайп между Mini и Classic.
+  */
+
+  const coverIn =
+    easeInOut(getProgress(progress, 0.68, 0.88));
+
+  const coverOut =
+    easeInOut(getProgress(progress, 0.92, 1));
+
+  const coverOpacity =
+    coverIn * (1 - coverOut);
+
+  const coverScale =
+    0.82 + coverIn * 0.18 - coverOut * 0.08;
+
+  const coverY =
+    70 - coverIn * 70 - coverOut * 20;
+
+  selectionCover.style.transform = `
+    translate(-50%, calc(-50% + ${coverY}px))
+    scale(${coverScale})
+  `;
+
+  selectionCover.style.opacity =
+    coverOpacity;
+
+
+  /* -----------------------------------------
+     6. SCROLL INDICATOR
+  ----------------------------------------- */
 
   const indicatorOpacity =
     1 - easeInOut(
@@ -194,13 +298,13 @@ function updateExperience() {
   scrollIndicator.style.opacity =
     indicatorOpacity;
 
+
+  /* -----------------------------------------
+     7. PROGRESS INDICATOR
+  ----------------------------------------- */
+
   scrollProgress.style.opacity =
     0.35 + progress * 0.65;
-
-
-  // =========================================
-  // SCENE NUMBER
-  // =========================================
 
   let sceneNumber = 1;
 
@@ -218,41 +322,34 @@ function updateExperience() {
 
   progressValue.textContent =
     String(sceneNumber).padStart(2, "0");
-
 }
 
 
-// =========================================
-// PERFORMANCE-FRIENDLY SCROLL
-// =========================================
+/* =========================================
+   OPTIMIZED SCROLL UPDATE
+========================================= */
 
 function requestExperienceUpdate() {
-
   if (animationFrame !== null) {
     return;
   }
 
   animationFrame = requestAnimationFrame(() => {
-
     updateExperience();
 
     animationFrame = null;
-
   });
-
 }
 
 
-// =========================================
-// EVENT LISTENERS
-// =========================================
+/* =========================================
+   EVENT LISTENERS
+========================================= */
 
 window.addEventListener(
   "scroll",
   requestExperienceUpdate,
-  {
-    passive: true
-  }
+  { passive: true }
 );
 
 window.addEventListener(
@@ -265,9 +362,18 @@ window.addEventListener(
   requestExperienceUpdate
 );
 
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    if (document.hidden && titleVideo) {
+      titleVideo.pause();
+    }
+  }
+);
 
-// =========================================
-// INITIALIZATION
-// =========================================
+
+/* =========================================
+   INITIAL UPDATE
+========================================= */
 
 updateExperience();
