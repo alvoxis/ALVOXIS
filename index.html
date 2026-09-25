@@ -10,7 +10,7 @@
 
   <meta
     name="description"
-    content="ALVOXIS creates meaningful luxury gifts for moments worth remembering."
+    content="ALVOXIS — personalized luxury gifts for unforgettable moments."
   />
 
   <link rel="stylesheet" href="css/style.css" />
@@ -22,21 +22,23 @@
   <header class="site-header">
     <a href="#" class="brand-logo">ALVOXIS</a>
 
-    <button class="menu-button" aria-label="Open menu">
+    <button class="menu-button" type="button" aria-label="Open menu">
       <span></span>
       <span></span>
     </button>
   </header>
 
 
-  <!-- CINEMATIC SCROLL EXPERIENCE -->
+  <!-- MAIN -->
   <main>
 
+    <!-- CINEMATIC SCROLL EXPERIENCE -->
     <section class="scroll-experience" id="experience">
 
-      <div class="experience-sticky">
+      <!-- THIS AREA STAYS FIXED WHILE SCROLLING -->
+      <div class="experience-sticky" id="experienceSticky">
 
-        <!-- VIDEO SCENE -->
+        <!-- VIDEO -->
         <div class="video-scene" id="videoScene">
 
           <video
@@ -57,11 +59,11 @@
         </div>
 
 
-        <!-- CINEMATIC DARK OVERLAY -->
+        <!-- DARK CINEMATIC OVERLAY -->
         <div class="cinematic-overlay"></div>
 
 
-        <!-- OPENING CONTENT -->
+        <!-- HERO TITLE -->
         <div class="opening-content" id="openingContent">
 
           <p class="hero-label">
@@ -82,7 +84,7 @@
         </div>
 
 
-        <!-- INTRO TEXT THAT APPEARS DURING SCROLL -->
+        <!-- SECOND SCENE -->
         <div class="distance-content" id="distanceContent">
 
           <p class="section-label">
@@ -115,11 +117,15 @@
         </div>
 
 
-        <!-- SCROLL PROGRESS -->
-        <div class="scroll-progress">
+        <!-- PROGRESS -->
+        <div class="scroll-progress" id="scrollProgress">
+
           <span id="progressValue">01</span>
+
           <span class="progress-divider"></span>
+
           <span>04</span>
+
         </div>
 
       </div>
@@ -127,7 +133,7 @@
     </section>
 
 
-    <!-- NEXT STAGE -->
+    <!-- NEXT SECTION -->
     <section class="next-stage">
 
       <div class="next-stage-content">
