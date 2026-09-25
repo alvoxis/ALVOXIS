@@ -939,3 +939,210 @@ h2 {
   }
 
 }
+
+/* ========================================
+   ALVOXIS — FULLSCREEN CARD EXPERIENCE
+   ======================================== */
+
+.collection-experience {
+  position: relative;
+  height: 420vh;
+  background: #050505;
+}
+
+.interactive-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  perspective: 1400px;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+/* Полноэкранная зона карточек */
+
+.product-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(0, 0, -220px) scale(0.72);
+  transform-origin: center center;
+  transition:
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 650ms ease,
+    visibility 0s linear 800ms;
+  will-change: transform, opacity;
+}
+
+/* Активная карточка занимает экран */
+
+.product-card.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) scale(1);
+  z-index: 10;
+  transition:
+    transform 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 650ms ease,
+    visibility 0s;
+}
+
+/* Предыдущие карточки */
+
+.product-card.is-before {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(-12%, -2%, -300px) scale(0.55);
+  z-index: 2;
+}
+
+/* Следующие карточки находятся позади */
+
+.product-card.is-after {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(0, 0, -380px) scale(0.58);
+  z-index: 3;
+}
+
+/* Текущая карточка уходит влево */
+
+.product-card.is-exiting-left {
+  opacity: 0;
+  visibility: visible;
+  pointer-events: none;
+  transform:
+    translate3d(-115%, -5%, -180px)
+    rotateY(-24deg)
+    scale(0.42);
+  z-index: 20;
+  transition:
+    transform 750ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 600ms ease,
+    visibility 0s;
+}
+
+/* Текущая карточка уходит вправо */
+
+.product-card.is-exiting-right {
+  opacity: 0;
+  visibility: visible;
+  pointer-events: none;
+  transform:
+    translate3d(115%, -5%, -180px)
+    rotateY(24deg)
+    scale(0.42);
+  z-index: 20;
+  transition:
+    transform 750ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 600ms ease,
+    visibility 0s;
+}
+
+/* Изображение бокса */
+
+.product-card img,
+.product-card picture {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center center;
+}
+
+/* Если внутри карточки есть основной контейнер */
+
+.product-card .product-card-inner,
+.product-card .card-inner,
+.product-card .product-visual {
+  width: min(100%, 620px);
+  height: min(100%, 780px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Обложка может быть крупнее остальных объектов */
+
+.product-card:first-child img {
+  width: min(94vw, 780px);
+  max-height: 82svh;
+  object-fit: contain;
+}
+
+/* Информация о продукте */
+
+.product-card .product-info,
+.product-card .card-content {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  z-index: 5;
+  text-align: center;
+}
+
+/* Мобильная версия */
+
+@media (max-width: 700px) {
+  .collection-experience {
+    height: 420vh;
+  }
+
+  .interactive-stage {
+    height: 100svh;
+    min-height: 560px;
+  }
+
+  .product-card {
+    padding:
+      20px
+      16px
+      calc(90px + env(safe-area-inset-bottom));
+  }
+
+  .product-card:first-child img {
+    width: 96vw;
+    max-height: 76svh;
+  }
+
+  .product-card .product-card-inner,
+  .product-card .card-inner,
+  .product-card .product-visual {
+    width: 100%;
+    height: 76svh;
+  }
+
+  .product-card.is-exiting-left {
+    transform:
+      translate3d(-125%, -4%, -160px)
+      rotateY(-20deg)
+      scale(0.38);
+  }
+
+  .product-card.is-exiting-right {
+    transform:
+      translate3d(125%, -4%, -160px)
+      rotateY(20deg)
+      scale(0.38);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card {
+    transition-duration: 250ms;
+  }
+}
