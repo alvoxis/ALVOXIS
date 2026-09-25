@@ -1,0 +1,1111 @@
+
+/* =========================================
+   ALVOXIS — GLOBAL RESET
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --background: #080808;
+  --background-soft: #0e0e0e;
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.58);
+  --gold: #b9a078;
+  --gold-light: #e2c99b;
+  --line: rgba(255, 255, 255, 0.12);
+}
+
+html {
+  background: var(--background);
+  scroll-behavior: auto;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+
+  background: var(--background);
+  color: var(--text);
+
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: 28px 42px;
+
+  pointer-events: none;
+}
+
+.brand-logo {
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+
+  pointer-events: auto;
+}
+
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(10px);
+
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.menu-button span {
+  display: block;
+
+  width: 14px;
+  height: 1px;
+
+  background: #ffffff;
+}
+
+/* =========================================
+   MAIN SCROLL SCENE
+========================================= */
+
+.scroll-experience {
+  position: relative;
+  height: 400vh;
+}
+
+.experience-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+
+  overflow: hidden;
+
+  background: #080808;
+
+  isolation: isolate;
+  perspective: 1400px;
+}
+
+/* =========================================
+   VIDEO
+========================================= */
+
+.video-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  opacity: 1;
+  visibility: visible;
+
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center center;
+
+  will-change: transform, opacity;
+
+  pointer-events: none;
+}
+
+.hero-video {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center center;
+
+  background: #080808;
+}
+
+/* =========================================
+   CINEMATIC OVERLAY
+========================================= */
+
+.cinematic-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.24) 0%,
+      rgba(0, 0, 0, 0.03) 40%,
+      rgba(0, 0, 0, 0.42) 100%
+    );
+}
+
+/* =========================================
+   TYPOGRAPHY
+========================================= */
+
+.eyebrow {
+  margin-bottom: 25px;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  line-height: 1.5;
+
+  text-transform: uppercase;
+}
+
+.opening-content,
+.distance-content,
+.selection-cover {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: auto;
+
+  padding: 100px 24px;
+
+  text-align: center;
+  pointer-events: none;
+}
+
+/* =========================================
+   OPENING TEXT
+========================================= */
+
+.opening-content {
+  z-index: 20;
+
+  opacity: 1;
+
+  transform: translate(-50%, -50%) scale(1);
+
+  will-change: transform, opacity;
+}
+
+.opening-content h1 {
+  max-width: 950px;
+
+  font-size: clamp(42px, 7.3vw, 112px);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+/* =========================================
+   DISTANCE TEXT
+========================================= */
+
+.distance-content {
+  z-index: 21;
+
+  opacity: 0;
+
+  transform: translate(-50%, -50%) scale(0.78);
+
+  will-change: transform, opacity;
+}
+
+.distance-content h2 {
+  max-width: 900px;
+
+  font-size: clamp(40px, 6.8vw, 105px);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.distance-description {
+  max-width: 360px;
+  margin-top: 32px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   SELECTION COVER INSIDE VIDEO SCENE
+========================================= */
+
+.selection-cover {
+  z-index: 22;
+
+  opacity: 0;
+
+  transform: translate(-50%, -50%) scale(0.84);
+
+  will-change: transform, opacity;
+}
+
+.selection-cover-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  background: radial-gradient(
+    circle,
+    rgba(185, 160, 120, 0.13) 0%,
+    rgba(185, 160, 120, 0.035) 35%,
+    transparent 72%
+  );
+
+  filter: blur(20px);
+}
+
+.selection-cover-content {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.selection-cover-content h2 {
+  font-size: clamp(52px, 8vw, 118px);
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  line-height: 0.94;
+}
+
+.selection-cover-content p:not(.eyebrow) {
+  margin-top: 32px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.sideways-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+
+  margin-top: 38px;
+}
+
+.hint-line {
+  display: block;
+
+  width: 42px;
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.hint-arrow {
+  color: var(--gold);
+  font-size: 23px;
+}
+
+/* =========================================
+   SCROLL INDICATOR
+========================================= */
+
+.scroll-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  z-index: 30;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  color: rgba(255, 255, 255, 0.52);
+
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+
+  transform: translateX(-50%);
+
+  white-space: nowrap;
+  will-change: opacity;
+}
+
+.scroll-indicator-line {
+  display: block;
+
+  width: 1px;
+  height: 42px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.65),
+    transparent
+  );
+}
+
+/* =========================================
+   SCROLL PROGRESS
+========================================= */
+
+.scroll-progress {
+  position: absolute;
+  right: 42px;
+  bottom: 38px;
+  z-index: 30;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.progress-divider {
+  display: block;
+
+  width: 24px;
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* =========================================
+   MYSTERY COVER
+========================================= */
+
+.mystery-cover-section {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+  min-height: 100svh;
+
+  overflow: hidden;
+
+  background: #080808;
+  isolation: isolate;
+}
+
+.mystery-cover-image {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  overflow: hidden;
+}
+
+.mystery-cover-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center center;
+
+  filter: saturate(0.88) contrast(1.08);
+
+  transform: scale(1.04);
+
+  transition: transform 1.8s ease;
+}
+
+.mystery-cover-section:hover
+.mystery-cover-image img {
+  transform: scale(1.08);
+}
+
+.mystery-cover-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.76) 0%,
+      rgba(0, 0, 0, 0.32) 52%,
+      rgba(0, 0, 0, 0.62) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.22),
+      rgba(0, 0, 0, 0.54)
+    );
+}
+
+.mystery-cover-content {
+  position: relative;
+  z-index: 3;
+
+  width: 100%;
+  max-width: 1200px;
+
+  padding: 150px 70px 100px;
+
+  text-align: left;
+}
+
+.mystery-cover-content .section-label {
+  margin-bottom: 30px;
+
+  color: var(--gold-light);
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+
+  text-transform: uppercase;
+}
+
+.mystery-cover-content h2 {
+  max-width: 700px;
+
+  font-size: clamp(48px, 7.2vw, 110px);
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  line-height: 0.94;
+}
+
+.mystery-cover-content p:not(.section-label) {
+  max-width: 320px;
+  margin-top: 32px;
+
+  color: rgba(255, 255, 255, 0.66);
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.mystery-cover-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 45px;
+
+  min-width: 245px;
+  margin-top: 42px;
+  padding: 16px 20px;
+
+  border: 1px solid rgba(226, 201, 155, 0.62);
+  border-radius: 100px;
+
+  color: #ffffff;
+
+  font-size: 11px;
+  letter-spacing: 0.04em;
+
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease;
+}
+
+.mystery-cover-button span {
+  color: var(--gold-light);
+  font-size: 18px;
+}
+
+.mystery-cover-button:hover {
+  border-color: var(--gold-light);
+  background: rgba(185, 160, 120, 0.16);
+
+  transform: translateX(5px);
+}
+
+/* =========================================
+   COLLECTION SECTION
+========================================= */
+
+.collection-section {
+  position: relative;
+
+  padding: 150px 42px 170px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(185, 160, 120, 0.11),
+      transparent 38%
+    ),
+    #080808;
+}
+
+.collection-heading {
+  width: 100%;
+  max-width: 900px;
+
+  margin: 0 auto 85px;
+
+  text-align: center;
+}
+
+.section-label {
+  margin-bottom: 25px;
+
+  color: var(--gold);
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+
+  text-transform: uppercase;
+}
+
+.collection-heading h2 {
+  font-size: clamp(46px, 7vw, 105px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 0.96;
+}
+
+.collection-heading p:not(.section-label) {
+  max-width: 370px;
+  margin: 32px auto 0;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   PRODUCT GRID
+========================================= */
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+
+  width: 100%;
+  max-width: 1320px;
+
+  margin: 0 auto;
+}
+
+.product-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 2px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.01)
+    );
+
+  transition:
+    border-color 0.45s ease,
+    transform 0.45s ease;
+}
+
+.product-card:hover {
+  border-color: rgba(185, 160, 120, 0.55);
+
+  transform: translateY(-8px);
+}
+
+.product-image-wrapper {
+  position: relative;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: #101010;
+}
+
+.product-image-wrapper::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    180deg,
+    transparent 60%,
+    rgba(0, 0, 0, 0.2)
+  );
+}
+
+.product-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.8s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.045);
+  filter: brightness(1.08);
+}
+
+.product-info {
+  padding: 32px 32px 35px;
+}
+
+.product-category {
+  margin-bottom: 17px;
+
+  color: var(--gold);
+
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+
+  text-transform: uppercase;
+}
+
+.product-info h3 {
+  font-size: clamp(28px, 3vw, 46px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.product-description {
+  max-width: 280px;
+  min-height: 44px;
+  margin-top: 18px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  margin-top: 30px;
+}
+
+.product-price {
+  color: #ffffff;
+
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.product-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 12px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 100px;
+
+  color: rgba(255, 255, 255, 0.88);
+
+  font-size: 10px;
+  letter-spacing: 0.06em;
+
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.product-button span {
+  color: var(--gold-light);
+  font-size: 16px;
+}
+
+.product-button:hover {
+  border-color: var(--gold);
+  background: rgba(185, 160, 120, 0.13);
+}
+
+/* =========================================
+   NEXT STAGE
+========================================= */
+
+.next-stage {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 80vh;
+  padding: 120px 24px;
+
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(185, 160, 120, 0.08),
+      transparent 45%
+    ),
+    #080808;
+}
+
+.next-stage-content {
+  width: 100%;
+  max-width: 1000px;
+
+  text-align: center;
+}
+
+.next-stage h2 {
+  font-size: clamp(44px, 7vw, 110px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+}
+
+.next-stage p:not(.section-label) {
+  max-width: 360px;
+  margin: 34px auto 0;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 120px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: #080808;
+}
+
+.site-footer p {
+  color: rgba(255, 255, 255, 0.36);
+
+  font-size: 10px;
+  letter-spacing: 0.2em;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .site-header {
+    padding: 22px 20px;
+  }
+
+  .brand-logo {
+    font-size: 13px;
+    letter-spacing: 0.28em;
+  }
+
+  .menu-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .experience-sticky {
+    min-height: 500px;
+  }
+
+  .opening-content,
+  .distance-content,
+  .selection-cover {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .eyebrow {
+    margin-bottom: 20px;
+
+    font-size: 9px;
+    letter-spacing: 0.25em;
+  }
+
+  .opening-content h1 {
+    font-size: clamp(42px, 12vw, 74px);
+  }
+
+  .distance-content h2 {
+    font-size: clamp(40px, 11.5vw, 70px);
+  }
+
+  .distance-description {
+    max-width: 280px;
+    margin-top: 25px;
+
+    font-size: 12px;
+  }
+
+  .selection-cover-content h2 {
+    font-size: clamp(52px, 14vw, 85px);
+  }
+
+  .selection-cover-content p:not(.eyebrow) {
+    margin-top: 26px;
+    font-size: 12px;
+  }
+
+  .selection-cover-glow {
+    width: 300px;
+    height: 300px;
+  }
+
+  .scroll-indicator {
+    bottom: 24px;
+    font-size: 8px;
+  }
+
+  .scroll-indicator-line {
+    height: 30px;
+  }
+
+  .scroll-progress {
+    right: 20px;
+    bottom: 25px;
+
+    font-size: 9px;
+  }
+
+  .progress-divider {
+    width: 17px;
+  }
+
+  /* MYSTERY COVER MOBILE */
+
+  .mystery-cover-section {
+    min-height: 100svh;
+  }
+
+  .mystery-cover-image img {
+    object-position: 58% center;
+  }
+
+  .mystery-cover-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.42),
+        rgba(0, 0, 0, 0.25) 35%,
+        rgba(0, 0, 0, 0.82) 100%
+      );
+  }
+
+  .mystery-cover-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    min-height: 100svh;
+
+    padding: 120px 24px 65px;
+
+    text-align: center;
+  }
+
+  .mystery-cover-content .section-label {
+    margin-bottom: 25px;
+
+    font-size: 9px;
+    letter-spacing: 0.24em;
+  }
+
+  .mystery-cover-content h2 {
+    max-width: 340px;
+    margin: 0 auto;
+
+    font-size: clamp(42px, 12.5vw, 70px);
+  }
+
+  .mystery-cover-content p:not(.section-label) {
+    max-width: 280px;
+    margin: 26px auto 0;
+
+    font-size: 12px;
+  }
+
+  .mystery-cover-button {
+    align-self: center;
+
+    min-width: 225px;
+    margin-top: 32px;
+    padding: 15px 18px;
+
+    font-size: 10px;
+  }
+
+  /* COLLECTION MOBILE */
+
+  .collection-section {
+    padding: 105px 20px 110px;
+  }
+
+  .collection-heading {
+    margin-bottom: 48px;
+  }
+
+  .collection-heading h2 {
+    font-size: clamp(44px, 12.5vw, 72px);
+  }
+
+  .collection-heading p:not(.section-label) {
+    max-width: 280px;
+    margin-top: 25px;
+
+    font-size: 12px;
+  }
+
+  .collection-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .product-image-wrapper {
+    aspect-ratio: 1 / 1;
+  }
+
+  .product-info {
+    padding: 27px 24px 29px;
+  }
+
+  .product-info h3 {
+    font-size: 32px;
+  }
+
+  .product-description {
+    min-height: auto;
+    max-width: 260px;
+
+    font-size: 12px;
+  }
+
+  .product-bottom {
+    margin-top: 27px;
+  }
+
+  .product-price {
+    font-size: 16px;
+  }
+
+  .product-button {
+    gap: 13px;
+    padding: 11px 14px;
+  }
+
+  .next-stage {
+    min-height: 70vh;
+    padding: 100px 22px;
+  }
+
+  .next-stage h2 {
+    font-size: clamp(42px, 12vw, 70px);
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
