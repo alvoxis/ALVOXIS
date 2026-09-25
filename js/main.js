@@ -13,7 +13,7 @@ const scrollProgress = document.querySelector("#scrollProgress");
 const progressValue = document.querySelector("#progressValue");
 
 let animationFrame = null;
-let videoMetadataReady = false;
+let videoReady = false;
 
 
 /* =========================================
@@ -24,18 +24,42 @@ if (titleVideo) {
   titleVideo.muted = true;
   titleVideo.volume = 0;
 
-  // Видео не запускается автоматически.
-  // Его временем управляет положение скролла.
+  // Видео не запускается само.
+  // Им управляет положение страницы.
   titleVideo.pause();
 
   titleVideo.addEventListener("loadedmetadata", () => {
-    videoMetadataReady = true;
+    videoReady = true;
+
+    try {
+      titleVideo.currentTime = 0;
+    } catch (error) {
+      console.warn(
+        "Could not set initial video time:",
+        error
+      );
+    }
+
+    updateExperience();
+  });
+
+  titleVideo.addEventListener("loadeddata", () => {
+    videoReady = true;
+
     updateExperience();
   });
 
   titleVideo.addEventListener("canplay", () => {
-    videoMetadataReady = true;
+    videoReady = true;
+
     updateExperience();
+  });
+
+  titleVideo.addEventListener("error", () => {
+    console.error(
+      "ALVOXIS video could not be loaded.",
+      titleVideo.error
+    );
   });
 }
 
@@ -45,16 +69,19 @@ if (titleVideo) {
 ========================================= */
 
 function clamp(value, minimum, maximum) {
-  return Math.min(Math.max(value, minimum), maximum);
+  return Math.min(
+    Math.max(value, minimum),
+    maximum
+  );
 }
 
 
 function easeInOut(value) {
-  const clampedValue = clamp(value, 0, 1);
+  const progress = clamp(value, 0, 1);
 
-  return clampedValue < 0.5
-    ? 2 * clampedValue * clampedValue
-    : 1 - Math.pow(-2 * clampedValue + 2, 2) / 2;
+  return progress < 0.5
+    ? 2 * progress * progress
+    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 }
 
 
@@ -63,65 +90,69 @@ function getProgress(value, start, end) {
     return value >= end ? 1 : 0;
   }
 
-  return clamp((value - start) / (end - start), 0, 1);
+  return clamp(
+    (value - start) / (end - start),
+    0,
+    1
+  );
 }
 
 
 /* =========================================
-   SCROLL-DRIVEN VIDEO
+   SCROLL-CONTROLLED VIDEO
 ========================================= */
 
 function updateScrollVideo(progress) {
-  if (!titleVideo || !videoMetadataReady) {
+  if (!titleVideo || !videoReady) {
     return;
   }
 
-  if (!Number.isFinite(titleVideo.duration)) {
-    return;
-  }
+  const duration = titleVideo.duration;
 
-  if (titleVideo.duration <= 0) {
+  if (!Number.isFinite(duration) || duration <= 0) {
     return;
   }
 
   /*
-    Видео проигрывается в первой части сцены.
+    VIDEO PLAYBACK PHASE
 
-    Скролл вниз:
-    currentTime увеличивается.
+    0.00–0.55:
+    Видео проигрывается полностью
+    под управлением скролла.
 
-    Скролл вверх:
-    currentTime уменьшается.
-
-    При остановке скролла:
-    видео остаётся на текущем кадре.
+    В этой фазе видео остаётся
+    большим и полностью видимым.
   */
 
-  const videoPlaybackProgress = easeInOut(
-    getProgress(progress, 0, 0.34)
+  const playbackProgress = easeInOut(
+    getProgress(progress, 0, 0.55)
   );
 
   const targetTime =
-    videoPlaybackProgress * titleVideo.duration;
+    playbackProgress * duration;
 
-  const currentTimeDifference =
-    Math.abs(titleVideo.currentTime - targetTime);
+  const difference = Math.abs(
+    titleVideo.currentTime - targetTime
+  );
 
-  if (currentTimeDifference > 0.016) {
+  if (difference > 0.016) {
     try {
       titleVideo.currentTime = targetTime;
     } catch (error) {
-      console.warn("Video time update failed:", error);
+      console.warn(
+        "Could not update video playback:",
+        error
+      );
     }
   }
 
-  // Не даём видео автоматически проигрываться.
+  // Запрещаем самостоятельное воспроизведение.
   titleVideo.pause();
 }
 
 
 /* =========================================
-   MAIN EXPERIENCE ANIMATION
+   MAIN EXPERIENCE
 ========================================= */
 
 function updateExperience() {
@@ -154,44 +185,52 @@ function updateExperience() {
 
 
   /* -----------------------------------------
-     2. VIDEO MOVEMENT AND DISAPPEARANCE
+     2. VIDEO DEPTH EXIT
   ----------------------------------------- */
 
-  const videoProgress =
-    easeInOut(getProgress(progress, 0, 0.34));
+  /*
+    До 55% видео не уменьшается.
+
+    С 55% до 78%:
+    видео уменьшается, уходит в глубину
+    и полностью исчезает.
+  */
+
+  const disappearanceProgress = easeInOut(
+    getProgress(progress, 0.55, 0.78)
+  );
 
   const videoScale =
-    1 - videoProgress * 0.72;
+    1 - disappearanceProgress * 0.84;
 
   const videoY =
-    videoProgress * -7;
+    disappearanceProgress * -8;
 
   const videoZ =
-    videoProgress * -480;
-
-  /*
-    Видео начинает полностью исчезать
-    ближе к окончанию своей сцены.
-  */
+    disappearanceProgress * -1100;
 
   const videoOpacity =
     1 - easeInOut(
-      getProgress(progress, 0.16, 0.34)
+      getProgress(progress, 0.64, 0.78)
     );
 
   videoScene.style.transform = `
-    translate3d(0, ${videoY}%, ${videoZ}px)
+    translate3d(
+      0,
+      ${videoY}%,
+      ${videoZ}px
+    )
     scale(${videoScale})
   `;
 
   videoScene.style.opacity = videoOpacity;
 
   /*
-    После исчезновения видео полностью
-    скрываем его визуальный слой.
+    Скрываем видео только после
+    полного исчезновения.
   */
 
-  if (videoOpacity <= 0.01) {
+  if (videoOpacity <= 0.005) {
     videoScene.style.visibility = "hidden";
   } else {
     videoScene.style.visibility = "visible";
@@ -202,14 +241,20 @@ function updateExperience() {
      3. OPENING TEXT
   ----------------------------------------- */
 
-  const openingProgress =
-    easeInOut(getProgress(progress, 0.04, 0.27));
+  /*
+    Начальный текст исчезает
+    во время первой части скролла.
+  */
+
+  const openingProgress = easeInOut(
+    getProgress(progress, 0.08, 0.38)
+  );
 
   const openingScale =
     1 - openingProgress * 0.22;
 
   const openingY =
-    openingProgress * -40;
+    openingProgress * -45;
 
   const openingOpacity =
     1 - openingProgress;
@@ -227,20 +272,27 @@ function updateExperience() {
      4. DISTANCE TEXT
   ----------------------------------------- */
 
-  const textIn =
-    easeInOut(getProgress(progress, 0.22, 0.52));
+  /*
+    Новый текст появляется
+    после исчезновения видео.
+  */
 
-  const textOut =
-    easeInOut(getProgress(progress, 0.65, 0.86));
+  const textIn = easeInOut(
+    getProgress(progress, 0.75, 0.89)
+  );
+
+  const textOut = easeInOut(
+    getProgress(progress, 0.91, 1)
+  );
 
   const textOpacity =
     textIn * (1 - textOut);
 
   const textScale =
-    0.72 + textIn * 0.28 - textOut * 0.12;
+    0.78 + textIn * 0.22 - textOut * 0.08;
 
   const textY =
-    60 - textIn * 60 - textOut * 35;
+    70 - textIn * 70 - textOut * 25;
 
   distanceContent.style.transform = `
     translate(-50%, calc(-50% + ${textY}px))
@@ -256,26 +308,26 @@ function updateExperience() {
   ----------------------------------------- */
 
   /*
-    Обложка появляется после основного текста.
-
-    Позже здесь можно будет подключить
-    горизонтальный свайп между Mini и Classic.
+    Обложка выбора подарка появляется
+    после основного текста.
   */
 
-  const coverIn =
-    easeInOut(getProgress(progress, 0.68, 0.88));
+  const coverIn = easeInOut(
+    getProgress(progress, 0.86, 0.97)
+  );
 
-  const coverOut =
-    easeInOut(getProgress(progress, 0.92, 1));
+  const coverOut = easeInOut(
+    getProgress(progress, 0.98, 1)
+  );
 
   const coverOpacity =
     coverIn * (1 - coverOut);
 
   const coverScale =
-    0.82 + coverIn * 0.18 - coverOut * 0.08;
+    0.84 + coverIn * 0.16 - coverOut * 0.05;
 
   const coverY =
-    70 - coverIn * 70 - coverOut * 20;
+    65 - coverIn * 65 - coverOut * 20;
 
   selectionCover.style.transform = `
     translate(-50%, calc(-50% + ${coverY}px))
@@ -292,7 +344,7 @@ function updateExperience() {
 
   const indicatorOpacity =
     1 - easeInOut(
-      getProgress(progress, 0.02, 0.18)
+      getProgress(progress, 0.04, 0.2)
     );
 
   scrollIndicator.style.opacity =
@@ -308,15 +360,15 @@ function updateExperience() {
 
   let sceneNumber = 1;
 
-  if (progress >= 0.25) {
+  if (progress >= 0.38) {
     sceneNumber = 2;
   }
 
-  if (progress >= 0.62) {
+  if (progress >= 0.78) {
     sceneNumber = 3;
   }
 
-  if (progress >= 0.86) {
+  if (progress >= 0.91) {
     sceneNumber = 4;
   }
 
@@ -349,7 +401,9 @@ function requestExperienceUpdate() {
 window.addEventListener(
   "scroll",
   requestExperienceUpdate,
-  { passive: true }
+  {
+    passive: true
+  }
 );
 
 window.addEventListener(
