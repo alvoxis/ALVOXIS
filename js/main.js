@@ -1,6 +1,6 @@
 
 // =========================================
-// ALVOXIS — CINEMATIC SCROLL ANIMATION
+// ALVOXIS — COMPLETE SCROLL ENGINE
 // =========================================
 
 const experience = document.querySelector("#experience");
@@ -9,23 +9,24 @@ const titleVideo = document.querySelector("#titleVideo");
 const openingContent = document.querySelector("#openingContent");
 const distanceContent = document.querySelector("#distanceContent");
 const scrollIndicator = document.querySelector("#scrollIndicator");
-const scrollProgress = document.querySelector(".scroll-progress");
+const scrollProgress = document.querySelector("#scrollProgress");
 const progressValue = document.querySelector("#progressValue");
 
 let animationFrame = null;
 
 
 // =========================================
-// VIDEO SETTINGS
+// VIDEO
 // =========================================
 
 if (titleVideo) {
+
   titleVideo.muted = true;
   titleVideo.volume = 0;
 
   const playVideo = () => {
     titleVideo.play().catch(() => {
-      // Autoplay may be restricted by the browser.
+      // Browser autoplay restrictions are ignored.
     });
   };
 
@@ -38,12 +39,15 @@ if (titleVideo) {
   }
 
   document.addEventListener("visibilitychange", () => {
+
     if (document.hidden) {
       titleVideo.pause();
     } else {
       playVideo();
     }
+
   });
+
 }
 
 
@@ -51,114 +55,152 @@ if (titleVideo) {
 // HELPERS
 // =========================================
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
+function clamp(value, minimum, maximum) {
+  return Math.min(Math.max(value, minimum), maximum);
 }
 
 function easeInOut(value) {
   return value * value * (3 - 2 * value);
 }
 
-function rangeProgress(value, start, end) {
-  return clamp((value - start) / (end - start), 0, 1);
+function getProgress(value, start, end) {
+  return clamp(
+    (value - start) / (end - start),
+    0,
+    1
+  );
 }
 
 
 // =========================================
-// SCROLL ANIMATION
+// MAIN SCROLL ANIMATION
 // =========================================
 
 function updateExperience() {
+
   if (!experience) {
     return;
   }
 
-  const experienceTop = experience.getBoundingClientRect().top;
-  const scrollDistance = experience.offsetHeight - window.innerHeight;
+  const experienceRect = experience.getBoundingClientRect();
 
-  if (scrollDistance <= 0) {
+  const totalScrollDistance =
+    experience.offsetHeight - window.innerHeight;
+
+  if (totalScrollDistance <= 0) {
     return;
   }
 
-  const rawProgress = -experienceTop / scrollDistance;
+  /*
+    Progress is calculated from the whole scroll section.
+    0 = beginning
+    1 = end
+  */
+
+  const rawProgress =
+    -experienceRect.top / totalScrollDistance;
+
   const progress = clamp(rawProgress, 0, 1);
 
 
-  // -----------------------------------------
-  // 1. VIDEO MOVES INTO THE DISTANCE
-  // -----------------------------------------
+  // =========================================
+  // SCENE 1 — VIDEO MOVES INTO THE DISTANCE
+  // =========================================
 
   const videoProgress = easeInOut(
-    rangeProgress(progress, 0, 0.34)
+    getProgress(progress, 0, 0.34)
   );
 
-  const videoScale = 1 - videoProgress * 0.72;
-  const videoY = videoProgress * -7;
-  const videoZ = videoProgress * -480;
-  const videoOpacity = 1 - videoProgress * 0.88;
+  const videoScale =
+    1 - videoProgress * 0.72;
+
+  const videoY =
+    videoProgress * -7;
+
+  const videoZ =
+    videoProgress * -480;
+
+  const videoOpacity =
+    1 - videoProgress * 0.88;
 
   videoScene.style.transform =
     `translate3d(0, ${videoY}%, ${videoZ}px) scale(${videoScale})`;
 
-  videoScene.style.opacity = videoOpacity;
+  videoScene.style.opacity =
+    videoOpacity;
 
 
-  // -----------------------------------------
-  // 2. OPENING TEXT FADES AWAY
-  // -----------------------------------------
+  // =========================================
+  // SCENE 1 — HERO TEXT DISAPPEARS
+  // =========================================
 
-  const openingOut = easeInOut(
-    rangeProgress(progress, 0.04, 0.27)
+  const openingProgress = easeInOut(
+    getProgress(progress, 0.04, 0.27)
   );
 
-  const openingScale = 1 - openingOut * 0.22;
-  const openingY = openingOut * -40;
-  const openingOpacity = 1 - openingOut;
+  const openingScale =
+    1 - openingProgress * 0.22;
+
+  const openingY =
+    openingProgress * -40;
+
+  const openingOpacity =
+    1 - openingProgress;
 
   openingContent.style.transform =
     `translate(-50%, calc(-50% + ${openingY}px)) scale(${openingScale})`;
 
-  openingContent.style.opacity = openingOpacity;
+  openingContent.style.opacity =
+    openingOpacity;
 
 
-  // -----------------------------------------
-  // 3. DISTANCE TEXT APPEARS
-  // -----------------------------------------
+  // =========================================
+  // SCENE 2 — TEXT COMES FROM THE DISTANCE
+  // =========================================
 
   const textIn = easeInOut(
-    rangeProgress(progress, 0.22, 0.52)
+    getProgress(progress, 0.22, 0.52)
   );
 
   const textOut = easeInOut(
-    rangeProgress(progress, 0.65, 0.86)
+    getProgress(progress, 0.65, 0.86)
   );
 
-  const textOpacity = textIn * (1 - textOut);
-  const textScale = 0.72 + textIn * 0.28 - textOut * 0.12;
-  const textY = 60 - textIn * 60 - textOut * 35;
+  const textOpacity =
+    textIn * (1 - textOut);
+
+  const textScale =
+    0.72 + textIn * 0.28 - textOut * 0.12;
+
+  const textY =
+    60 - textIn * 60 - textOut * 35;
 
   distanceContent.style.transform =
     `translate(-50%, calc(-50% + ${textY}px)) scale(${textScale})`;
 
-  distanceContent.style.opacity = textOpacity;
+  distanceContent.style.opacity =
+    textOpacity;
 
 
-  // -----------------------------------------
-  // 4. SCROLL INDICATORS
-  // -----------------------------------------
+  // =========================================
+  // SCROLL INDICATORS
+  // =========================================
 
-  const indicatorOpacity = 1 - easeInOut(
-    rangeProgress(progress, 0.02, 0.18)
-  );
+  const indicatorOpacity =
+    1 - easeInOut(
+      getProgress(progress, 0.02, 0.18)
+    );
 
-  scrollIndicator.style.opacity = indicatorOpacity;
+  scrollIndicator.style.opacity =
+    indicatorOpacity;
 
-  scrollProgress.style.opacity = 0.35 + progress * 0.65;
+  scrollProgress.style.opacity =
+    0.35 + progress * 0.65;
 
 
-  // -----------------------------------------
-  // 5. PROGRESS NUMBER
-  // -----------------------------------------
+  // =========================================
+  // SCENE NUMBER
+  // =========================================
 
   let sceneNumber = 1;
 
@@ -174,33 +216,58 @@ function updateExperience() {
     sceneNumber = 4;
   }
 
-  progressValue.textContent = String(sceneNumber).padStart(2, "0");
+  progressValue.textContent =
+    String(sceneNumber).padStart(2, "0");
+
 }
 
 
 // =========================================
-// OPTIMIZED SCROLL LISTENER
+// PERFORMANCE-FRIENDLY SCROLL
 // =========================================
 
 function requestExperienceUpdate() {
+
   if (animationFrame !== null) {
     return;
   }
 
   animationFrame = requestAnimationFrame(() => {
+
     updateExperience();
+
     animationFrame = null;
+
   });
+
 }
 
-window.addEventListener("scroll", requestExperienceUpdate, {
-  passive: true
-});
 
-window.addEventListener("resize", requestExperienceUpdate);
+// =========================================
+// EVENT LISTENERS
+// =========================================
 
-window.addEventListener("orientationchange", requestExperienceUpdate);
+window.addEventListener(
+  "scroll",
+  requestExperienceUpdate,
+  {
+    passive: true
+  }
+);
+
+window.addEventListener(
+  "resize",
+  requestExperienceUpdate
+);
+
+window.addEventListener(
+  "orientationchange",
+  requestExperienceUpdate
+);
 
 
-// INITIAL UPDATE
+// =========================================
+// INITIALIZATION
+// =========================================
+
 updateExperience();
