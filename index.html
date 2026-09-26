@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <meta
+    name="theme-color"
+    content="#050505"
+  />
+
+  <title>ALVOXIS — Meaningful Moments</title>
+
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  />
+</head>
+
+<body>
+
+  <!-- =========================================
+       HEADER
+  ========================================== -->
+
+  <header class="site-header">
+
+    <a
+      href="#/"
+      class="brand"
+      data-nav-route="home"
+    >
+      ALVOXIS
+    </a>
+
+    <nav class="main-nav">
+
+      <a
+        href="#/"
+        data-nav-route="home"
+        data-i18n="nav.catalog"
+      >
+        Catalog
+      </a>
+
+      <a
+        href="#/account"
+        data-nav-route="account"
+        data-i18n="nav.account"
+      >
+        Account
+      </a>
+
+    </nav>
+
+    <div class="header-actions">
+
+      <div
+        class="lang-select"
+        id="langSelect"
+      >
+
+        <button
+          type="button"
+          class="lang-current"
+          id="langCurrent"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          EN
+        </button>
+
+        <div
+          class="lang-menu"
+          id="langMenu"
+        >
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="lv">LV</button>
+          <button type="button" data-lang="ru">RU</button>
+          <button type="button" data-lang="et">ET</button>
+          <button type="button" data-lang="lt">LT</button>
+        </div>
+
+      </div>
+
+      <a
+        href="#/cart"
+        class="cart-link"
+        data-nav-route="cart"
+        aria-label="Cart"
+      >
+        <span class="cart-icon" aria-hidden="true">◎</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+
+    </div>
+
+    <button
+      class="menu-button"
+      type="button"
+      aria-label="Open menu"
+      id="mobileMenuButton"
+    >
+      <span></span>
+      <span></span>
+    </button>
+
+  </header>
+
+
+  <!-- mobile nav sheet -->
+
+  <div class="mobile-nav" id="mobileNav" hidden>
+    <a href="#/" data-nav-route="home" data-i18n="nav.catalog">Catalog</a>
+    <a href="#/account" data-nav-route="account" data-i18n="nav.account">Account</a>
+    <a href="#/cart" data-nav-route="cart" data-i18n="nav.cart">Cart</a>
+  </div>
+
+
+  <!-- =========================================
+       MAIN — SPA VIEWS
+  ========================================== -->
+
+  <main id="viewRoot">
+
+
+    <!-- =======================================
+         VIEW: HOME (hero video + book catalog)
+    ======================================== -->
+
+    <div id="view-home" class="view">
+
+
+      <!-- VIDEO EXPERIENCE -->
+
+      <section
+        id="experience"
+        class="video-experience"
+      >
+
+        <div class="video-scene">
+
+          <video
+            id="heroVideo"
+            class="hero-video"
+            muted
+            playsinline
+            preload="auto"
+            webkit-playsinline
+          >
+
+            <source
+              src="assets/videos/gemini_generated_video_C490D624.mp4"
+              type="video/mp4"
+            />
+
+          </video>
+
+
+          <div class="video-overlay"></div>
+
+
+          <div
+            class="video-content"
+            id="videoContent"
+          >
+
+            <p class="eyebrow" data-i18n="hero.eyebrow">
+              ALVOXIS PRESENTS
+            </p>
+
+            <h1 data-i18n="hero.title">
+              Some moments deserve
+              to be remembered.
+            </h1>
+
+          </div>
+
+
+          <div
+            id="videoCoverReveal"
+            class="video-cover-reveal"
+            aria-hidden="true"
+          >
+
+            <div class="video-cover-reveal-media">
+
+              <img
+                src="assets/images/053D01F6-EB27-4A2D-B6C4-DE826FAA2E45.png"
+                alt=""
+              />
+
+              <div class="video-cover-reveal-scrim"></div>
+
+            </div>
+
+            <div class="video-cover-reveal-copy">
+
+              <p class="eyebrow" data-i18n="catalog.coverEyebrow">
+                ALVOXIS
+              </p>
+
+              <h2 data-i18n="catalog.coverTitle">
+                Something meaningful
+                is waiting.
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <div class="video-progress-container">
+
+            <div class="video-progress">
+              <span id="videoProgressBar"></span>
+            </div>
+
+            <div class="video-progress-label">
+              <span id="videoCounter">01 / 03</span>
+              <span data-i18n="hero.scroll">SCROLL TO EXPLORE</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- 3D BOOK COLLECTION -->
+
+      <section
+        id="collection"
+        class="collection-experience"
+      >
+
+        <div class="collection-sticky">
+
+          <div class="collection-background" aria-hidden="true"></div>
+          <div class="book-light" aria-hidden="true"></div>
+
+          <div class="collection-header">
+
+            <p class="eyebrow" data-i18n="catalog.eyebrow">
+              THE ALVOXIS COLLECTION
+            </p>
+
+            <p data-i18n="catalog.scrollHint">
+              Scroll to turn the page
+            </p>
+
+          </div>
+
+
+          <div
+            id="bookScene"
+            class="book-scene"
+            aria-label="ALVOXIS interactive collection book"
+          >
+
+            <div
+              id="alvoxisBook"
+              class="alvoxis-book"
+            >
+
+
+              <!-- PAGE 01 — COVER / INTRO -->
+
+              <div class="book-page book-page-cover" data-page-index="0">
+
+                <div class="book-page-face book-page-front">
+
+                  <div class="book-page-media">
+                    <img src="assets/images/053D01F6-EB27-4A2D-B6C4-DE826FAA2E45.png" alt="ALVOXIS gift box" />
+                    <div class="book-page-scrim"></div>
+                  </div>
+
+                  <div class="book-page-overlay">
+                    <div class="page-copy">
+                      <p class="eyebrow" data-i18n="catalog.coverEyebrow">ALVOXIS</p>
+                      <h2 data-i18n="catalog.coverTitle">Something meaningful is waiting.</h2>
+                      <p data-i18n="catalog.coverText">Discover a collection created for moments worth remembering.</p>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="book-page-face book-page-back"></div>
+
+              </div>
+
+
+              <!-- PAGE 02 — MINI -->
+
+              <div class="book-page book-page-product" data-page-index="1">
+
+                <div class="book-page-face book-page-front">
+
+                  <div class="book-page-media">
+                    <img src="assets/images/13B0048D-74F8-4511-8456-78D15FF53C36.png" alt="ALVOXIS Mini Gift Box" />
+                    <div class="book-page-scrim"></div>
+                  </div>
+
+                  <div class="book-page-overlay">
+                    <div class="page-copy">
+                      <p class="eyebrow" data-i18n="catalog.eyebrow">THE MINI COLLECTION</p>
+                      <h2 data-i18n="products.mini.name">ALVOXIS Mini</h2>
+                      <p data-i18n="products.mini.tagline">A small box. A meaningful memory.</p>
+                      <strong class="book-price" data-price="mini">€49.99</strong>
+                      <a class="product-action book-product-action" href="#/product/mini" data-i18n="product.selectGift">
+                        Select this gift
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="book-page-face book-page-back"></div>
+
+              </div>
+
+
+              <!-- PAGE 03 — CLASSIC -->
+
+              <div class="book-page book-page-product" data-page-index="2">
+
+                <div class="book-page-face book-page-front">
+
+                  <div class="book-page-media">
+                    <img src="assets/images/IMG_0709.jpeg" alt="ALVOXIS Classic Gift Box" />
+                    <div class="book-page-scrim"></div>
+                  </div>
+
+                  <div class="book-page-overlay">
+                    <div class="page-copy">
+                      <p class="eyebrow" data-i18n="catalog.eyebrow">THE CLASSIC COLLECTION</p>
+                      <h2 data-i18n="products.classic.name">ALVOXIS Classic</h2>
+                      <p data-i18n="products.classic.tagline">Designed for unforgettable moments.</p>
+                      <strong class="book-price" data-price="classic">€59.99</strong>
+                      <a class="product-action book-product-action" href="#/product/classic" data-i18n="product.selectGift">
+                        Select this gift
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="book-page-face book-page-back"></div>
+
+              </div>
+
+
+              <!-- PAGE 04 — SIGNATURE -->
+
+              <div class="book-page book-page-signature" data-page-index="3">
+
+                <div class="book-page-face book-page-front">
+
+                  <div class="signature-placeholder">
+                    <span>ALVOXIS</span>
+                    <small data-i18n="catalog.comingSoon">COMING SOON</small>
+                    <p class="eyebrow" data-i18n="catalog.nextChapter">THE NEXT CHAPTER</p>
+                    <p class="signature-copy" data-i18n="products.signature.tagline">A new experience is coming.</p>
+                  </div>
+
+                </div>
+
+                <div class="book-page-face book-page-back"></div>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="book-controls">
+
+              <button id="previousCard" class="collection-arrow book-arrow" type="button" aria-label="Previous page">←</button>
+
+              <div id="collectionDots" class="collection-dots" aria-label="Book pages">
+                <span class="active" data-page="0"></span>
+                <span data-page="1"></span>
+                <span data-page="2"></span>
+                <span data-page="3"></span>
+              </div>
+
+              <button id="nextCard" class="collection-arrow book-arrow" type="button" aria-label="Next page">→</button>
+
+            </div>
+
+            <div id="collectionCounter" class="collection-counter">01 / 04</div>
+
+            <div class="book-scroll-hint" aria-hidden="true">
+              <span>SCROLL</span>
+              <i></i>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ABOUT -->
+
+      <section id="about" class="about-section">
+
+        <p class="eyebrow" data-i18n="catalog.eyebrow">THE IDEA BEHIND ALVOXIS</p>
+
+        <h2>
+          Some gifts are opened.
+          Others are remembered.
+        </h2>
+
+        <p>
+          ALVOXIS creates meaningful gift experiences
+          designed to preserve emotions, memories
+          and special moments.
+        </p>
+
+      </section>
+
+    </div>
+
+
+    <!-- =======================================
+         VIEW: PRODUCT
+    ======================================== -->
+
+    <div id="view-product" class="view" hidden>
+      <section class="page-shell" id="productContent"></section>
+    </div>
+
+
+    <!-- =======================================
+         VIEW: PERSONALIZE
+    ======================================== -->
+
+    <div id="view-personalize" class="view" hidden>
+      <section class="page-shell" id="personalizeContent"></section>
+    </div>
+
+
+    <!-- =======================================
+         VIEW: CART
+    ======================================== -->
+
+    <div id="view-cart" class="view" hidden>
+      <section class="page-shell" id="cartContent"></section>
+    </div>
+
+
+    <!-- =======================================
+         VIEW: CHECKOUT
+    ======================================== -->
+
+    <div id="view-checkout" class="view" hidden>
+      <section class="page-shell" id="checkoutContent"></section>
+    </div>
+
+
+    <!-- =======================================
+         VIEW: ACCOUNT
+    ======================================== -->
+
+    <div id="view-account" class="view" hidden>
+      <section class="page-shell" id="accountContent"></section>
+    </div>
+
+
+    <!-- =======================================
+         VIEW: CONFIRMATION
+    ======================================== -->
+
+    <div id="view-confirmation" class="view" hidden>
+      <section class="page-shell" id="confirmationContent"></section>
+    </div>
+
+
+  </main>
+
+
+
+  <!-- =========================================
+       FOOTER
+  ========================================== -->
+
+  <footer class="site-footer">
+
+    <div class="footer-main">
+
+      <div class="footer-brand">
+        <div class="brand">ALVOXIS</div>
+        <p data-i18n="footer.tagline">Some moments deserve to be remembered.</p>
+      </div>
+
+      <div class="footer-links">
+
+        <div class="footer-col">
+          <span class="footer-col-title" data-i18n="footer.contact">Contact</span>
+          <a href="mailto:alvoxis8@gmail.com">alvoxis8@gmail.com</a>
+          <a href="https://www.instagram.com/alvoxis/" target="_blank" rel="noopener">@alvoxis</a>
+        </div>
+
+        <div class="footer-col">
+          <a href="#/" data-i18n="footer.catalog">Catalog</a>
+          <a href="#/account" data-i18n="footer.account">Account</a>
+        </div>
+
+        <div class="footer-col">
+          <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="#" data-i18n="footer.terms">Terms &amp; Conditions</a>
+          <a href="#" data-i18n="footer.refund">Refund Policy</a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =========================================
+       JAVASCRIPT
+  ========================================== -->
+
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>
