@@ -1,0 +1,670 @@
+:root {
+  --black: #050505;
+  --dark: #0b0b0b;
+  --white: #f5f3ef;
+  --muted: #aaa59d;
+  --gold: #c7a875;
+  --gold-soft: rgba(199, 168, 117, 0.35);
+  --line: rgba(255, 255, 255, 0.16);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* The book now fills the screen like the hero video. */
+  --book-width: 100%;
+  --book-height: 100%;
+}
+
+
+/* ========================================
+   RESET
+======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--black);
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  overflow-x: hidden;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* ========================================
+   HEADER
+======================================== */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 84px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.site-header > * {
+  pointer-events: auto;
+}
+
+.brand {
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+}
+
+.main-nav a {
+  color: rgba(245, 243, 239, 0.72);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+  color: var(--white);
+}
+
+.menu-button {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.menu-button span {
+  display: block;
+  width: 15px;
+  height: 1px;
+  margin: 4px auto;
+  background: var(--white);
+}
+
+
+/* ========================================
+   TYPOGRAPHY
+======================================== */
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+
+/* ========================================
+   VIDEO EXPERIENCE
+======================================== */
+
+.video-experience {
+  position: relative;
+  height: 500vh;
+  background: var(--black);
+}
+
+.video-scene {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  background: var(--black);
+  isolation: isolate;
+}
+
+
+/* VIDEO */
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: var(--black);
+  opacity: 1;
+  transform: scale(1) translate3d(0, 0, 0);
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
+}
+
+
+/* DARK OVERLAY */
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.52) 0%,
+    rgba(0, 0, 0, 0.08) 42%,
+    rgba(0, 0, 0, 0.74) 100%
+  );
+}
+
+
+/* VIDEO CONTENT */
+
+.video-content {
+  position: absolute;
+  z-index: 6;
+  left: 8vw;
+  bottom: 17vh;
+  max-width: 760px;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: opacity, transform;
+}
+
+.video-content h1 {
+  margin-top: 22px;
+  max-width: 760px;
+  font-size: clamp(42px, 6.5vw, 100px);
+}
+
+
+/* VIDEO PROGRESS */
+
+.video-progress-container {
+  position: absolute;
+  z-index: 7;
+  left: 8vw;
+  right: 8vw;
+  bottom: 6vh;
+}
+
+.video-progress {
+  width: 100%;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.video-progress span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: var(--white);
+}
+
+.video-progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  color: rgba(245, 243, 239, 0.65);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   COLLECTION
+======================================== */
+
+.collection-experience {
+  position: relative;
+  height: 480vh;
+  background: #050505;
+}
+
+.collection-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  background: #050505;
+  isolation: isolate;
+}
+
+.collection-background {
+  position: absolute;
+  inset: 0;
+  z-index: -5;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    rgba(90, 72, 43, 0.24) 0%,
+    rgba(35, 30, 24, 0.16) 28%,
+    rgba(5, 5, 5, 0.92) 70%,
+    #050505 100%
+  );
+  pointer-events: none;
+}
+
+.book-light {
+  position: absolute;
+  z-index: -4;
+  top: 40%;
+  left: 50%;
+  width: 80vw;
+  height: 60vh;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(199, 168, 117, 0.1) 0%,
+    rgba(199, 168, 117, 0.035) 35%,
+    transparent 72%
+  );
+  filter: blur(35px);
+  pointer-events: none;
+}
+
+.collection-header {
+  position: absolute;
+  top: 11vh;
+  left: 8vw;
+  right: 8vw;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.collection-header p:last-child {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+
+/* ========================================
+   BOOK SCENE
+======================================== */
+
+.book-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 2400px;
+  perspective-origin: 8% 50%;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+
+/* ========================================
+   ALVOXIS BOOK
+======================================== */
+
+.alvoxis-book {
+  position: relative;
+  z-index: 5;
+  width: var(--book-width);
+  height: var(--book-height);
+  transform-style: preserve-3d;
+  will-change: transform;
+  pointer-events: none;
+}
+
+
+/* ========================================
+   BOOK PAGES — full-bleed leaves
+   hinged at the left edge, like a real
+   page turning inside a fullscreen book.
+======================================== */
+
+.book-page {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  will-change: transform;
+  pointer-events: none;
+}
+
+
+/* EACH PAGE HAS TWO PHYSICAL FACES */
+
+.book-page-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.book-page-front {
+  transform: rotateY(0deg) translateZ(0.5px);
+}
+
+.book-page-back {
+  transform: rotateY(180deg) translateZ(0.5px);
+  background: linear-gradient(125deg, #0c0b0a 0%, #16140f 48%, #0a0a09 100%);
+  border-left: 1px solid rgba(199, 168, 117, 0.18);
+}
+
+.book-page-back::before {
+  content: "ALVOXIS";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(199, 168, 117, 0.14);
+  font-size: clamp(28px, 6vw, 60px);
+  font-weight: 700;
+  letter-spacing: 0.35em;
+}
+
+
+/* SHEET EDGE — a sliver of thickness at the spine */
+
+.book-page::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  z-index: 40;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.35),
+    rgba(255, 255, 255, 0.22),
+    rgba(0, 0, 0, 0.15)
+  );
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+
+/* DYNAMIC SHADOW — driven by --shadow-opacity, set inline by
+   JS every scroll frame from the page's live turn fraction.
+   Peaks near the middle of the turn, softens at both ends —
+   this is what makes the page feel like it lifts off the
+   book rather than just rotating in place. */
+
+.book-page-front::after,
+.book-page-back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.14) 30%,
+    transparent 62%
+  );
+  opacity: var(--shadow-opacity, 0);
+}
+
+
+/* ========================================
+   FULL-BLEED MEDIA + OVERLAY TEXT
+   Used by the cover and product pages.
+======================================== */
+
+.book-page-media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.book-page-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.book-page-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 5, 0.55) 0%,
+    rgba(5, 5, 5, 0.05) 32%,
+    rgba(5, 5, 5, 0.15) 55%,
+    rgba(5, 5, 5, 0.92) 100%
+  );
+}
+
+.book-page-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8vh 8vw;
+}
+
+.page-number {
+  position: absolute;
+  top: 4vh;
+  left: 8vw;
+  color: rgba(245, 243, 239, 0.55);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+
+/* ========================================
+   PAGE COPY (light text over dark scrim)
+======================================== */
+
+.page-copy {
+  max-width: 560px;
+}
+
+.page-copy .eyebrow {
+  margin-bottom: 20px;
+}
+
+.page-copy h2 {
+  max-width: 560px;
+  color: var(--white);
+  font-size: clamp(38px, 5.5vw, 84px);
+  line-height: 0.95;
+}
+
+.page-copy > p:not(.eyebrow) {
+  max-width: 420px;
+  margin-top: 24px;
+  color: rgba(245, 243, 239, 0.72);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.book-price {
+  display: block;
+  margin-top: 26px;
+  color: var(--white);
+  font-size: 22px;
+  font-weight: 400;
+}
+
+
+/* ========================================
+   PRODUCT BUTTON
+======================================== */
+
+.book-product-action {
+  display: inline-block;
+  margin-top: 26px;
+  padding: 14px 28px;
+  border: 1px solid rgba(245, 243, 239, 0.5);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--white);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.book-product-action:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+
+/* ========================================
+   SIGNATURE (no photo yet)
+======================================== */
+
+.book-page-signature .book-page-front {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(148, 118, 68, 0.14),
+    rgba(5, 5, 5, 0.98) 68%
+  );
+}
+
+.signature-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8vh 8vw;
+}
+
+.signature-placeholder span {
+  color: var(--white);
+  font-size: clamp(30px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  transform: translateX(0.15em);
+}
+
+.signature-placeholder small {
+  margin-top: 20px;
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+}
+
+.signature-placeholder .eyebrow {
+  margin-top: 46px;
+}
+
+.signature-copy {
+  margin-top: 18px;
+  max-width: 360px;
+  color: rgba(245, 243, 239, 0.6);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+
+/* ========================================
+   CONTROLS
+======================================== */
+
+.book-controls {
+  position: absolute;
+  z-index: 200;
+  left: 8vw;
+  right: 8vw;
+  bottom: 8vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.book-arrow {
+  pointer-events: auto;
+}
+
+.collection-arrow {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(5, 5, 5, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--white);
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+.collection-arrow:hover {
+  background: var(--white);
+  color: var(--black);
+  transform: scale(1.06);
+}
+
+.collection-arrow:active {
+  transform: scale(0.94);
