@@ -688,5 +688,12 @@ export function t(lang, path) {
     fallbackNode = fallbackNode && fallbackNode[part] !== undefined ? fallbackNode[part] : undefined;
   }
 
-  return node !== undefined ? node : (fallbackNode !== undefined ? fallbackNode : path);
+  if (node !== undefined) return node;
+  if (fallbackNode !== undefined) return fallbackNode;
+
+  // Never let a raw translation key (e.g. "products.mini.name")
+  // reach the customer-facing UI. Log it so it's easy to spot
+  // and fix, and return an empty string instead of the path.
+  console.warn(`ALVOXIS i18n: missing translation for "${path}"`);
+  return "";
 }
