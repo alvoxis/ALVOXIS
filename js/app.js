@@ -23,9 +23,9 @@ import { initHomeExperience } from "./main.js";
 function applyTranslations() {
   const lang = getState().language;
 
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
     const value = t(lang, el.dataset.i18n);
-    if (Array.isArray(value)) return; // lists are rendered explicitly where used
+    if (Array.isArray(value) || !value) return; // keep existing HTML fallback text
     el.textContent = value;
   });
 
