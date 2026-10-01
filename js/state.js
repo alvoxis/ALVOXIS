@@ -179,7 +179,9 @@ export function getOrders() {
   if (!state.user) return [];
   const users = loadUsers();
   const record = users[state.user.email];
-  return record ? record.orders : [];
+  /* orders created by the old preview checkout were never real — hide
+     any that are still stored on this device */
+  return record ? record.orders.filter((order) => order.status !== "demo") : [];
 }
 
 export function addOrder(order) {

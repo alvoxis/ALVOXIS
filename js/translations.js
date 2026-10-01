@@ -12,21 +12,22 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS PRESENTS",
       title: "Some moments deserve to be remembered.",
-      scroll: "Scroll to explore",
       skip: "Skip intro",
       play: "Play film"
     },
     catalog: {
       eyebrow: "THE ALVOXIS COLLECTION",
       scrollHint: "Drag to turn the page",
-      dragShort: "DRAG",
       coverEyebrow: "ALVOXIS",
       coverTitle: "Something meaningful is waiting.",
       coverText: "Discover a collection created for moments worth remembering.",
       comingSoon: "Coming soon",
       nextChapter: "The next chapter",
       nextChapterTitle: "Support the story.",
-      nextChapterCopy: "ALVOXIS is still being written — page by page. This chapter is coming soon."
+      nextChapterCopy: "ALVOXIS is still being written — page by page. This chapter is coming soon.",
+      miniEyebrow: "THE MINI COLLECTION",
+      classicEyebrow: "THE CLASSIC COLLECTION",
+      coverAlt: "ALVOXIS gift box"
     },
     product: {
       selectGift: "Select this gift",
@@ -100,7 +101,8 @@ export const translations = {
       myOrders: "My orders",
       noOrders: "You have no orders yet.",
       logOut: "Log out",
-      demoNotice: "Demo mode — accounts are stored on this device only, until a real backend is connected.",
+      localNotice: "Your account is saved on this device only.",
+      orderStatus: { pending: "Pending", paid: "Paid", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled" },
       providerNotice: "This sign-in method requires a connected authentication backend and isn't active yet.",
       errorInvalid: "Incorrect email or password.",
       errorExists: "An account with this email already exists.",
@@ -127,7 +129,8 @@ export const translations = {
       title: "Order confirmed",
       orderNumber: "Order number",
       viewOrder: "View my order",
-      continueShopping: "Continue shopping"
+      continueShopping: "Continue shopping",
+      notFound: "We couldn't find this order."
     },
     footer: {
       tagline: "Some moments deserve to be remembered.",
@@ -139,6 +142,26 @@ export const translations = {
       refund: "Refund Policy"
     },
     common: { loading: "Loading…", close: "Close", comingSoon: "Coming soon" },
+    meta: { title: "ALVOXIS — Meaningful Moments" },
+    about: {
+      eyebrow: "THE IDEA BEHIND ALVOXIS",
+      title: "Some gifts are opened. Others are remembered.",
+      text: "ALVOXIS creates meaningful gift experiences designed to preserve emotions, memories and special moments."
+    },
+    a11y: {
+      openMenu: "Open menu",
+      language: "Language",
+      book: "ALVOXIS collection",
+      bookRole: "book",
+      bookPages: "Book pages",
+      prevPage: "Previous page",
+      nextPage: "Next page",
+      cover: "Cover"
+    },
+    form: {
+      required: "Please fill in this field.",
+      email: "Please enter a valid email address."
+    },
     products: {
       mini: { name: "ALVOXIS Mini", tagline: "A small box. A meaningful memory." },
       classic: { name: "ALVOXIS Classic", tagline: "Designed for unforgettable moments." },
@@ -151,21 +174,22 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS ПРЕДСТАВЛЯЕТ",
       title: "Некоторые моменты достойны того, чтобы их помнили.",
-      scroll: "Прокрутите, чтобы посмотреть",
       skip: "Пропустить",
       play: "Смотреть фильм"
     },
     catalog: {
       eyebrow: "КОЛЛЕКЦИЯ ALVOXIS",
       scrollHint: "Проведите, чтобы перелистнуть",
-      dragShort: "ВЕДИТЕ",
       coverEyebrow: "ALVOXIS",
       coverTitle: "Кое-что важное уже ждёт вас.",
       coverText: "Откройте коллекцию, созданную для моментов, которые стоит помнить.",
       comingSoon: "Скоро",
       nextChapter: "Следующая глава",
       nextChapterTitle: "Поддержите историю.",
-      nextChapterCopy: "ALVOXIS всё ещё пишется — страница за страницей. Эта глава скоро откроется."
+      nextChapterCopy: "ALVOXIS всё ещё пишется — страница за страницей. Эта глава скоро откроется.",
+      miniEyebrow: "КОЛЛЕКЦИЯ MINI",
+      classicEyebrow: "КОЛЛЕКЦИЯ CLASSIC",
+      coverAlt: "Подарочная коробка ALVOXIS"
     },
     product: {
       selectGift: "Выбрать этот подарок",
@@ -224,7 +248,7 @@ export const translations = {
       registerTitle: "Создать аккаунт",
       google: "Продолжить с Google",
       apple: "Продолжить с Apple",
-      email: "Email",
+      email: "Эл. почта",
       password: "Пароль",
       confirmPassword: "Подтвердите пароль",
       name: "Имя",
@@ -239,7 +263,8 @@ export const translations = {
       myOrders: "Мои заказы",
       noOrders: "У вас пока нет заказов.",
       logOut: "Выйти",
-      demoNotice: "Демо-режим — аккаунты сохраняются только на этом устройстве, пока не подключён настоящий бэкенд.",
+      localNotice: "Ваш аккаунт сохраняется только на этом устройстве.",
+      orderStatus: { pending: "В обработке", paid: "Оплачен", shipped: "Отправлен", delivered: "Доставлен", cancelled: "Отменён" },
       providerNotice: "Этот способ входа требует подключённого сервиса аутентификации и пока не активен.",
       errorInvalid: "Неверный email или пароль.",
       errorExists: "Аккаунт с таким email уже существует.",
@@ -266,7 +291,8 @@ export const translations = {
       title: "Заказ подтверждён",
       orderNumber: "Номер заказа",
       viewOrder: "Посмотреть заказ",
-      continueShopping: "Продолжить покупки"
+      continueShopping: "Продолжить покупки",
+      notFound: "Этот заказ не найден."
     },
     footer: {
       tagline: "Некоторые моменты достойны того, чтобы их помнили.",
@@ -278,6 +304,26 @@ export const translations = {
       refund: "Политика возврата"
     },
     common: { loading: "Загрузка…", close: "Закрыть", comingSoon: "Скоро" },
+    meta: { title: "ALVOXIS — Значимые моменты" },
+    about: {
+      eyebrow: "ИДЕЯ ALVOXIS",
+      title: "Одни подарки открывают. Другие — помнят.",
+      text: "ALVOXIS создаёт значимые подарки, которые сохраняют эмоции, воспоминания и особенные моменты."
+    },
+    a11y: {
+      openMenu: "Открыть меню",
+      language: "Язык",
+      book: "Коллекция ALVOXIS",
+      bookRole: "книга",
+      bookPages: "Страницы книги",
+      prevPage: "Предыдущая страница",
+      nextPage: "Следующая страница",
+      cover: "Обложка"
+    },
+    form: {
+      required: "Пожалуйста, заполните это поле.",
+      email: "Введите корректный адрес эл. почты."
+    },
     products: {
       mini: { name: "ALVOXIS Mini", tagline: "Маленькая коробка. Значимая память." },
       classic: { name: "ALVOXIS Classic", tagline: "Создано для незабываемых моментов." },
@@ -290,21 +336,22 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS PIEDĀVĀ",
       title: "Daži mirkļi ir pelnījuši palikt atmiņā.",
-      scroll: "Ritiniet, lai turpinātu",
       skip: "Izlaist ievadu",
       play: "Atskaņot"
     },
     catalog: {
       eyebrow: "ALVOXIS KOLEKCIJA",
       scrollHint: "Velciet, lai pāršķirtu lapu",
-      dragShort: "VELCIET",
       coverEyebrow: "ALVOXIS",
       coverTitle: "Kaut kas nozīmīgs jau gaida.",
       coverText: "Atklājiet kolekciju, kas radīta mirkļiem, kurus vērts atcerēties.",
       comingSoon: "Drīzumā",
       nextChapter: "Nākamā nodaļa",
       nextChapterTitle: "Atbalsti stāstu.",
-      nextChapterCopy: "ALVOXIS joprojām tiek rakstīts — lapu pa lapai. Šī nodaļa drīzumā."
+      nextChapterCopy: "ALVOXIS joprojām tiek rakstīts — lapu pa lapai. Šī nodaļa drīzumā.",
+      miniEyebrow: "MINI KOLEKCIJA",
+      classicEyebrow: "CLASSIC KOLEKCIJA",
+      coverAlt: "ALVOXIS dāvanu kaste"
     },
     product: {
       selectGift: "Izvēlēties šo dāvanu",
@@ -379,7 +426,8 @@ export const translations = {
       myOrders: "Mani pasūtījumi",
       noOrders: "Jums vēl nav neviena pasūtījuma.",
       logOut: "Izrakstīties",
-      demoNotice: "Demonstrācijas režīms — konti tiek saglabāti tikai šajā ierīcē, kamēr nav pievienots reāls serveris.",
+      localNotice: "Jūsu konts tiek saglabāts tikai šajā ierīcē.",
+      orderStatus: { pending: "Gaida apstrādi", paid: "Apmaksāts", shipped: "Nosūtīts", delivered: "Piegādāts", cancelled: "Atcelts" },
       providerNotice: "Šai pieslēgšanās metodei nepieciešams pievienots autentifikācijas serviss, un tā vēl nav aktīva.",
       errorInvalid: "Nepareizs e-pasts vai parole.",
       errorExists: "Konts ar šo e-pastu jau pastāv.",
@@ -406,7 +454,8 @@ export const translations = {
       title: "Pasūtījums apstiprināts",
       orderNumber: "Pasūtījuma numurs",
       viewOrder: "Skatīt manu pasūtījumu",
-      continueShopping: "Turpināt iepirkšanos"
+      continueShopping: "Turpināt iepirkšanos",
+      notFound: "Šo pasūtījumu neizdevās atrast."
     },
     footer: {
       tagline: "Daži mirkļi ir pelnījuši palikt atmiņā.",
@@ -418,6 +467,26 @@ export const translations = {
       refund: "Atgriešanas politika"
     },
     common: { loading: "Ielādē…", close: "Aizvērt", comingSoon: "Drīzumā" },
+    meta: { title: "ALVOXIS — Nozīmīgi mirkļi" },
+    about: {
+      eyebrow: "IDEJA AIZ ALVOXIS",
+      title: "Dažas dāvanas tiek atvērtas. Citas paliek atmiņā.",
+      text: "ALVOXIS rada nozīmīgas dāvanu pieredzes, kas saglabā emocijas, atmiņas un īpašus mirkļus."
+    },
+    a11y: {
+      openMenu: "Atvērt izvēlni",
+      language: "Valoda",
+      book: "ALVOXIS kolekcija",
+      bookRole: "grāmata",
+      bookPages: "Grāmatas lapas",
+      prevPage: "Iepriekšējā lapa",
+      nextPage: "Nākamā lapa",
+      cover: "Vāks"
+    },
+    form: {
+      required: "Lūdzu, aizpildiet šo lauku.",
+      email: "Lūdzu, ievadiet derīgu e-pasta adresi."
+    },
     products: {
       mini: { name: "ALVOXIS Mini", tagline: "Maza kaste. Nozīmīga atmiņa." },
       classic: { name: "ALVOXIS Classic", tagline: "Radīts neaizmirstamiem mirkļiem." },
@@ -430,21 +499,22 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS ESITLEB",
       title: "Mõned hetked väärivad meelespidamist.",
-      scroll: "Keri, et avastada",
       skip: "Jäta vahele",
       play: "Esita"
     },
     catalog: {
       eyebrow: "ALVOXISE KOLLEKTSIOON",
       scrollHint: "Lohista, et lehte pöörata",
-      dragShort: "LOHISTA",
       coverEyebrow: "ALVOXIS",
       coverTitle: "Midagi olulist juba ootab.",
       coverText: "Avasta kollektsioon, mis on loodud hetkedele, mida tasub meeles pidada.",
       comingSoon: "Peagi",
       nextChapter: "Järgmine peatükk",
       nextChapterTitle: "Toeta lugu.",
-      nextChapterCopy: "ALVOXIS on alles kirjutamisel — leht lehe haaval. See peatükk tuleb peagi."
+      nextChapterCopy: "ALVOXIS on alles kirjutamisel — leht lehe haaval. See peatükk tuleb peagi.",
+      miniEyebrow: "MINI KOLLEKTSIOON",
+      classicEyebrow: "CLASSIC KOLLEKTSIOON",
+      coverAlt: "ALVOXISe kinkekarp"
     },
     product: {
       selectGift: "Vali see kingitus",
@@ -518,7 +588,8 @@ export const translations = {
       myOrders: "Minu tellimused",
       noOrders: "Sul pole veel tellimusi.",
       logOut: "Logi välja",
-      demoNotice: "Demorežiim — kontod salvestatakse ainult sellesse seadmesse, kuni tegelik server on ühendatud.",
+      localNotice: "Sinu konto salvestatakse ainult sellesse seadmesse.",
+      orderStatus: { pending: "Ootel", paid: "Makstud", shipped: "Saadetud", delivered: "Kohale toimetatud", cancelled: "Tühistatud" },
       providerNotice: "See sisselogimisviis vajab ühendatud autentimisteenust ega ole veel aktiivne.",
       errorInvalid: "Vale e-post või parool.",
       errorExists: "Selle e-postiga konto on juba olemas.",
@@ -545,7 +616,8 @@ export const translations = {
       title: "Tellimus kinnitatud",
       orderNumber: "Tellimuse number",
       viewOrder: "Vaata minu tellimust",
-      continueShopping: "Jätka ostlemist"
+      continueShopping: "Jätka ostlemist",
+      notFound: "Seda tellimust ei leitud."
     },
     footer: {
       tagline: "Mõned hetked väärivad meelespidamist.",
@@ -557,6 +629,26 @@ export const translations = {
       refund: "Tagastamispoliitika"
     },
     common: { loading: "Laadimine…", close: "Sulge", comingSoon: "Peagi" },
+    meta: { title: "ALVOXIS — Tähenduslikud hetked" },
+    about: {
+      eyebrow: "ALVOXISE IDEE",
+      title: "Mõned kingitused avatakse. Teised jäävad meelde.",
+      text: "ALVOXIS loob tähenduslikke kingituskogemusi, mis säilitavad emotsioone, mälestusi ja erilisi hetki."
+    },
+    a11y: {
+      openMenu: "Ava menüü",
+      language: "Keel",
+      book: "ALVOXIS kollektsioon",
+      bookRole: "raamat",
+      bookPages: "Raamatu lehed",
+      prevPage: "Eelmine leht",
+      nextPage: "Järgmine leht",
+      cover: "Kaas"
+    },
+    form: {
+      required: "Palun täitke see väli.",
+      email: "Palun sisestage kehtiv e-posti aadress."
+    },
     products: {
       mini: { name: "ALVOXIS Mini", tagline: "Väike karp. Oluline mälestus." },
       classic: { name: "ALVOXIS Classic", tagline: "Loodud unustamatuteks hetkedeks." },
@@ -569,21 +661,22 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS PRISTATO",
       title: "Kai kurios akimirkos verta prisiminti.",
-      scroll: "Slinkite, kad tęstumėte",
       skip: "Praleisti įžangą",
       play: "Paleisti"
     },
     catalog: {
       eyebrow: "ALVOXIS KOLEKCIJA",
       scrollHint: "Vilkite, kad apverstumėte puslapį",
-      dragShort: "VILKITE",
       coverEyebrow: "ALVOXIS",
       coverTitle: "Kažkas svarbaus jau laukia.",
       coverText: "Atraskite kolekciją, sukurtą akimirkoms, kurias verta prisiminti.",
       comingSoon: "Netrukus",
       nextChapter: "Kitas skyrius",
       nextChapterTitle: "Palaikyk istoriją.",
-      nextChapterCopy: "ALVOXIS vis dar rašomas — puslapis po puslapio. Šis skyrius netrukus."
+      nextChapterCopy: "ALVOXIS vis dar rašomas — puslapis po puslapio. Šis skyrius netrukus.",
+      miniEyebrow: "MINI KOLEKCIJA",
+      classicEyebrow: "CLASSIC KOLEKCIJA",
+      coverAlt: "ALVOXIS dovanų dėžutė"
     },
     product: {
       selectGift: "Pasirinkti šią dovaną",
@@ -657,7 +750,8 @@ export const translations = {
       myOrders: "Mano užsakymai",
       noOrders: "Kol kas neturite užsakymų.",
       logOut: "Atsijungti",
-      demoNotice: "Demonstracinis režimas — paskyros saugomos tik šiame įrenginyje, kol nėra prijungtas tikras serveris.",
+      localNotice: "Jūsų paskyra išsaugoma tik šiame įrenginyje.",
+      orderStatus: { pending: "Laukiama", paid: "Apmokėta", shipped: "Išsiųsta", delivered: "Pristatyta", cancelled: "Atšaukta" },
       providerNotice: "Šiam prisijungimo būdui reikalinga prijungta autentifikavimo paslauga, ir jis dar neaktyvus.",
       errorInvalid: "Neteisingas el. paštas arba slaptažodis.",
       errorExists: "Paskyra su šiuo el. paštu jau egzistuoja.",
@@ -684,7 +778,8 @@ export const translations = {
       title: "Užsakymas patvirtintas",
       orderNumber: "Užsakymo numeris",
       viewOrder: "Peržiūrėti užsakymą",
-      continueShopping: "Tęsti apsipirkimą"
+      continueShopping: "Tęsti apsipirkimą",
+      notFound: "Šio užsakymo rasti nepavyko."
     },
     footer: {
       tagline: "Kai kurios akimirkos verta prisiminti.",
@@ -696,6 +791,26 @@ export const translations = {
       refund: "Grąžinimo politika"
     },
     common: { loading: "Kraunama…", close: "Uždaryti", comingSoon: "Netrukus" },
+    meta: { title: "ALVOXIS — Prasmingos akimirkos" },
+    about: {
+      eyebrow: "ALVOXIS IDĖJA",
+      title: "Vienos dovanos atidaromos. Kitos – prisimenamos.",
+      text: "ALVOXIS kuria prasmingas dovanų patirtis, kurios išsaugo emocijas, prisiminimus ir ypatingas akimirkas."
+    },
+    a11y: {
+      openMenu: "Atidaryti meniu",
+      language: "Kalba",
+      book: "ALVOXIS kolekcija",
+      bookRole: "knyga",
+      bookPages: "Knygos puslapiai",
+      prevPage: "Ankstesnis puslapis",
+      nextPage: "Kitas puslapis",
+      cover: "Viršelis"
+    },
+    form: {
+      required: "Užpildykite šį lauką.",
+      email: "Įveskite teisingą el. pašto adresą."
+    },
     products: {
       mini: { name: "ALVOXIS Mini", tagline: "Maža dėžutė. Prasmingas prisiminimas." },
       classic: { name: "ALVOXIS Classic", tagline: "Sukurta neužmirštamoms akimirkoms." },
@@ -718,8 +833,12 @@ export function t(lang, path) {
     fallbackNode = fallbackNode && fallbackNode[part] !== undefined ? fallbackNode[part] : undefined;
   }
 
-  if (node !== undefined) return node;
-  if (fallbackNode !== undefined) return fallbackNode;
+  /* only text (or a list of text) may reach the UI — never an object,
+     null or undefined */
+  const usable = (value) => typeof value === "string" || typeof value === "number" || Array.isArray(value);
+
+  if (usable(node)) return node;
+  if (usable(fallbackNode)) return fallbackNode;
 
   // Never let a raw translation key (e.g. "products.mini.name")
   // reach the customer-facing UI. Log it so it's easy to spot

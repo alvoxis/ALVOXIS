@@ -9,11 +9,12 @@
              while the book — whose page 0 IS the cover — emerges
              from that depth as a closed book, then grows to fill
              the stage. There is no second cover anywhere.
-     book    pages turn by direct manipulation: the page follows
-             the finger / mouse and bends through a short chain of
-             vertical strips. Release past 35% → the turn completes,
-             otherwise it falls back. Arrows, dots, keyboard and
-             trackpad drive the very same settle animation.
+     book    pages turn like a magazine sheet: the finger pulls the
+             page's corner, the sheet folds along a crease that follows
+             the finger, its back folds over, and soft shadows track the
+             crease. Release past 35% (or flick) → the turn completes,
+             otherwise the sheet lies back down. Arrows, dots, keyboard
+             and trackpad drive the very same settle animation.
 
    Vertical scrolling is never intercepted: the book uses
    `touch-action: pan-y`, so the browser keeps vertical pans and
@@ -22,10 +23,9 @@
 
 /* ---------- tunables ---------- */
 
-const SEGMENTS = 8;             // curl strips per page (6–10)
-const CURL_DEG = 64;            // extra bend at the free edge, at mid-turn
+const CORNER_LIFT = 0.3;        // how high the pulled corner arcs (share of its reach)
 const COMMIT_PROGRESS = 0.35;   // release past this fraction -> the turn completes
-const FLICK_VELOCITY = 0.5;     // px/ms — a fast flick also commits
+const FLICK_VELOCITY = 0.35;    // px/ms — a quick flick also commits
 const LOCK_PX = 8;              // movement before a gesture is classified
 const STALL_MS = 6000;          // no frames by then -> offer play / skip
 
@@ -282,164 +282,222 @@ export function initHomeExperience() {
 
 
   /* =======================================================
-     PAGE CURL
+     PAGE TURN — a folding sheet, not a rotating panel
 
-     A turning page is drawn by a chain of SEGMENTS nested strips.
-     Each strip holds a slice of the page's real front (and back)
-     and hinges on its own left edge, so small per-strip rotations
-     add up into a bend while the edges stay joined. The strips
-     near the free edge bend most, and each is shaded by its own
-     angle to the light. The interactive page is shown whenever it
-     is flat; the strips only exist on screen during a turn.
+     The page is pulled by its free corner. Wherever the corner is
+     dragged to (P), the sheet folds along the perpendicular
+     bisector of the corner's rest position (C) and P — exactly the
+     crease a real sheet of paper makes:
+
+       · the part of the page behind the crease is clipped away,
+         revealing the next page underneath;
+       · that same part is drawn again as the flap — mirrored across
+         the crease, showing the paper's back — lying on top;
+       · the corner travels on an arc around the spine (it can never
+         get further from the spine than the page is wide), lifting
+         as it goes, so the crease tilts like a real magazine page;
+       · three soft shadows follow the crease: the curl shading on
+         the flap, the flap's shadow on the page, and the shadow the
+         lifted sheet casts onto the next page.
+
+     Everything per frame is a clip-path and a transform — no
+     layout, no cloned content, a fixed handful of elements.
   ======================================================= */
 
-  const curls = pages.map(() => null);
   let pageWidth = 0;
   let pageHeight = 0;
-
-  /* per-hinge share of the total bend: grows toward the free edge */
-  const hingeWeights = (() => {
-    const raw = [];
-    for (let i = 0; i < SEGMENTS; i += 1) {
-      raw.push(i === 0 ? 0 : Math.pow(i, 1.35));
-    }
-    const sum = raw.reduce((a, b) => a + b, 0);
-    return raw.map((w) => w / sum);
-  })();
 
   function measure() {
     pageWidth = book.clientWidth || stage.clientWidth || window.innerWidth;
     pageHeight = book.clientHeight || stage.clientHeight || window.innerHeight;
-    book.style.setProperty("--book-perspective", `${Math.round(Math.max(1100, pageWidth * 2.3))}px`);
   }
 
-  function buildCurl(index) {
-
-    const page = pages[index];
-    const front = page.querySelector(".book-page-front");
-    const back = page.querySelector(".book-page-back");
-    const signature = `${pageWidth}x${pageHeight}|${front.innerHTML}`;
-    const cached = curls[index];
-
-    if (cached && cached.signature === signature) {
-      return cached;
-    }
-
-    if (cached) {
-      cached.root.remove();
-    }
-
-    const stripWidth = pageWidth / SEGMENTS;
-    const root = document.createElement("div");
-    root.className = "page-curl";
-    root.setAttribute("aria-hidden", "true");
-
-    const strips = [];
-    let parent = root;
-
-    for (let i = 0; i < SEGMENTS; i += 1) {
-
-      const strip = document.createElement("div");
-      strip.className = i === SEGMENTS - 1 ? "curl-strip curl-strip-edge" : "curl-strip";
-      strip.style.left = i === 0 ? "0px" : `${stripWidth}px`;
-      strip.style.width = `${stripWidth}px`;
-
-      const frontFace = document.createElement("div");
-      frontFace.className = "curl-face curl-front";
-      const frontSlice = front.cloneNode(true);
-      frontSlice.className = "curl-slice";
-      frontSlice.style.width = `${pageWidth}px`;
-      frontSlice.style.left = `${-i * stripWidth}px`;
-      frontFace.appendChild(frontSlice);
-
-      const backFace = document.createElement("div");
-      backFace.className = "curl-face curl-back";
-      const backSlice = back.cloneNode(true);
-      backSlice.className = "curl-slice curl-back-slice";
-      backSlice.style.width = `${pageWidth}px`;
-      /* the back is seen mirrored, so slice it from the opposite side */
-      backSlice.style.left = `${-(SEGMENTS - 1 - i) * stripWidth}px`;
-      backFace.appendChild(backSlice);
-
-      strip.append(frontFace, backFace);
-      parent.appendChild(strip);
-      strips.push(strip);
-      parent = strip;
-    }
-
-    root.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
-    root.querySelectorAll("[data-i18n], [data-price]").forEach((el) => {
-      el.removeAttribute("data-i18n");
-      el.removeAttribute("data-price");
-    });
-
-    page.appendChild(root);
-
-    const curl = { root, strips, signature };
-    curls[index] = curl;
-    return curl;
+  function makeLayer(className) {
+    const el = document.createElement("div");
+    el.className = className;
+    el.setAttribute("aria-hidden", "true");
+    return el;
   }
 
-  function invalidateCurls() {
-    curls.forEach((curl, index) => {
-      if (curl && !pages[index].classList.contains("is-turning")) {
-        curl.root.remove();
-        curls[index] = null;
+  /* the flap: the back of the sheet, folded over */
+  const flap = makeLayer("turn-flap");
+  const flapPaper = makeLayer("turn-flap-paper");
+  const flapShade = makeLayer("turn-strip turn-flap-shade");
+  flap.append(flapPaper, flapShade);
+  book.appendChild(flap);
+
+  /* shadow of the flap on the part of the page still lying flat */
+  const flapShadow = makeLayer("turn-strip turn-flap-shadow");
+
+  /* shadow of the lifted sheet on the next page */
+  const castShadow = makeLayer("turn-strip turn-cast-shadow");
+
+  /* the gesture currently shaping the sheet: which page, which corner */
+  let turn = null; // { index, corner: 1 bottom | -1 top, pull: px of extra vertical pull }
+
+  function setTurn(index, corner, pull) {
+    if (!turn || turn.index !== index) {
+      if (turn) {
+        resetPage(turn.index);
       }
-    });
+      turn = { index, corner, pull };
+      pages[index].appendChild(flapShadow);
+      const beneath = pages[index + 1];
+      if (beneath) {
+        beneath.appendChild(castShadow);
+      }
+    } else {
+      turn.corner = corner;
+      turn.pull = pull;
+    }
   }
 
-  function paintCurl(curl, p) {
-
-    const bump = Math.sin(Math.PI * p);
-    const bend = reduceMotion ? 0 : CURL_DEG * bump;
-    const baseDeg = 180 * p;
-    let cumulative = baseDeg;
-
-    curl.strips.forEach((strip, i) => {
-
-      const hinge = bend * hingeWeights[i];
-      cumulative += hinge;
-
-      /* tiny z lift per strip keeps the bent sheet clear of the page below */
-      strip.style.transform = i === 0
-        ? ""
-        : `rotateY(${(-hinge).toFixed(3)}deg) translateZ(${(bump * 0.6).toFixed(2)}px)`;
-
-      /* light comes from the viewer: the more a slice faces away, the darker */
-      const facing = Math.cos((cumulative * Math.PI) / 180);
-      const frontShade = clamp(0.55 * (1 - facing), 0, 0.6);
-      const backShade = clamp(0.55 * (1 + facing), 0, 0.6);
-      strip.style.setProperty("--shade-front", frontShade.toFixed(3));
-      strip.style.setProperty("--shade-back", backShade.toFixed(3));
-    });
+  function resetPage(index) {
+    const page = pages[index];
+    page.classList.remove("is-turning");
+    page.style.clipPath = "";
+    page.style.webkitClipPath = "";
+    flap.classList.remove("is-visible");
+    flapShadow.remove();
+    castShadow.remove();
   }
 
+  /* clip the page rectangle to one side of the crease (Sutherland–Hodgman) */
+  function clipToSide(mx, my, nx, ny, side) {
+    const rect = [[0, 0], [pageWidth, 0], [pageWidth, pageHeight], [0, pageHeight]];
+    const out = [];
+    const inside = (p) => side * ((p[0] - mx) * nx + (p[1] - my) * ny) >= 0;
 
-  /* =======================================================
-     RENDER
-  ======================================================= */
+    for (let i = 0; i < rect.length; i += 1) {
+      const a = rect[i];
+      const b = rect[(i + 1) % rect.length];
+      const ina = inside(a);
+      const inb = inside(b);
+
+      if (ina) {
+        out.push(a);
+      }
+
+      if (ina !== inb) {
+        const da = (a[0] - mx) * nx + (a[1] - my) * ny;
+        const db = (b[0] - mx) * nx + (b[1] - my) * ny;
+        const k = da / (da - db);
+        out.push([a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k]);
+      }
+    }
+
+    return out;
+  }
+
+  function polygon(points) {
+    if (points.length < 3) {
+      return "polygon(0 0, 0 0, 0 0)";
+    }
+    return `polygon(${points.map((p) => `${p[0].toFixed(1)}px ${p[1].toFixed(1)}px`).join(", ")})`;
+  }
+
+  /* lay a gradient strip along the crease, its gradient running along (sx, sy) */
+  function placeStrip(el, mx, my, sx, sy, depth, opacity) {
+    const length = 2 * Math.hypot(pageWidth, pageHeight);
+    const angle = Math.atan2(-sx, sy); // strip's x axis runs along the crease, its y axis along (sx, sy)
+    el.style.width = `${length.toFixed(0)}px`;
+    el.style.height = `${Math.max(1, depth).toFixed(1)}px`;
+    el.style.transform = `translate(${mx.toFixed(1)}px, ${my.toFixed(1)}px) rotate(${angle.toFixed(4)}rad) translate(${(-length / 2).toFixed(1)}px, 0)`;
+    el.style.opacity = opacity.toFixed(3);
+  }
+
+  /*
+    The corner's path for turn fraction t (0 = flat, 1 = turned over).
+    Horizontally the crease sits at W·(1 − t), so it travels with the
+    finger; vertically the corner lifts on an arc around the spine.
+  */
+  function cornerAt(t, corner, pull) {
+    const W = pageWidth;
+    const cy = corner === 1 ? pageHeight : 0;
+    const lift = reduceMotion ? 0 : CORNER_LIFT * 2 * W * Math.sqrt(Math.max(0, t * (1 - t)));
+
+    let px = W - 2 * W * t;
+    let py = cy - corner * lift + pull * Math.sin(Math.PI * t);
+
+    /* the corner is tied to the spine by the width of the sheet */
+    const dx = px;
+    const dy = py - cy;
+    const reach = Math.hypot(dx, dy);
+    if (reach > W) {
+      px = (dx / reach) * W;
+      py = cy + (dy / reach) * W;
+    }
+
+    return { cx: W, cy, px, py };
+  }
 
   function renderPage(index) {
 
     const page = pages[index];
-    const p = state.progress[index];
-    const turning = p > 0.0005 && p < 0.9995;
+    const t = state.progress[index];
+    const turning = t > 0.0005 && t < 0.9995;
 
-    page.classList.toggle("is-turning", turning);
-    page.classList.toggle("is-turned", p >= 0.9995);
-    page.style.transform = p <= 0.0005 ? "" : `rotateY(${(-180 * p).toFixed(3)}deg)`;
-    page.style.zIndex = String(turning ? 300 : p >= 0.9995 ? index : 100 - index);
+    page.classList.toggle("is-turned", t >= 0.9995);
+    page.style.zIndex = String(turning ? 300 : t >= 0.9995 ? index : 100 - index);
 
-    /* the sheet lifting away casts its shadow on the page beneath it */
-    const beneath = pages[index + 1];
-    if (beneath) {
-      beneath.style.setProperty("--cast-shadow", (turning ? Math.sin(Math.PI * p) * 0.65 : 0).toFixed(3));
+    if (!turning) {
+      if (turn && turn.index === index) {
+        resetPage(index);
+        turn = null;
+      }
+      return;
     }
 
-    if (turning) {
-      paintCurl(buildCurl(index), p);
+    if (!turn || turn.index !== index) {
+      setTurn(index, 1, 0);
     }
+
+    const { cx, cy, px, py } = cornerAt(t, turn.corner, turn.pull);
+    const vx = cx - px;
+    const vy = cy - py;
+    const span = Math.hypot(vx, vy);
+
+    if (span < 0.5) {
+      return;
+    }
+
+    const nx = vx / span;           // crease normal, pointing at the corner's rest position
+    const ny = vy / span;
+    const mx = (cx + px) / 2;       // a point on the crease
+    const my = (cy + py) / 2;
+
+    /* 1 — the flat part of the page */
+    page.classList.add("is-turning");
+    const flatPart = polygon(clipToSide(mx, my, nx, ny, -1));
+    page.style.clipPath = flatPart;
+    page.style.webkitClipPath = flatPart;
+
+    /* 2 — the flap: the folded part, mirrored across the crease */
+    const foldedPoints = clipToSide(mx, my, nx, ny, 1);
+    const folded = polygon(foldedPoints);
+    flap.style.clipPath = folded;
+    flap.style.webkitClipPath = folded;
+
+    const a = 1 - 2 * nx * nx;
+    const b = -2 * nx * ny;
+    const d = 1 - 2 * ny * ny;
+    const e = mx - (a * mx + b * my);
+    const f = my - (b * mx + d * my);
+    flap.style.transform = `matrix(${a.toFixed(5)}, ${b.toFixed(5)}, ${b.toFixed(5)}, ${d.toFixed(5)}, ${e.toFixed(2)}, ${f.toFixed(2)})`;
+    flap.classList.add("is-visible");
+
+    /* how deep the fold is — drives the size of every shadow */
+    let depth = 0;
+    foldedPoints.forEach((p) => {
+      depth = Math.max(depth, (p[0] - mx) * nx + (p[1] - my) * ny);
+    });
+
+    const lifted = Math.sin(Math.PI * t);
+
+    /* 3 — shadows that follow the crease */
+    placeStrip(flapShade, mx, my, nx, ny, depth, 1);
+    placeStrip(flapShadow, mx, my, -nx, -ny, depth * 1.12 + 28, 0.35 + lifted * 0.65);
+    placeStrip(castShadow, mx, my, nx, ny, Math.min(pageWidth * 0.45, 40 + depth * 0.5), 0.25 + lifted * 0.75);
   }
 
   function renderAll() {
@@ -487,7 +545,7 @@ export function initHomeExperience() {
 
   let settleFrame = null;
 
-  function settle({ index, dir, from, to, fromDrag }) {
+  function settle({ index, dir, from, to, fromDrag, velocity = 0 }) {
 
     cancelAnimationFrame(settleFrame);
 
@@ -498,18 +556,24 @@ export function initHomeExperience() {
       return;
     }
 
-    const duration = reduceMotion ? 140 : clamp(260 + distance * 640, 260, 900);
+    /* a fast release finishes faster; a slow one glides */
+    const speedUp = clamp(Math.abs(velocity) / 1.6, 0, 0.45);
+    const duration = reduceMotion ? 140 : clamp((300 + distance * 700) * (1 - speedUp), 220, 1000);
     const ease = fromDrag ? easeOutCubic : easeInOutCubic;
     const startedAt = performance.now();
+    const startPull = turn && turn.index === index ? turn.pull : 0;
 
     state.settling = true;
 
     function step(now) {
-      const t = clamp((now - startedAt) / duration, 0, 1);
-      state.progress[index] = from + (to - from) * ease(t);
+      const k = clamp((now - startedAt) / duration, 0, 1);
+      state.progress[index] = from + (to - from) * ease(k);
+      if (turn && turn.index === index) {
+        turn.pull = startPull * (1 - ease(k)); // the sheet straightens as it lands
+      }
       renderPage(index);
 
-      if (t < 1) {
+      if (k < 1) {
         settleFrame = requestAnimationFrame(step);
       } else {
         finishSettle(index, dir, to);
@@ -549,8 +613,10 @@ export function initHomeExperience() {
     const current = state.currentPage;
 
     if (dir === 1 && current < PAGE_COUNT - 1) {
+      setTurn(current, 1, 0);
       settle({ index: current, dir: 1, from: state.progress[current], to: 1, fromDrag: false });
     } else if (dir === -1 && current > 0) {
+      setTurn(current - 1, 1, 0);
       settle({ index: current - 1, dir: -1, from: state.progress[current - 1], to: 0, fromDrag: false });
     }
   }
@@ -563,7 +629,8 @@ export function initHomeExperience() {
       return;
     }
 
-    /* long jumps snap the in-between pages and animate only the last turn */
+    /* long jumps lay the in-between pages down at once and animate only
+       the last sheet, so pages are never skipped out of order */
     if (target > state.currentPage) {
       for (let i = state.currentPage; i < target - 1; i += 1) {
         state.progress[i] = 1;
@@ -579,24 +646,18 @@ export function initHomeExperience() {
       state.currentPage = target + 1;
       turnBy(-1);
     }
+    updateChrome();
   }
 
 
   /* =======================================================
-     DRAG — pointerdown → pointermove (page follows) → pointerup
-     (complete or fall back). Mouse, pen and touch share it.
+     DRAG — pointerdown → pointermove (the sheet follows) →
+     pointerup / pointercancel (complete or fall back).
+     Mouse, pen and touch share one path.
   ======================================================= */
 
   let suppressClick = false;
   let dragFrame = null;
-
-  function beginGesture(index, dir) {
-    state.drag.index = index;
-    state.drag.dir = dir;
-    state.drag.base = state.progress[index];
-    state.drag.value = state.drag.base;
-    buildCurl(index); // build before the first frame so nothing pops in
-  }
 
   function onPointerDown(event) {
 
@@ -618,8 +679,48 @@ export function initHomeExperience() {
       dir: 0,
       base: 0,
       value: 0,
+      reach: 1,
+      corner: 1,
+      pull: 0,
       samples: [{ t: performance.now(), x: event.clientX }]
     };
+  }
+
+  function lockGesture(drag, event, dx) {
+
+    if (dx < 0 && state.currentPage < PAGE_COUNT - 1) {
+      drag.dir = 1;                                   // leftward: turn the top page
+      drag.index = state.currentPage;
+    } else if (dx > 0 && state.currentPage > 0) {
+      drag.dir = -1;                                  // rightward: bring the last page back
+      drag.index = state.currentPage - 1;
+    } else {
+      drag.locked = "none";                           // nothing to turn that way
+      return;
+    }
+
+    const rect = bookScene.getBoundingClientRect();
+    const localX = drag.startX - rect.left;
+    const localY = drag.startY - rect.top;
+
+    /* the finger reaching the far edge completes the turn */
+    drag.reach = Math.max(drag.dir === 1 ? localX : pageWidth - localX, pageWidth * 0.55);
+    /* grab the corner on the finger's half of the page */
+    drag.corner = localY > pageHeight / 2 ? 1 : -1;
+    drag.base = state.progress[drag.index];
+    drag.value = drag.base;
+    drag.locked = "x";
+    drag.startX = event.clientX;                      // follow from here, no jump
+    drag.startY = event.clientY;
+
+    setTurn(drag.index, drag.corner, 0);
+
+    try {
+      bookScene.setPointerCapture(event.pointerId);
+    } catch (error) { /* capture is best-effort */ }
+
+    suppressClick = true;
+    stage.classList.add("is-dragging");
   }
 
   function onPointerMove(event) {
@@ -645,24 +746,7 @@ export function initHomeExperience() {
         return;
       }
 
-      if (dx < 0 && state.currentPage < PAGE_COUNT - 1) {
-        beginGesture(state.currentPage, 1);          // leftward: turn the top page
-      } else if (dx > 0 && state.currentPage > 0) {
-        beginGesture(state.currentPage - 1, -1);     // rightward: bring the last page back
-      } else {
-        drag.locked = "none";                        // nothing to turn that way
-        return;
-      }
-
-      drag.locked = "x";
-      drag.startX = event.clientX;                   // follow from here, no jump
-
-      try {
-        bookScene.setPointerCapture(event.pointerId);
-      } catch (error) { /* capture is best-effort */ }
-
-      suppressClick = true;
-      stage.classList.add("is-dragging");
+      lockGesture(drag, event, dx);
     }
 
     if (drag.locked !== "x") {
@@ -671,9 +755,9 @@ export function initHomeExperience() {
 
     event.preventDefault();
 
-    /* the page's turned fraction tracks the pointer's travel across the page */
-    const fraction = (event.clientX - drag.startX) / (pageWidth || window.innerWidth);
+    const fraction = (event.clientX - drag.startX) / drag.reach;
     drag.value = clamp(drag.base - fraction, 0, 1);
+    drag.pull = clamp(event.clientY - drag.startY, -pageHeight * 0.4, pageHeight * 0.4) * 0.6;
 
     const now = performance.now();
     drag.samples.push({ t: now, x: event.clientX });
@@ -681,12 +765,15 @@ export function initHomeExperience() {
       drag.samples.shift();
     }
 
+    /* at most one render per frame, always with the latest pointer */
     if (!dragFrame) {
       dragFrame = requestAnimationFrame(() => {
         dragFrame = null;
-        if (state.drag && state.drag.locked === "x") {
-          state.progress[state.drag.index] = state.drag.value;
-          renderPage(state.drag.index);
+        const live = state.drag;
+        if (live && live.locked === "x") {
+          state.progress[live.index] = live.value;
+          setTurn(live.index, live.corner, live.pull);
+          renderPage(live.index);
         }
       });
     }
@@ -704,15 +791,15 @@ export function initHomeExperience() {
 
   function releaseGesture({ index, dir, value }, flickToward) {
 
-    /* how far the page has travelled in the direction of the turn */
+    /* how far the sheet has travelled in the direction of the turn */
     const along = dir === 1 ? value : 1 - value;
 
-    const commit = flickToward > FLICK_VELOCITY ? along > 0.05
+    const commit = flickToward > FLICK_VELOCITY ? along > 0.04
                  : flickToward < -FLICK_VELOCITY ? false
                  : along >= COMMIT_PROGRESS;
 
     const to = dir === 1 ? (commit ? 1 : 0) : (commit ? 0 : 1);
-    settle({ index, dir, from: value, to, fromDrag: true });
+    settle({ index, dir, from: value, to, fromDrag: true, velocity: flickToward });
   }
 
   function onPointerUp(event) {
@@ -736,6 +823,10 @@ export function initHomeExperience() {
       bookScene.releasePointerCapture(drag.id);
     } catch (error) { /* already released */ }
 
+    /* render the very last pointer position before settling from it */
+    state.progress[drag.index] = drag.value;
+    setTurn(drag.index, drag.corner, drag.pull);
+
     const vx = velocityX(drag.samples);
     const flickToward = drag.dir === 1 ? -vx : vx;
 
@@ -749,6 +840,7 @@ export function initHomeExperience() {
   bookScene.addEventListener("pointermove", onPointerMove);
   bookScene.addEventListener("pointerup", onPointerUp);
   bookScene.addEventListener("pointercancel", onPointerUp);
+
   /* only the scene's own capture matters: taking capture over from the
      browser's implicit touch capture fires this on the inner target too */
   bookScene.addEventListener("lostpointercapture", (event) => {
@@ -756,6 +848,13 @@ export function initHomeExperience() {
       onPointerUp(event);
     }
   });
+
+  /* iOS Safari: once a gesture is a page turn, the page must not scroll */
+  bookScene.addEventListener("touchmove", (event) => {
+    if (state.drag && state.drag.locked === "x") {
+      event.preventDefault();
+    }
+  }, { passive: false });
 
   bookScene.addEventListener("click", (event) => {
     if (suppressClick) {
@@ -770,7 +869,7 @@ export function initHomeExperience() {
 
   /* =======================================================
      TRACKPAD — horizontal two-finger swipes arrive as wheel
-     events. They drive the same gesture; a short pause in the
+     events. They drive the same sheet; a short pause in the
      stream counts as the release.
   ======================================================= */
 
@@ -782,35 +881,38 @@ export function initHomeExperience() {
       return; // vertical wheel scrolling stays native
     }
 
-    const drag = state.drag;
-
-    if (drag && drag.kind !== "wheel") {
+    if (state.drag && state.drag.kind !== "wheel") {
       return;
     }
 
-    if (!drag) {
+    if (!state.drag) {
 
       if (!canInteract()) {
         return;
       }
 
       const forward = event.deltaX > 0;
+      let index;
+      let dir;
 
       if (forward && state.currentPage < PAGE_COUNT - 1) {
-        state.drag = { kind: "wheel" };
-        beginGesture(state.currentPage, 1);
+        index = state.currentPage;
+        dir = 1;
       } else if (!forward && state.currentPage > 0) {
-        state.drag = { kind: "wheel" };
-        beginGesture(state.currentPage - 1, -1);
+        index = state.currentPage - 1;
+        dir = -1;
       } else {
         return;
       }
+
+      state.drag = { kind: "wheel", index, dir, value: state.progress[index] };
+      setTurn(index, 1, 0);
     }
 
     event.preventDefault(); // also stops the browser's horizontal "back" swipe
 
     const wheel = state.drag;
-    wheel.value = clamp(wheel.value + event.deltaX / (pageWidth || window.innerWidth), 0, 1);
+    wheel.value = clamp(wheel.value + event.deltaX / pageWidth, 0, 1);
     state.progress[wheel.index] = wheel.value;
     renderPage(wheel.index);
 
@@ -878,7 +980,6 @@ export function initHomeExperience() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       measure();
-      invalidateCurls();
       renderAll();
     }, 120);
   });
@@ -908,7 +1009,6 @@ export function initHomeExperience() {
     /* called by the router whenever the home view is shown */
     refresh() {
       measure();
-      invalidateCurls();
       renderAll();
     }
   };

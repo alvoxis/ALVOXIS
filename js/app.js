@@ -10,23 +10,37 @@ import { PRODUCTS, getProduct, formatPrice } from "./products.js";
 import {
   getState, subscribe, setLanguage,
   addToCart, removeFromCart, setQuantity, getCartCount, getCartTotal,
-  registerUser, loginUser, logoutUser, getOrders, addOrder, clearCart
+  registerUser, loginUser, logoutUser, getOrders
 } from "./state.js";
-import { registerRoute, navigate, initRouter } from "./router.js";
+import { registerRoute, navigate, initRouter, rerenderCurrentRoute } from "./router.js";
 import { initHomeExperience } from "./main.js";
 
 
 /* =======================================================
-   TRANSLATIONS — apply to every [data-i18n] element
+   TRANSLATIONS
+   · [data-i18n="key"]            -> element text
+   · [data-i18n-aria-label="key"] -> aria-label (same for the
+     other attributes in I18N_ATTRIBUTES)
+   Views rendered from JS call t() directly and are re-rendered
+   when the language changes (see BOOT).
 ======================================================= */
+
+const I18N_ATTRIBUTES = ["aria-label", "aria-roledescription", "alt", "placeholder", "title"];
 
 function applyTranslations() {
   const lang = getState().language;
 
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const value = t(lang, el.dataset.i18n);
-    if (Array.isArray(value) || !value) return; // keep existing HTML fallback text
+    if (typeof value !== "string" || !value) return; // keep existing HTML fallback text
     el.textContent = value;
+  });
+
+  I18N_ATTRIBUTES.forEach((attribute) => {
+    document.querySelectorAll(`[data-i18n-${attribute}]`).forEach((el) => {
+      const value = t(lang, el.getAttribute(`data-i18n-${attribute}`));
+      if (typeof value === "string" && value) el.setAttribute(attribute, value);
+    });
   });
 
   document.querySelectorAll("[data-price]").forEach((el) => {
@@ -587,10 +601,6 @@ function renderCheckoutView() {
         <button type="submit" class="primary-action" id="payNowBtn">${t(lang, "checkout.payNow")}</button>
       </div>
 
-      <button type="button" class="text-link demo-preview-btn" id="demoPreviewBtn">
-        Preview confirmation screen (demo only — no real payment)
-      </button>
-
     </form>
   `;
 
@@ -602,22 +612,6 @@ function renderCheckoutView() {
     // This is the wire-up point for a secure backend call to
     // create a Stripe Checkout Session — see README.
     alert(t(lang, "checkout.stripeNotice"));
-  });
-
-  document.getElementById("demoPreviewBtn").addEventListener("click", () => {
-    const orderId = `DEMO-${Date.now().toString().slice(-6)}`;
-
-    addOrder({
-      orderId,
-      date: new Date().toISOString(),
-      lines: cart,
-      total: getCartTotal(),
-      status: "demo"
-    });
-
-    clearCart();
-    updateCartBadge();
-    navigate(`/confirmation/${orderId}`);
   });
 }
 
@@ -651,9 +645,9 @@ function renderAccountView() {
             : orders.map((order) => `
                 <div class="order-row">
                   <span>#${order.orderId}</span>
-                  <span>${new Date(order.date).toLocaleDateString()}</span>
+                  <span>${new Date(order.date).toLocaleDateString(lang)}</span>
                   <span>${formatPrice(order.total, "EUR")}</span>
-                  <span class="order-status">${order.status}</span>
+                  <span class="order-status">${t(lang, `account.orderStatus.${order.status}`) || order.status}</span>
                 </div>
               `).join("")
         }
@@ -673,7 +667,7 @@ function renderAccountView() {
   root.innerHTML = `
     <div class="account-auth">
 
-      <p class="demo-notice">${t(lang, "account.demoNotice")}</p>
+      <p class="account-notice">${t(lang, "account.localNotice")}</p>
 
       <div class="auth-providers">
         <button class="provider-btn" id="googleBtn">${t(lang, "account.google")}</button>
@@ -758,6 +752,20 @@ function renderAccountView() {
 function renderConfirmationView(params) {
   const lang = getState().language;
   const root = document.getElementById("confirmationContent");
+  const order = getOrders().find((entry) => entry.orderId === params.orderId);
+
+  /* never show "Order confirmed" for an order that wasn't actually placed */
+  if (!order) {
+    root.innerHTML = `
+      <div class="confirmation-block">
+        <p class="empty-note">${t(lang, "confirmation.notFound")}</p>
+        <div class="step-actions">
+          <a class="primary-action" href="#/">${t(lang, "confirmation.continueShopping")}</a>
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   root.innerHTML = `
     <div class="confirmation-block">
@@ -793,16 +801,71 @@ registerRoute("/confirmation/:orderId", { view: "confirmation", render: renderCo
    BOOT
 ======================================================= */
 
+/* Re-render the visible view in the new language, keeping whatever the
+   visitor has already typed into its forms. */
+function rerenderInNewLanguage() {
+  const view = document.querySelector(".view:not([hidden])");
+  const typed = {};
+
+  if (view) {
+    view.querySelectorAll("input[name], textarea[name], select[name]").forEach((field) => {
+      if (field.type === "file") return;
+      typed[`${field.form ? field.form.id : ""}:${field.name}`] = field.value;
+    });
+  }
+
+  rerenderCurrentRoute();
+
+  if (view) {
+    view.querySelectorAll("input[name], textarea[name], select[name]").forEach((field) => {
+      const key = `${field.form ? field.form.id : ""}:${field.name}`;
+      if (key in typed && field.type !== "file") field.value = typed[key];
+    });
+  }
+}
+
+/* Native form validation bubbles speak the browser's language, not the
+   site's — replace their text with ours. */
+function initValidationMessages() {
+  document.addEventListener("invalid", (event) => {
+    const field = event.target;
+    if (typeof field.setCustomValidity !== "function") return;
+
+    const lang = getState().language;
+    field.setCustomValidity("");
+
+    if (field.validity.valueMissing) {
+      field.setCustomValidity(t(lang, "form.required"));
+    } else if (field.validity.typeMismatch && field.type === "email") {
+      field.setCustomValidity(t(lang, "form.email"));
+    }
+  }, true);
+
+  document.addEventListener("input", (event) => {
+    if (typeof event.target.setCustomValidity === "function") {
+      event.target.setCustomValidity("");
+    }
+  }, true);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   applyTranslations();
   initHeader();
+  initValidationMessages();
   homeExperience = initHomeExperience();
   initRouter();
+
+  let renderedLanguage = getState().language;
 
   subscribe(() => {
     applyTranslations();
     updateCartBadge();
+
+    if (getState().language !== renderedLanguage) {
+      renderedLanguage = getState().language;
+      rerenderInNewLanguage();
+    }
   });
 
 });

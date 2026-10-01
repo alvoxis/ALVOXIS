@@ -11,7 +11,7 @@
     content="#050505"
   />
 
-  <title>ALVOXIS — Meaningful Moments</title>
+  <title data-i18n="meta.title">ALVOXIS — Meaningful Moments</title>
 
   <link
     rel="stylesheet"
@@ -66,6 +66,8 @@
           type="button"
           class="lang-current"
           id="langCurrent"
+          aria-label="Language"
+          data-i18n-aria-label="a11y.language"
           aria-haspopup="true"
           aria-expanded="false"
         >
@@ -90,6 +92,7 @@
         class="cart-link"
         data-nav-route="cart"
         aria-label="Cart"
+        data-i18n-aria-label="nav.cart"
       >
         <span class="cart-icon" aria-hidden="true">◎</span>
         <span class="cart-count" id="cartCount">0</span>
@@ -101,6 +104,7 @@
       class="menu-button"
       type="button"
       aria-label="Open menu"
+      data-i18n-aria-label="a11y.openMenu"
       id="mobileMenuButton"
     >
       <span></span>
@@ -215,7 +219,9 @@
             class="book-scene"
             role="region"
             aria-roledescription="book"
+            data-i18n-aria-roledescription="a11y.bookRole"
             aria-label="ALVOXIS collection"
+            data-i18n-aria-label="a11y.book"
           >
 
             <div id="alvoxisBook" class="alvoxis-book">
@@ -228,7 +234,7 @@
                 <div class="book-page-face book-page-front">
 
                   <div class="book-page-media">
-                    <img src="assets/images/053D01F6-EB27-4A2D-B6C4-DE826FAA2E45.png" alt="ALVOXIS gift box" draggable="false" />
+                    <img src="assets/images/053D01F6-EB27-4A2D-B6C4-DE826FAA2E45.png" alt="ALVOXIS gift box" data-i18n-alt="catalog.coverAlt" draggable="false" />
                   </div>
 
                   <div class="book-page-scrim"></div>
@@ -255,14 +261,14 @@
                 <div class="book-page-face book-page-front">
 
                   <div class="book-page-media">
-                    <img src="assets/images/13B0048D-74F8-4511-8456-78D15FF53C36.png" alt="ALVOXIS Mini Gift Box" draggable="false" />
+                    <img src="assets/images/13B0048D-74F8-4511-8456-78D15FF53C36.png" alt="ALVOXIS Mini" data-i18n-alt="products.mini.name" draggable="false" />
                   </div>
 
                   <div class="book-page-scrim"></div>
 
                   <div class="book-page-overlay">
                     <div class="page-copy">
-                      <p class="eyebrow">THE MINI COLLECTION</p>
+                      <p class="eyebrow" data-i18n="catalog.miniEyebrow">THE MINI COLLECTION</p>
                       <h2 data-i18n="products.mini.name">ALVOXIS Mini</h2>
                       <p data-i18n="products.mini.tagline">A small box. A meaningful memory.</p>
                       <strong class="book-price" data-price="mini">€49.99</strong>
@@ -284,14 +290,14 @@
                 <div class="book-page-face book-page-front">
 
                   <div class="book-page-media">
-                    <img src="assets/images/IMG_0709.jpeg" alt="ALVOXIS Classic Gift Box" draggable="false" />
+                    <img src="assets/images/IMG_0709.jpeg" alt="ALVOXIS Classic" data-i18n-alt="products.classic.name" draggable="false" />
                   </div>
 
                   <div class="book-page-scrim"></div>
 
                   <div class="book-page-overlay">
                     <div class="page-copy">
-                      <p class="eyebrow">THE CLASSIC COLLECTION</p>
+                      <p class="eyebrow" data-i18n="catalog.classicEyebrow">THE CLASSIC COLLECTION</p>
                       <h2 data-i18n="products.classic.name">ALVOXIS Classic</h2>
                       <p data-i18n="products.classic.tagline">Designed for unforgettable moments.</p>
                       <strong class="book-price" data-price="classic">€59.99</strong>
@@ -314,7 +320,7 @@
                   <div class="next-chapter-page">
                     <p class="eyebrow" data-i18n="catalog.nextChapter">THE NEXT CHAPTER</p>
                     <h2 data-i18n="catalog.nextChapterTitle">Support the story.</h2>
-                    <p class="next-chapter-copy" data-i18n="catalog.nextChapterCopy">ALVOXIS is still being written — page by page.</p>
+                    <p class="next-chapter-copy" data-i18n="catalog.nextChapterCopy">ALVOXIS is still being written — page by page. This chapter is coming soon.</p>
                   </div>
                 </div>
 
@@ -328,16 +334,16 @@
 
           <div class="book-controls">
 
-            <button id="previousCard" class="collection-arrow" type="button" aria-label="Previous page">←</button>
+            <button id="previousCard" class="collection-arrow" type="button" aria-label="Previous page" data-i18n-aria-label="a11y.prevPage">←</button>
 
-            <div id="collectionDots" class="collection-dots" aria-label="Book pages">
-              <button type="button" class="active" data-page="0" aria-label="Cover"></button>
-              <button type="button" data-page="1" aria-label="ALVOXIS Mini"></button>
-              <button type="button" data-page="2" aria-label="ALVOXIS Classic"></button>
-              <button type="button" data-page="3" aria-label="The next chapter"></button>
+            <div id="collectionDots" class="collection-dots" aria-label="Book pages" data-i18n-aria-label="a11y.bookPages">
+              <button type="button" class="active" data-page="0" aria-label="Cover" data-i18n-aria-label="a11y.cover"></button>
+              <button type="button" data-page="1" aria-label="ALVOXIS Mini" data-i18n-aria-label="products.mini.name"></button>
+              <button type="button" data-page="2" aria-label="ALVOXIS Classic" data-i18n-aria-label="products.classic.name"></button>
+              <button type="button" data-page="3" aria-label="The next chapter" data-i18n-aria-label="catalog.nextChapter"></button>
             </div>
 
-            <button id="nextCard" class="collection-arrow" type="button" aria-label="Next page">→</button>
+            <button id="nextCard" class="collection-arrow" type="button" aria-label="Next page" data-i18n-aria-label="a11y.nextPage">→</button>
 
           </div>
 
@@ -352,18 +358,11 @@
 
       <section id="about" class="about-section">
 
-        <p class="eyebrow" data-i18n="catalog.eyebrow">THE IDEA BEHIND ALVOXIS</p>
+        <p class="eyebrow" data-i18n="about.eyebrow">THE IDEA BEHIND ALVOXIS</p>
 
-        <h2>
-          Some gifts are opened.
-          Others are remembered.
-        </h2>
+        <h2 data-i18n="about.title">Some gifts are opened. Others are remembered.</h2>
 
-        <p>
-          ALVOXIS creates meaningful gift experiences
-          designed to preserve emotions, memories
-          and special moments.
-        </p>
+        <p data-i18n="about.text">ALVOXIS creates meaningful gift experiences designed to preserve emotions, memories and special moments.</p>
 
       </section>
 

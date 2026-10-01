@@ -95,6 +95,14 @@ export function getCurrentParams() {
   return currentParams;
 }
 
+/* re-run the current view's renderer in place (no scroll, no hash change) */
+export function rerenderCurrentRoute() {
+  const match = matchRoute(window.location.hash);
+  if (match && typeof match.handler.render === "function") {
+    match.handler.render(match.params);
+  }
+}
+
 export function initRouter() {
   window.addEventListener("hashchange", resolve);
   resolve();
