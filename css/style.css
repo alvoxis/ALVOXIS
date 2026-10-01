@@ -8,10 +8,6 @@
   --line: rgba(255, 255, 255, 0.16);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-
-  /* The book now fills the screen like the hero video. */
-  --book-width: 100%;
-  --book-height: 100%;
 }
 
 
@@ -146,26 +142,20 @@ h2 {
 
 
 /* ========================================
-   VIDEO EXPERIENCE
+   HOME STAGE
+   One screen tall (small-viewport units, so
+   the bottom controls are never under the
+   iOS toolbar). The film and the book share
+   it; js/main.js sets data-phase:
+   intro → reveal → book.
 ======================================== */
 
-.video-experience {
+.home-stage {
   position: relative;
-  height: 500vh;
-  background: var(--black);
-}
-
-/* One pinned stage holds BOTH the video and the book layer, so the
-   cover that grows out of the depth is the very same element the
-   visitor then drags — there is no second cover and no section swap. */
-
-.story-stage {
-  position: sticky;
-  top: 0;
   width: 100%;
   height: 100vh;
   height: 100svh;
-  min-height: 620px;
+  min-height: 460px;
   overflow: hidden;
   background: var(--black);
   isolation: isolate;
@@ -174,9 +164,14 @@ h2 {
 .video-scene {
   position: absolute;
   inset: 0;
+  z-index: 1;
   overflow: hidden;
   background: var(--black);
-  isolation: isolate;
+  transform-origin: 50% 50%;
+}
+
+.home-stage[data-phase="book"] .video-scene {
+  visibility: hidden;
 }
 
 
@@ -185,16 +180,12 @@ h2 {
 .hero-video {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   background: var(--black);
-  opacity: 1;
-  transform: scale(1) translate3d(0, 0, 0);
-  transform-origin: center center;
-  will-change: transform, opacity, filter;
 }
 
 
@@ -207,9 +198,9 @@ h2 {
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.52) 0%,
-    rgba(0, 0, 0, 0.08) 42%,
-    rgba(0, 0, 0, 0.74) 100%
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.04) 40%,
+    rgba(0, 0, 0, 0.7) 100%
   );
 }
 
@@ -220,28 +211,64 @@ h2 {
   position: absolute;
   z-index: 6;
   left: 8vw;
-  bottom: 17vh;
+  right: 8vw;
+  bottom: calc(110px + env(safe-area-inset-bottom, 0px));
   max-width: 760px;
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  will-change: opacity, transform;
+  pointer-events: none;
 }
 
 .video-content h1 {
   margin-top: 22px;
   max-width: 760px;
-  font-size: clamp(42px, 6.5vw, 100px);
+  font-size: clamp(40px, 6.5vw, 100px);
 }
 
 
-/* VIDEO PROGRESS */
+/* PLAY FALLBACK (autoplay refused) */
+
+.video-play {
+  position: absolute;
+  z-index: 8;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 26px 16px 18px;
+  border: 1px solid rgba(245, 243, 239, 0.45);
+  border-radius: 999px;
+  background: rgba(5, 5, 5, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.video-play[hidden] {
+  display: none;
+}
+
+.video-play-icon {
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 11px solid var(--white);
+}
+
+
+/* VIDEO PROGRESS + SKIP */
 
 .video-progress-container {
   position: absolute;
   z-index: 7;
   left: 8vw;
   right: 8vw;
-  bottom: 6vh;
+  bottom: calc(34px + env(safe-area-inset-bottom, 0px));
 }
 
 .video-progress {
@@ -253,91 +280,90 @@ h2 {
 
 .video-progress span {
   display: block;
-  width: 0%;
+  width: 100%;
   height: 100%;
   background: var(--white);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
 }
 
 .video-progress-label {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 12px;
   color: rgba(245, 243, 239, 0.65);
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
+.video-skip {
+  padding: 8px 0 8px 16px;
+  border: 0;
+  background: none;
+  color: var(--white);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.video-skip:hover {
+  opacity: 1;
+}
+
+.home-stage:not([data-phase="intro"]) .video-progress-container,
+.home-stage:not([data-phase="intro"]) .video-content,
+.home-stage:not([data-phase="intro"]) .video-play {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
 
 /* ========================================
-   COLLECTION
+   COLLECTION LAYER (the book + its chrome)
 ======================================== */
 
 .collection-layer {
   position: absolute;
   inset: 0;
   z-index: 5;
-  background: #050505;
-  opacity: 0;
-  transform: scale(0.55);
-  transform-origin: center center;
+  visibility: hidden;
   pointer-events: none;
-  will-change: transform, opacity;
 }
 
-.collection-layer.is-live {
+.home-stage[data-phase="reveal"] .collection-layer,
+.home-stage[data-phase="book"] .collection-layer {
+  visibility: visible;
+}
+
+.home-stage[data-phase="book"] .collection-layer {
   pointer-events: auto;
 }
 
-.collection-sticky {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 620px;
-  overflow: hidden;
-  background: #050505;
-  isolation: isolate;
+/* chrome fades in once the book is open */
+.collection-header,
+.book-controls,
+.collection-counter {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.1s;
 }
 
-.collection-background {
-  position: absolute;
-  inset: 0;
-  z-index: -5;
-  background: radial-gradient(
-    ellipse at 50% 45%,
-    rgba(90, 72, 43, 0.24) 0%,
-    rgba(35, 30, 24, 0.16) 28%,
-    rgba(5, 5, 5, 0.92) 70%,
-    #050505 100%
-  );
-  pointer-events: none;
-}
-
-.book-light {
-  position: absolute;
-  z-index: -4;
-  top: 40%;
-  left: 50%;
-  width: 80vw;
-  height: 60vh;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse,
-    rgba(199, 168, 117, 0.1) 0%,
-    rgba(199, 168, 117, 0.035) 35%,
-    transparent 72%
-  );
-  filter: blur(35px);
-  pointer-events: none;
+.home-stage[data-phase="book"] .collection-header,
+.home-stage[data-phase="book"] .book-controls,
+.home-stage[data-phase="book"] .collection-counter {
+  opacity: 1;
 }
 
 .collection-header {
   position: absolute;
-  top: 11vh;
+  top: calc(84px + env(safe-area-inset-top, 0px));
   left: 8vw;
   right: 8vw;
-  z-index: 100;
+  z-index: 400;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -345,7 +371,7 @@ h2 {
 }
 
 .collection-header p:last-child {
-  color: var(--muted);
+  color: rgba(245, 243, 239, 0.7);
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -353,59 +379,75 @@ h2 {
 
 
 /* ========================================
-   BOOK SCENE
+   BOOK SCENE — receives every gesture.
+   pan-y: the browser keeps vertical pans
+   (normal page scroll); horizontal ones
+   come to js/main.js as pointer events.
 ======================================== */
 
 .book-scene {
   position: absolute;
   inset: 0;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 2400px;
-  perspective-origin: 8% 50%;
   overflow: hidden;
   touch-action: pan-y;
   overscroll-behavior-x: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  cursor: grab;
+}
+
+.home-stage.is-dragging .book-scene {
+  cursor: grabbing;
 }
 
 
 /* ========================================
-   ALVOXIS BOOK
+   THE BOOK
+   Pages are stacked in 2D by z-index (the
+   book itself is flat); each page renders
+   its own 3D turn under the book's
+   perspective.
 ======================================== */
 
 .alvoxis-book {
-  position: relative;
-  z-index: 5;
-  width: var(--book-width);
-  height: var(--book-height);
-  transform-style: preserve-3d;
-  will-change: transform;
-  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  perspective: var(--book-perspective, 2400px);
+  perspective-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  background: var(--black);
+}
+
+/* while it arrives as a closed object: page-block edges + a drop shadow */
+.home-stage[data-phase="reveal"] .alvoxis-book {
+  box-shadow:
+    3px 0 0 #e9e1d3,
+    6px 1px 0 #cfc5b4,
+    9px 2px 0 #b4a993,
+    0 50px 120px rgba(0, 0, 0, 0.85),
+    0 0 90px rgba(199, 168, 117, 0.18);
+}
+
+.home-stage[data-phase="reveal"] .book-page-cover {
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 
 /* ========================================
-   BOOK PAGES — full-bleed leaves
-   hinged at the left edge, like a real
-   page turning inside a fullscreen book.
+   PAGES — full-bleed leaves hinged at the
+   left edge (the spine)
 ======================================== */
 
 .book-page {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
-  transform-origin: left center;
-  will-change: transform;
+  transform-origin: 0 50%;
   pointer-events: none;
 }
-
-
-/* EACH PAGE HAS TWO PHYSICAL FACES */
 
 .book-page-face {
   position: absolute;
@@ -416,16 +458,16 @@ h2 {
 }
 
 .book-page-front {
-  transform: rotateY(0deg) translateZ(0.5px);
+  background: var(--black);
 }
 
 .book-page-back {
-  transform: rotateY(180deg) translateZ(0.5px);
+  transform: rotateY(180deg);
   background: linear-gradient(125deg, #0c0b0a 0%, #16140f 48%, #0a0a09 100%);
-  border-left: 1px solid rgba(199, 168, 117, 0.18);
 }
 
-.book-page-back::before {
+.book-page-back::before,
+.curl-back-slice::before {
   content: "ALVOXIS";
   position: absolute;
   inset: 0;
@@ -438,95 +480,121 @@ h2 {
   letter-spacing: 0.35em;
 }
 
-
-/* SHEET EDGE — a sliver of thickness at the spine */
-
+/* shadow the lifting sheet casts on the page beneath it */
 .book-page::after {
   content: "";
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 3px;
-  z-index: 40;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.35),
-    rgba(255, 255, 255, 0.22),
-    rgba(0, 0, 0, 0.15)
-  );
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-
-/* SHADOW CAST ON THE PAGE BENEATH — driven by --cast-shadow, set from
-   the turning page's progress. It darkens the page underneath as the
-   sheet above lifts away, then fades once the page has fully turned. */
-
-.book-page::before {
-  content: "";
-  position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 50;
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.55),
-    rgba(0, 0, 0, 0.18) 45%,
-    transparent 80%
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.22) 45%,
+    transparent 85%
   );
   opacity: var(--cast-shadow, 0);
 }
 
-/* FREE-EDGE HIGHLIGHT — a thin lit edge on the outer side of the sheet,
-   a hint of paper thickness. Kept faint so it never looks like plastic. */
-
-.book-page-front::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 2px;
-  z-index: 46;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.55) 30%,
-    rgba(255, 255, 255, 0.35) 70%,
-    rgba(255, 255, 255, 0)
-  );
-  opacity: calc(var(--shadow-opacity, 0) * 0.8);
+/* a turned-over page is off-stage; don't paint it */
+.book-page.is-turned {
+  visibility: hidden;
 }
 
-/* DYNAMIC SHADOW — driven by --shadow-opacity, set inline by
-   JS every scroll frame from the page's live turn fraction.
-   Peaks near the middle of the turn, softens at both ends —
-   this is what makes the page feel like it lifts off the
-   book rather than just rotating in place. */
+/* during a turn the strips draw the page; the flat faces step aside */
+.book-page.is-turning > .book-page-face {
+  visibility: hidden;
+}
 
-.book-page-front::after,
-.book-page-back::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 45;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.45),
-    rgba(0, 0, 0, 0.14) 30%,
-    transparent 62%
-  );
-  opacity: var(--shadow-opacity, 0);
+.book-page[data-active="true"] .book-product-action {
+  pointer-events: auto;
 }
 
 
 /* ========================================
-   FULL-BLEED MEDIA + OVERLAY TEXT
-   Used by the cover and product pages.
+   PAGE CURL — a chain of nested strips
+======================================== */
+
+.page-curl {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  display: none;
+}
+
+.book-page.is-turning > .page-curl {
+  display: block;
+}
+
+.curl-strip {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transform-origin: 0 50%;
+  transform-style: preserve-3d;
+}
+
+.curl-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% + 2px);   /* overlap hides hairline seams */
+  height: 100%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.curl-back {
+  transform: rotateY(180deg);
+}
+
+.curl-slice {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.curl-back > .curl-slice {
+  background: linear-gradient(125deg, #0c0b0a 0%, #16140f 48%, #0a0a09 100%);
+}
+
+/* per-strip shading by its own angle to the light */
+.curl-front::after,
+.curl-back::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: #000;
+}
+
+.curl-front::after {
+  opacity: var(--shade-front, 0);
+}
+
+.curl-back::after {
+  opacity: var(--shade-back, 0);
+}
+
+/* the free edge: a thin lit sliver of paper thickness */
+.curl-strip-edge > .curl-front::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.45) 35%, rgba(255, 255, 255, 0.3) 70%, transparent);
+}
+
+
+/* ========================================
+   PAGE CONTENT
 ======================================== */
 
 .book-page-media {
@@ -534,7 +602,6 @@ h2 {
   inset: 0;
   z-index: 1;
   overflow: hidden;
-  transform-style: preserve-3d;
 }
 
 .book-page-media img {
@@ -543,50 +610,7 @@ h2 {
   height: 100%;
   object-fit: cover;
   object-position: center;
-}
-/* PAGE-CURL STRIPS
-   JS slices the page photo into a few vertical strips. Each strip is
-   NESTED inside the previous one and hinges on its own left edge, so a
-   small rotation per strip accumulates into a smooth arc while the
-   edges stay joined — a bent sheet, not loose slats. The darkening
-   scrim and the copy sit on their own flat plane above, so text never
-   distorts mid-turn. Perspective is local to the photo layer only. */
-
-.book-page-media {
-  perspective: 1400px;
-  perspective-origin: 0% 50%;
-}
-
-.book-page-strip {
-  position: absolute;
-  top: 0;
-  background-repeat: no-repeat;
-  transform-origin: 0 50%;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: transform;
-}
-
-/* per-strip shading: strips angled away from the light get darker,
-   which is what makes the bend read as a curve rather than a fold */
-.book-page-strip::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #000;
-  opacity: var(--shade, 0);
-  pointer-events: none;
-}
-
-/* the original <img> stays in the DOM for alt text / decoding,
-   but the strips are what is actually painted */
-.book-page-media img.is-source {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
 .book-page-scrim {
@@ -595,10 +619,10 @@ h2 {
   z-index: 2;
   background: linear-gradient(
     180deg,
-    rgba(5, 5, 5, 0.55) 0%,
-    rgba(5, 5, 5, 0.05) 32%,
-    rgba(5, 5, 5, 0.15) 55%,
-    rgba(5, 5, 5, 0.92) 100%
+    rgba(5, 5, 5, 0.6) 0%,
+    rgba(5, 5, 5, 0.05) 30%,
+    rgba(5, 5, 5, 0.18) 52%,
+    rgba(5, 5, 5, 0.94) 100%
   );
 }
 
@@ -609,22 +633,8 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 8vh 8vw;
+  padding: 0 8vw calc(130px + env(safe-area-inset-bottom, 0px));
 }
-
-.page-number {
-  position: absolute;
-  top: 4vh;
-  left: 8vw;
-  color: rgba(245, 243, 239, 0.55);
-  font-size: 10px;
-  letter-spacing: 0.22em;
-}
-
-
-/* ========================================
-   PAGE COPY (light text over dark scrim)
-======================================== */
 
 .page-copy {
   max-width: 560px;
@@ -643,28 +653,24 @@ h2 {
 
 .page-copy > p:not(.eyebrow) {
   max-width: 420px;
-  margin-top: 24px;
-  color: rgba(245, 243, 239, 0.72);
+  margin-top: 22px;
+  color: rgba(245, 243, 239, 0.75);
   font-size: 14px;
   line-height: 1.8;
 }
 
 .book-price {
   display: block;
-  margin-top: 26px;
+  margin-top: 22px;
   color: var(--white);
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 400;
+  letter-spacing: 0.02em;
 }
-
-
-/* ========================================
-   PRODUCT BUTTON
-======================================== */
 
 .book-product-action {
   display: inline-block;
-  margin-top: 26px;
+  margin-top: 22px;
   padding: 14px 28px;
   border: 1px solid rgba(245, 243, 239, 0.5);
   border-radius: 999px;
@@ -677,10 +683,6 @@ h2 {
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.book-page[data-active="true"] .book-product-action {
-  pointer-events: auto;
-}
-
 .book-product-action:hover {
   background: var(--white);
   border-color: var(--white);
@@ -688,18 +690,15 @@ h2 {
 }
 
 
-/* ========================================
-   NEXT CHAPTER (no photo — story/support page,
-   not a product, so it never claims "coming soon"
-   like a product would)
-======================================== */
+/* NEXT CHAPTER — a story page, not a product */
 
-.book-page-signature .book-page-front {
+.book-page-signature .book-page-front,
+.book-page-signature .curl-front > .curl-slice {
   background: radial-gradient(
     ellipse at center,
-    rgba(148, 118, 68, 0.14),
+    rgba(148, 118, 68, 0.16),
     rgba(5, 5, 5, 0.98) 68%
-  );
+  ), var(--black);
 }
 
 .next-chapter-page {
@@ -736,17 +735,17 @@ h2 {
 
 .book-controls {
   position: absolute;
-  z-index: 200;
+  z-index: 400;
   left: 8vw;
   right: 8vw;
-  bottom: calc(8vh + env(safe-area-inset-bottom, 0px));
+  bottom: calc(40px + env(safe-area-inset-bottom, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
   pointer-events: none;
 }
 
-.book-arrow {
+.book-controls > * {
   pointer-events: auto;
 }
 
@@ -758,7 +757,7 @@ h2 {
   justify-content: center;
   border: 1px solid var(--line);
   border-radius: 50%;
-  background: rgba(5, 5, 5, 0.18);
+  background: rgba(5, 5, 5, 0.25);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: var(--white);
@@ -770,7 +769,6 @@ h2 {
 .collection-arrow:hover {
   background: var(--white);
   color: var(--black);
-  transform: scale(1.06);
 }
 
 .collection-arrow:active {
@@ -783,82 +781,56 @@ h2 {
 }
 
 .collection-arrow:disabled:hover {
-  background: rgba(5, 5, 5, 0.18);
+  background: rgba(5, 5, 5, 0.25);
   color: var(--white);
-  transform: none;
 }
-
-
-/* ========================================
-   DOTS
-======================================== */
 
 .collection-dots {
   display: flex;
   align-items: center;
-  gap: 10px;
-  pointer-events: none;
+  gap: 4px;
 }
 
-.collection-dots span {
-  display: block;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(245, 243, 239, 0.28);
-  transition: width 0.4s var(--ease), background 0.4s ease;
-  pointer-events: auto;
+.collection-dots button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
 }
 
-.collection-dots span.active {
+.collection-dots button::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  background: rgba(245, 243, 239, 0.32);
+  transition: width 0.4s var(--ease), background 0.4s ease;
+}
+
+.collection-dots button.active {
+  width: 40px;
+}
+
+.collection-dots button.active::before {
   width: 28px;
-  border-radius: 20px;
   background: var(--white);
 }
 
-
-/* ========================================
-   COUNTER
-======================================== */
-
 .collection-counter {
   position: absolute;
-  z-index: 200;
+  z-index: 400;
   right: 8vw;
-  bottom: calc(5vh + env(safe-area-inset-bottom, 0px));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   color: rgba(245, 243, 239, 0.55);
   font-size: 10px;
   letter-spacing: 0.2em;
   pointer-events: none;
-}
-
-
-/* ========================================
-   SCROLL HINT
-======================================== */
-
-.book-scroll-hint {
-  position: absolute;
-  z-index: 200;
-  left: 50%;
-  bottom: 4.5vh;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: rgba(245, 243, 239, 0.38);
-  font-size: 8px;
-  letter-spacing: 0.25em;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-
-.book-scroll-hint i {
-  display: block;
-  width: 24px;
-  height: 1px;
-  background: rgba(245, 243, 239, 0.32);
 }
 
 
@@ -955,29 +927,21 @@ h2 {
 
   /* VIDEO */
 
-  .video-experience {
-    height: 430vh;
-  }
-
-  .video-scene {
-    min-height: 560px;
-  }
-
   .video-content {
     left: 22px;
     right: 22px;
-    bottom: 18vh;
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   }
 
   .video-content h1 {
-    margin-top: 18px;
-    font-size: clamp(39px, 11vw, 60px);
+    margin-top: 16px;
+    font-size: clamp(36px, 10.5vw, 60px);
   }
 
   .video-progress-container {
     left: 22px;
     right: 22px;
-    bottom: 6vh;
+    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
   }
 
   .video-progress-label {
@@ -987,37 +951,23 @@ h2 {
 
   /* COLLECTION */
 
-  .collection-sticky {
-    min-height: 600px;
-  }
-
   .collection-header {
-    top: calc(78px + env(safe-area-inset-top, 0px));
+    top: calc(70px + env(safe-area-inset-top, 0px));
     left: 22px;
     right: 22px;
     display: block;
   }
 
   .collection-header p:last-child {
-    margin-top: 10px;
+    margin-top: 8px;
+    font-size: 9px;
   }
 
 
-  /* BOOK */
-
-  .book-scene {
-    perspective: 1500px;
-    perspective-origin: 50% 50%;
-  }
-
-  .page-number {
-    top: 3vh;
-    left: 22px;
-    font-size: 8px;
-  }
+  /* PAGES */
 
   .book-page-overlay {
-    padding: 5vh 22px 13vh;
+    padding: 0 22px calc(104px + env(safe-area-inset-bottom, 0px));
   }
 
   .page-copy {
@@ -1025,38 +975,38 @@ h2 {
   }
 
   .page-copy .eyebrow {
-    margin-bottom: 13px;
-    font-size: 8px;
+    margin-bottom: 12px;
+    font-size: 9px;
   }
 
   .page-copy h2 {
-    font-size: clamp(30px, 8vw, 44px);
+    font-size: clamp(30px, 8.5vw, 44px);
   }
 
   .page-copy > p:not(.eyebrow) {
-    margin-top: 16px;
-    font-size: 12px;
-    line-height: 1.7;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.6;
   }
 
   .book-price {
-    margin-top: 18px;
-    font-size: 17px;
+    margin-top: 14px;
+    font-size: 21px;
   }
 
   .book-product-action {
-    margin-top: 18px;
-    padding: 11px 20px;
+    margin-top: 16px;
+    padding: 12px 22px;
     font-size: 9px;
   }
 
   .next-chapter-page h2 {
-    font-size: clamp(30px, 8vw, 44px);
+    font-size: clamp(30px, 8.5vw, 44px);
   }
 
   .next-chapter-copy {
     margin-top: 16px;
-    font-size: 12px;
+    font-size: 13px;
   }
 
 
@@ -1065,37 +1015,21 @@ h2 {
   .book-controls {
     left: 22px;
     right: 22px;
-    bottom: 4.5vh;
+    bottom: calc(30px + env(safe-area-inset-bottom, 0px));
   }
 
   .collection-arrow {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     font-size: 17px;
-  }
-
-  .collection-dots {
-    gap: 7px;
-  }
-
-  .collection-dots span {
-    width: 4px;
-    height: 4px;
-  }
-
-  .collection-dots span.active {
-    width: 20px;
   }
 
   .collection-counter {
     right: 22px;
-    bottom: 2.2vh;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
     font-size: 8px;
   }
 
-  .book-scroll-hint {
-    display: none;
-  }
 
   /* ABOUT */
 
@@ -1122,6 +1056,12 @@ h2 {
     padding: 35px 22px;
   }
 
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 

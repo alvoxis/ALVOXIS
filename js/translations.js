@@ -12,7 +12,9 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS PRESENTS",
       title: "Some moments deserve to be remembered.",
-      scroll: "Scroll to explore"
+      scroll: "Scroll to explore",
+      skip: "Skip intro",
+      play: "Play film"
     },
     catalog: {
       eyebrow: "THE ALVOXIS COLLECTION",
@@ -149,7 +151,9 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS ПРЕДСТАВЛЯЕТ",
       title: "Некоторые моменты достойны того, чтобы их помнили.",
-      scroll: "Прокрутите, чтобы посмотреть"
+      scroll: "Прокрутите, чтобы посмотреть",
+      skip: "Пропустить",
+      play: "Смотреть фильм"
     },
     catalog: {
       eyebrow: "КОЛЛЕКЦИЯ ALVOXIS",
@@ -286,7 +290,9 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS PIEDĀVĀ",
       title: "Daži mirkļi ir pelnījuši palikt atmiņā.",
-      scroll: "Ritiniet, lai turpinātu"
+      scroll: "Ritiniet, lai turpinātu",
+      skip: "Izlaist ievadu",
+      play: "Atskaņot"
     },
     catalog: {
       eyebrow: "ALVOXIS KOLEKCIJA",
@@ -424,7 +430,9 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS ESITLEB",
       title: "Mõned hetked väärivad meelespidamist.",
-      scroll: "Keri, et avastada"
+      scroll: "Keri, et avastada",
+      skip: "Jäta vahele",
+      play: "Esita"
     },
     catalog: {
       eyebrow: "ALVOXISE KOLLEKTSIOON",
@@ -561,7 +569,9 @@ export const translations = {
     hero: {
       eyebrow: "ALVOXIS PRISTATO",
       title: "Kai kurios akimirkos verta prisiminti.",
-      scroll: "Slinkite, kad tęstumėte"
+      scroll: "Slinkite, kad tęstumėte",
+      skip: "Praleisti įžangą",
+      play: "Paleisti"
     },
     catalog: {
       eyebrow: "ALVOXIS KOLEKCIJA",

@@ -133,116 +133,102 @@
     <div id="view-home" class="view">
 
 
-      <!-- VIDEO EXPERIENCE -->
+      <!-- HOME STAGE
+           One 100svh stage. The film plays on its own; when it ends (or is
+           skipped) it recedes into depth and the ONE book — whose first
+           page is the cover — emerges and grows to fill the stage.
+           js/main.js owns the phase: intro → reveal → book. -->
 
       <section
         id="experience"
-        class="video-experience"
+        class="home-stage"
+        data-phase="intro"
       >
 
-        <div class="story-stage">
-
-        <div class="video-scene">
+        <div class="video-scene" id="videoScene">
 
           <video
             id="heroVideo"
             class="hero-video"
+            autoplay
             muted
             playsinline
-            preload="auto"
             webkit-playsinline
+            preload="auto"
+            disablepictureinpicture
           >
-
             <source
               src="assets/videos/gemini_generated_video_C490D624.mp4"
               type="video/mp4"
             />
-
           </video>
 
+          <div class="video-overlay" aria-hidden="true"></div>
 
-          <div class="video-overlay"></div>
-
-
-          <div
-            class="video-content"
-            id="videoContent"
-          >
-
-            <p class="eyebrow" data-i18n="hero.eyebrow">
-              ALVOXIS PRESENTS
-            </p>
-
-            <h1 data-i18n="hero.title">
-              Some moments deserve
-              to be remembered.
-            </h1>
-
+          <div class="video-content">
+            <p class="eyebrow" data-i18n="hero.eyebrow">ALVOXIS PRESENTS</p>
+            <h1 data-i18n="hero.title">Some moments deserve to be remembered.</h1>
           </div>
 
+          <button
+            type="button"
+            class="video-play"
+            id="videoPlay"
+            hidden
+          >
+            <span class="video-play-icon" aria-hidden="true"></span>
+            <span data-i18n="hero.play">Play film</span>
+          </button>
 
           <div class="video-progress-container">
 
-            <div class="video-progress">
+            <div class="video-progress" aria-hidden="true">
               <span id="videoProgressBar"></span>
             </div>
 
             <div class="video-progress-label">
-              <span id="videoCounter">01 / 03</span>
-              <span data-i18n="hero.scroll">SCROLL TO EXPLORE</span>
+              <span id="videoCounter">0:00</span>
+              <button type="button" class="video-skip" id="videoSkip" data-i18n="hero.skip">Skip intro</button>
             </div>
 
           </div>
 
         </div>
 
-        <!-- THE BOOK — lives in the SAME pinned stage as the video, so the
-             cover that emerges is the one and only cover (no second copy). -->
 
-      <div
-        id="collection"
-        class="collection-layer"
-        inert
-      >
+        <!-- THE BOOK — the one and only cover is page 0 -->
 
-        <div class="collection-sticky">
-
-          <div class="collection-background" aria-hidden="true"></div>
-          <div class="book-light" aria-hidden="true"></div>
+        <div
+          id="collection"
+          class="collection-layer"
+          aria-hidden="true"
+          inert
+        >
 
           <div class="collection-header">
-
-            <p class="eyebrow" data-i18n="catalog.eyebrow">
-              THE ALVOXIS COLLECTION
-            </p>
-
-            <p data-i18n="catalog.scrollHint">
-              Scroll to turn the page
-            </p>
-
+            <p class="eyebrow" data-i18n="catalog.eyebrow">THE ALVOXIS COLLECTION</p>
+            <p data-i18n="catalog.scrollHint">Drag to turn the page</p>
           </div>
-
 
           <div
             id="bookScene"
             class="book-scene"
-            aria-label="ALVOXIS interactive collection book"
+            role="region"
+            aria-roledescription="book"
+            aria-label="ALVOXIS collection"
           >
 
-            <div
-              id="alvoxisBook"
-              class="alvoxis-book"
-            >
+            <div id="alvoxisBook" class="alvoxis-book">
 
 
-              <!-- PAGE 01 — COVER / INTRO -->
+              <!-- PAGE 0 — COVER -->
 
               <div class="book-page book-page-cover" data-page-index="0">
 
                 <div class="book-page-face book-page-front">
 
                   <div class="book-page-media">
-                    <img src="assets/images/053D01F6-EB27-4A2D-B6C4-DE826FAA2E45.png" alt="ALVOXIS gift box" />
+                    <img src="assets/images/053D01F6-EB27-4A2D-B6C4-DE826FAA2E45.png" alt="ALVOXIS gift box" draggable="false" />
                   </div>
 
                   <div class="book-page-scrim"></div>
@@ -262,27 +248,25 @@
               </div>
 
 
-              <!-- PAGE 02 — MINI -->
+              <!-- PAGE 1 — ALVOXIS MINI -->
 
               <div class="book-page book-page-product" data-page-index="1">
 
                 <div class="book-page-face book-page-front">
 
                   <div class="book-page-media">
-                    <img src="assets/images/13B0048D-74F8-4511-8456-78D15FF53C36.png" alt="ALVOXIS Mini Gift Box" />
+                    <img src="assets/images/13B0048D-74F8-4511-8456-78D15FF53C36.png" alt="ALVOXIS Mini Gift Box" draggable="false" />
                   </div>
 
                   <div class="book-page-scrim"></div>
 
                   <div class="book-page-overlay">
                     <div class="page-copy">
-                      <p class="eyebrow" data-i18n="catalog.eyebrow">THE MINI COLLECTION</p>
+                      <p class="eyebrow">THE MINI COLLECTION</p>
                       <h2 data-i18n="products.mini.name">ALVOXIS Mini</h2>
                       <p data-i18n="products.mini.tagline">A small box. A meaningful memory.</p>
                       <strong class="book-price" data-price="mini">€49.99</strong>
-                      <a class="product-action book-product-action" href="#/product/mini" data-i18n="product.selectGift">
-                        Select this gift
-                      </a>
+                      <a class="book-product-action" href="#/product/mini" data-i18n="product.selectGift">Select this gift</a>
                     </div>
                   </div>
 
@@ -293,27 +277,25 @@
               </div>
 
 
-              <!-- PAGE 03 — CLASSIC -->
+              <!-- PAGE 2 — ALVOXIS CLASSIC -->
 
               <div class="book-page book-page-product" data-page-index="2">
 
                 <div class="book-page-face book-page-front">
 
                   <div class="book-page-media">
-                    <img src="assets/images/IMG_0709.jpeg" alt="ALVOXIS Classic Gift Box" />
+                    <img src="assets/images/IMG_0709.jpeg" alt="ALVOXIS Classic Gift Box" draggable="false" />
                   </div>
 
                   <div class="book-page-scrim"></div>
 
                   <div class="book-page-overlay">
                     <div class="page-copy">
-                      <p class="eyebrow" data-i18n="catalog.eyebrow">THE CLASSIC COLLECTION</p>
+                      <p class="eyebrow">THE CLASSIC COLLECTION</p>
                       <h2 data-i18n="products.classic.name">ALVOXIS Classic</h2>
                       <p data-i18n="products.classic.tagline">Designed for unforgettable moments.</p>
                       <strong class="book-price" data-price="classic">€59.99</strong>
-                      <a class="product-action book-product-action" href="#/product/classic" data-i18n="product.selectGift">
-                        Select this gift
-                      </a>
+                      <a class="book-product-action" href="#/product/classic" data-i18n="product.selectGift">Select this gift</a>
                     </div>
                   </div>
 
@@ -324,57 +306,42 @@
               </div>
 
 
-              <!-- PAGE 04 — SIGNATURE -->
+              <!-- PAGE 3 — THE NEXT CHAPTER -->
 
               <div class="book-page book-page-signature" data-page-index="3">
 
                 <div class="book-page-face book-page-front">
-
                   <div class="next-chapter-page">
                     <p class="eyebrow" data-i18n="catalog.nextChapter">THE NEXT CHAPTER</p>
                     <h2 data-i18n="catalog.nextChapterTitle">Support the story.</h2>
                     <p class="next-chapter-copy" data-i18n="catalog.nextChapterCopy">ALVOXIS is still being written — page by page.</p>
                   </div>
-
                 </div>
 
                 <div class="book-page-face book-page-back"></div>
 
               </div>
 
-
-            </div>
-
-
-            <div class="book-controls">
-
-              <button id="previousCard" class="collection-arrow book-arrow" type="button" aria-label="Previous page">←</button>
-
-              <div id="collectionDots" class="collection-dots" aria-label="Book pages">
-                <span class="active" data-page="0"></span>
-                <span data-page="1"></span>
-                <span data-page="2"></span>
-                <span data-page="3"></span>
-              </div>
-
-              <button id="nextCard" class="collection-arrow book-arrow" type="button" aria-label="Next page">→</button>
-
-            </div>
-
-            <div id="collectionCounter" class="collection-counter">01 / 04</div>
-
-            <div class="book-scroll-hint" aria-hidden="true">
-              <span data-i18n="catalog.dragShort">DRAG</span>
-              <i></i>
             </div>
 
           </div>
 
-        </div>
+          <div class="book-controls">
 
-      </div>
+            <button id="previousCard" class="collection-arrow" type="button" aria-label="Previous page">←</button>
 
+            <div id="collectionDots" class="collection-dots" aria-label="Book pages">
+              <button type="button" class="active" data-page="0" aria-label="Cover"></button>
+              <button type="button" data-page="1" aria-label="ALVOXIS Mini"></button>
+              <button type="button" data-page="2" aria-label="ALVOXIS Classic"></button>
+              <button type="button" data-page="3" aria-label="The next chapter"></button>
+            </div>
 
+            <button id="nextCard" class="collection-arrow" type="button" aria-label="Next page">→</button>
+
+          </div>
+
+          <div id="collectionCounter" class="collection-counter" aria-live="polite">01 / 04</div>
 
         </div>
 
