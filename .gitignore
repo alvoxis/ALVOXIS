@@ -1,0 +1,15 @@
+# secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+supabase/.env
+supabase/functions/.env
+
+# Supabase CLI working files
+supabase/.temp/
+supabase/.branches/
+
+# tooling
+node_modules/
+.DS_Store

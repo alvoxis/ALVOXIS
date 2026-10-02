@@ -3,9 +3,16 @@
    ========================================================= */
 
 import { DEFAULT_LANGUAGE, LANGUAGES } from "./translations.js";
+import { getProduct } from "./products.js";
 
 const STATE_KEY = "alvoxis_state_v1";
-const USERS_KEY = "alvoxis_users_v1";
+
+/* The old browser-only account system kept users — with
+   plaintext passwords — and fake orders in localStorage.
+   Remove whatever is left of it from this device. */
+try {
+  localStorage.removeItem("alvoxis_users_v1");
+} catch (error) { /* storage unavailable */ }
 
 function loadState() {
   try {
@@ -28,14 +35,15 @@ const saved = loadState();
 const state = {
   language: (saved && saved.language) || detectLanguage(),
   cart: (saved && saved.cart) || [],
-  user: (saved && saved.user) || null
+  user: null // filled from the Supabase session at boot
 };
 
 const listeners = new Set();
 
 function persist() {
   try {
-    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    /* only UI preferences + the cart draft; never the user */
+    localStorage.setItem(STATE_KEY, JSON.stringify({ language: state.language, cart: state.cart }));
   } catch (error) {
     console.warn("ALVOXIS: could not save state", error);
   }
@@ -117,82 +125,23 @@ export function getCartCount() {
   return state.cart.reduce((sum, line) => sum + line.quantity, 0);
 }
 
+/* display only — the amount actually charged is computed by the server */
 export function getCartTotal() {
-  return state.cart.reduce((sum, line) => sum + line.price * line.quantity, 0);
+  return state.cart.reduce((sum, line) => {
+    const product = getProduct(line.productId);
+    return sum + (product ? product.price : 0) * line.quantity;
+  }, 0);
 }
 
-function loadUsers() {
-  try {
-    const raw = localStorage.getItem(USERS_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch (error) {
-    return {};
-  }
-}
+/* ---------- signed-in user ----------
+   A snapshot of the Supabase session, kept in memory only.
+   Supabase Auth is the source of truth; nothing about the user
+   is ever written to localStorage by ALVOXIS itself. */
 
-function saveUsers(users) {
-  try {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  } catch (error) {
-    console.warn("ALVOXIS: could not save users", error);
-  }
-}
-
-export function registerUser({ name, email, password }) {
-  const users = loadUsers();
-  const key = email.trim().toLowerCase();
-
-  if (users[key]) {
-    return { ok: false, error: "exists" };
-  }
-
-  users[key] = { name, email: key, password, orders: [] };
-  saveUsers(users);
-
-  state.user = { name, email: key };
-  update();
-
-  return { ok: true };
-}
-
-export function loginUser({ email, password }) {
-  const users = loadUsers();
-  const key = email.trim().toLowerCase();
-  const record = users[key];
-
-  if (!record || record.password !== password) {
-    return { ok: false, error: "invalid" };
-  }
-
-  state.user = { name: record.name, email: record.email };
-  update();
-
-  return { ok: true };
-}
-
-export function logoutUser() {
-  state.user = null;
-  update();
-}
-
-export function getOrders() {
-  if (!state.user) return [];
-  const users = loadUsers();
-  const record = users[state.user.email];
-  /* orders created by the old preview checkout were never real — hide
-     any that are still stored on this device */
-  return record ? record.orders.filter((order) => order.status !== "demo") : [];
-}
-
-export function addOrder(order) {
-  if (!state.user) return;
-  const users = loadUsers();
-  const record = users[state.user.email];
-  if (!record) return;
-
-  record.orders.unshift(order);
-  saveUsers(users);
-  update();
+export function setUser(user) {
+  const before = state.user ? state.user.id : null;
+  state.user = user;
+  if ((user ? user.id : null) !== before) notify();
 }
 
 document.documentElement.lang = state.language;

@@ -13,6 +13,30 @@
 
   <title data-i18n="meta.title">ALVOXIS — Meaningful Moments</title>
 
+  <meta
+    name="description"
+    content="ALVOXIS — personalised gift boxes with a photo puzzle and a greeting card. Some moments deserve to be remembered."
+    data-i18n-content="meta.description"
+  />
+  <link rel="canonical" href="https://alvoxis.eu/" />
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ALVOXIS" />
+  <meta property="og:url" content="https://alvoxis.eu/" />
+  <meta property="og:title" content="ALVOXIS — Meaningful Moments" />
+  <meta property="og:description" content="Personalised gift boxes with a photo puzzle and a greeting card. Some moments deserve to be remembered." />
+  <meta property="og:image" content="https://alvoxis.eu/assets/images/053D01F6-EB27-4A2D-B6C4-DE826FAA2E45.png" />
+  <meta property="og:locale" content="en_GB" />
+  <meta property="og:locale:alternate" content="lv_LV" />
+  <meta property="og:locale:alternate" content="ru_RU" />
+  <meta property="og:locale:alternate" content="et_EE" />
+  <meta property="og:locale:alternate" content="lt_LT" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+
   <link
     rel="stylesheet"
     href="css/style.css"
@@ -312,15 +336,63 @@
               </div>
 
 
-              <!-- PAGE 3 — THE NEXT CHAPTER -->
+              <!-- PAGE 3 — THE NEXT CHAPTER: support the story (js/support.js) -->
 
               <div class="book-page book-page-signature" data-page-index="3">
 
                 <div class="book-page-face book-page-front">
-                  <div class="next-chapter-page">
-                    <p class="eyebrow" data-i18n="catalog.nextChapter">THE NEXT CHAPTER</p>
-                    <h2 data-i18n="catalog.nextChapterTitle">Support the story.</h2>
-                    <p class="next-chapter-copy" data-i18n="catalog.nextChapterCopy">ALVOXIS is still being written — page by page. This chapter is coming soon.</p>
+                  <div class="next-chapter-page support-page">
+
+                    <div class="support-story">
+                      <p class="eyebrow" data-i18n="catalog.nextChapter">THE NEXT CHAPTER</p>
+                      <h2 data-i18n="support.title">The story is not over.</h2>
+                      <p class="support-subtitle" data-i18n="support.subtitle">Help us write the next page.</p>
+                      <p class="next-chapter-copy" data-i18n="support.text">ALVOXIS grows one chapter at a time.</p>
+                    </div>
+
+                    <form class="support-form" id="supportForm" novalidate>
+
+                      <fieldset class="support-amounts">
+                        <legend class="sr-only" data-i18n="support.chooseAmount">Choose an amount</legend>
+                        <button type="button" class="support-chip" data-amount="1">€1</button>
+                        <button type="button" class="support-chip" data-amount="5">€5</button>
+                        <button type="button" class="support-chip" data-amount="10">€10</button>
+                        <button type="button" class="support-chip" data-amount="25">€25</button>
+                        <button type="button" class="support-chip" data-amount="50">€50</button>
+                        <button type="button" class="support-chip" data-amount="100">€100</button>
+                      </fieldset>
+
+                      <label class="support-custom" for="supportAmount">
+                        <span class="sr-only" data-i18n="support.customAmount">Your own amount, from €1.00 to €100.00</span>
+                        <span class="support-currency" aria-hidden="true">€</span>
+                        <input
+                          id="supportAmount"
+                          name="amount"
+                          type="text"
+                          inputmode="decimal"
+                          autocomplete="off"
+                          maxlength="6"
+                          placeholder="Your amount"
+                          data-i18n-placeholder="support.placeholder"
+                          aria-describedby="supportMood supportError"
+                        />
+                      </label>
+
+                      <p class="support-mood" id="supportMood" aria-live="polite">Choose an amount — every page starts with a single word.</p>
+
+                      <p class="support-gift" id="supportGift" hidden>
+                        <strong data-i18n="support.giftTitle">A little extra magic awaits you.</strong>
+                        <span data-i18n="support.giftText">Support with €50 or more and we will make you a keepsake puzzle.</span>
+                      </p>
+
+                      <p class="support-error" id="supportError" role="alert" hidden></p>
+
+                      <button type="submit" class="support-submit" id="supportSubmit" data-i18n="support.cta">Support the story</button>
+
+                      <p class="support-note" data-i18n="support.note">Secure payment by Stripe · from €1 to €100</p>
+
+                    </form>
+
                   </div>
                 </div>
 
@@ -415,11 +487,11 @@
 
 
     <!-- =======================================
-         VIEW: CONFIRMATION
+         VIEW: PAYMENT RESULT
     ======================================== -->
 
-    <div id="view-confirmation" class="view" hidden>
-      <section class="page-shell" id="confirmationContent"></section>
+    <div id="view-payment" class="view" hidden>
+      <section class="page-shell" id="paymentContent"></section>
     </div>
 
 

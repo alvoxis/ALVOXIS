@@ -2088,3 +2088,696 @@ h2 {
   }
 
 }
+
+
+/* ========================================================
+   ALVOXIS — SUPPORT THE STORY (last page of the book)
+======================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.support-page {
+  justify-content: center;
+  justify-content: safe center; /* if space runs out, never slide under the header */
+  gap: 22px;
+  padding: calc(120px + env(safe-area-inset-top, 0px)) 8vw calc(110px + env(safe-area-inset-bottom, 0px));
+}
+
+.support-story h2 {
+  margin-top: 16px;
+}
+
+.support-subtitle {
+  margin-top: 14px;
+  color: var(--gold);
+  font-size: 15px;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+.support-story .next-chapter-copy {
+  margin: 14px auto 0;
+  max-width: 460px;
+}
+
+.support-form {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.book-page[data-active="true"] .support-form {
+  pointer-events: auto;
+}
+
+.support-amounts {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  border: 0;
+}
+
+.support-chip {
+  min-height: 40px;
+  padding: 0 6px;
+  border: 1px solid rgba(199, 168, 117, 0.42);
+  border-radius: 999px;
+  background: rgba(5, 5, 5, 0.35);
+  color: var(--white);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+.support-chip:hover {
+  border-color: var(--gold);
+}
+
+.support-chip:active {
+  transform: scale(0.96);
+}
+
+.support-chip.is-active {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--black);
+}
+
+.support-custom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 260px;
+  border-bottom: 1px solid rgba(245, 243, 239, 0.4);
+}
+
+.support-currency {
+  color: var(--gold);
+  font-size: 22px;
+}
+
+.support-custom input {
+  width: 100%;
+  padding: 10px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--white);
+  font: inherit;
+  font-size: 22px;
+  text-align: center;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.support-custom input::placeholder {
+  color: rgba(245, 243, 239, 0.35);
+  font-size: 15px;
+}
+
+.support-custom:focus-within {
+  border-bottom-color: var(--gold);
+}
+
+.support-custom input[aria-invalid="true"] {
+  color: #e7b0a0;
+}
+
+.support-mood {
+  min-height: 1.6em;
+  color: rgba(245, 243, 239, 0.62);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.6;
+  transition: color 0.4s ease;
+}
+
+.support-mood.is-lit {
+  color: var(--white);
+}
+
+.support-gift {
+  padding: 12px 16px;
+  border: 1px solid rgba(199, 168, 117, 0.45);
+  border-radius: 14px;
+  background: rgba(199, 168, 117, 0.08);
+  color: rgba(245, 243, 239, 0.8);
+  font-size: 12px;
+  line-height: 1.6;
+  animation: gift-glow 0.6s var(--ease);
+}
+
+.support-gift strong {
+  display: block;
+  color: var(--gold);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+@keyframes gift-glow {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.support-error {
+  color: #e7b0a0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.support-error a {
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.support-submit {
+  min-width: 220px;
+  padding: 15px 30px;
+  border: 1px solid var(--white);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--black);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.support-submit:hover {
+  opacity: 0.86;
+}
+
+.support-submit:active {
+  transform: scale(0.98);
+}
+
+.support-submit:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.support-note {
+  color: rgba(245, 243, 239, 0.4);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+@media (max-width: 700px) {
+  .support-page {
+    gap: 14px;
+    padding: calc(112px + env(safe-area-inset-top, 0px)) 22px calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .support-amounts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .support-chip {
+    min-height: 36px;
+  }
+}
+
+/* short portrait screens: keep the essentials */
+@media (max-height: 760px) {
+  .support-story .next-chapter-copy {
+    display: none;
+  }
+
+  .support-subtitle {
+    margin-top: 8px;
+  }
+
+  .support-form {
+    gap: 10px;
+  }
+
+  .support-note {
+    display: none;
+  }
+}
+
+/* phones in landscape: story on the left, the pen on the right */
+@media (max-height: 560px) {
+  .support-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: calc(70px + env(safe-area-inset-top, 0px)) 6vw calc(58px + env(safe-area-inset-bottom, 0px));
+    text-align: left;
+  }
+
+  .support-amounts {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .support-chip {
+    min-height: 32px;
+    font-size: 12px;
+  }
+
+  .support-custom input {
+    padding: 4px 8px;
+    font-size: 18px;
+  }
+
+  .support-mood {
+    font-size: 12px;
+  }
+
+  .support-gift {
+    padding: 7px 12px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .support-form {
+    gap: 8px;
+  }
+
+  .support-submit {
+    padding: 10px 24px;
+  }
+}
+
+
+/* ========================================================
+   ACCOUNT — chapters of your own ALVOXIS story
+======================================================== */
+
+.account-shell {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.account-title {
+  margin-top: 18px;
+  font-size: clamp(34px, 6vw, 64px);
+  overflow-wrap: anywhere;
+}
+
+.account-lead {
+  margin-top: 18px;
+  max-width: 560px;
+  color: rgba(245, 243, 239, 0.72);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.account-notice.is-success,
+.form-success {
+  color: var(--gold);
+  font-size: 12px;
+}
+
+.account-chapters {
+  display: flex;
+  gap: 6px;
+  margin: 34px 0 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.account-chapters::-webkit-scrollbar {
+  display: none;
+}
+
+.account-chapter-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: rgba(245, 243, 239, 0.6);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+
+.chapter-numeral {
+  color: var(--gold);
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.05em;
+}
+
+.account-chapter-link:hover,
+.account-chapter-link.is-active {
+  color: var(--white);
+  background: rgba(199, 168, 117, 0.1);
+}
+
+.account-chapter {
+  padding-top: 24px;
+  animation: chapter-turn 0.5s var(--ease);
+}
+
+@keyframes chapter-turn {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.chapter-heading {
+  font-size: clamp(26px, 4vw, 38px);
+}
+
+.account-facts {
+  display: grid;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.account-facts div {
+  display: grid;
+  grid-template-columns: minmax(120px, 200px) 1fr;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.account-facts dt {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.account-facts dd {
+  overflow-wrap: anywhere;
+}
+
+.ledger {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+  list-style: none;
+}
+
+.ledger-entry {
+  display: grid;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ledger-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ledger-date {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ledger-items {
+  color: rgba(245, 243, 239, 0.7);
+  font-size: 13px;
+  list-style: none;
+}
+
+.ledger-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ledger-amount {
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: rgba(245, 243, 239, 0.75);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.status-chip.is-paid {
+  border-color: rgba(199, 168, 117, 0.5);
+  color: var(--gold);
+}
+
+.status-chip.is-failed,
+.status-chip.is-refunded {
+  color: #e7b0a0;
+}
+
+.status-chip.is-gift {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.status-chip.is-link:hover {
+  background: rgba(199, 168, 117, 0.12);
+}
+
+.gift-card {
+  margin-top: 22px;
+  padding: 26px 24px;
+  border: 1px solid rgba(199, 168, 117, 0.35);
+  border-radius: 20px;
+  background: radial-gradient(ellipse at top, rgba(199, 168, 117, 0.1), transparent 70%);
+}
+
+.gift-card h3 {
+  margin-top: 12px;
+  font-size: clamp(24px, 3.4vw, 32px);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.gift-card .step-actions {
+  margin-top: 18px;
+}
+
+.gift-photo {
+  margin-top: 20px;
+}
+
+.gift-preview {
+  display: block;
+  max-width: 100%;
+  max-height: 340px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.gift-empty {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+  border: 1px dashed rgba(245, 243, 239, 0.25);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.field-hint {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.settings-block {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.settings-block h3 {
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.settings-languages {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.settings-languages .support-chip {
+  min-width: 52px;
+}
+
+/* sign-in card */
+
+.auth-card {
+  max-width: 440px;
+  margin-top: 26px;
+}
+
+.provider-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 22px;
+}
+
+.google-mark {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.provider-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0 6px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.auth-switch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.checkout-signin {
+  margin: 6px 0 18px;
+  color: rgba(245, 243, 239, 0.75);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.primary-action:disabled,
+.ghost-action:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .account-facts div {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .ledger-entry {
+    padding: 16px;
+  }
+}
+
+/* the support page is the last page: the collection header and its
+   "drag to turn" hint step aside to give the story room */
+.home-stage[data-page="3"] .collection-header {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (max-width: 700px) and (max-height: 700px) {
+  .support-page {
+    gap: 9px;
+    padding-top: calc(78px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .support-page h2 {
+    font-size: 28px;
+  }
+
+  .support-subtitle {
+    font-size: 13px;
+  }
+
+  .support-chip {
+    min-height: 32px;
+    font-size: 12px;
+  }
+
+  .support-custom input {
+    padding: 4px 8px;
+    font-size: 18px;
+  }
+
+  .support-mood {
+    font-size: 12px;
+    min-height: 1.3em;
+  }
+
+  .support-gift {
+    padding: 8px 12px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .support-gift strong {
+    font-size: 12px;
+  }
+
+  .support-submit {
+    padding: 12px 26px;
+  }
+}
+
+.auth-card .auth-form {
+  padding-top: 8px;
+  border-top: 0;
+}

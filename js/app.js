@@ -9,11 +9,18 @@ import { LANGUAGES, t } from "./translations.js";
 import { PRODUCTS, getProduct, formatPrice } from "./products.js";
 import {
   getState, subscribe, setLanguage,
-  addToCart, removeFromCart, setQuantity, getCartCount, getCartTotal,
-  registerUser, loginUser, logoutUser, getOrders
+  addToCart, removeFromCart, setQuantity, getCartCount, getCartTotal, clearCart, updateCartLine
 } from "./state.js";
-import { registerRoute, navigate, initRouter, rerenderCurrentRoute } from "./router.js";
+import { registerRoute, navigate, initRouter, rerenderCurrentRoute, getQuery } from "./router.js";
 import { initHomeExperience } from "./main.js";
+import {
+  AppError, backendConfigured, initAuth, paymentRecord, rememberNext, startCheckout, uploadOrderPhoto
+} from "./api.js";
+import { afterSignIn, esc, forgetAccountData, markAuthReady, renderAccountView, verifySession } from "./account.js";
+import { initSupport } from "./support.js";
+import {
+  PHOTO_ACCEPT, PhotoError, dataUrlToBlob, deleteDraftPhoto, loadDraftPhoto, preparePhoto, saveDraftPhoto
+} from "./photos.js";
 
 
 /* =======================================================
@@ -25,7 +32,7 @@ import { initHomeExperience } from "./main.js";
    when the language changes (see BOOT).
 ======================================================= */
 
-const I18N_ATTRIBUTES = ["aria-label", "aria-roledescription", "alt", "placeholder", "title"];
+const I18N_ATTRIBUTES = ["aria-label", "aria-roledescription", "alt", "placeholder", "title", "content"];
 
 function applyTranslations() {
   const lang = getState().language;
@@ -85,12 +92,30 @@ function initHeader() {
   const mobileMenuButton = document.getElementById("mobileMenuButton");
   const mobileNav = document.getElementById("mobileNav");
 
+  mobileMenuButton.setAttribute("aria-expanded", "false");
+  mobileMenuButton.setAttribute("aria-controls", "mobileNav");
   mobileMenuButton.addEventListener("click", () => {
     mobileNav.hidden = !mobileNav.hidden;
+    mobileMenuButton.setAttribute("aria-expanded", String(!mobileNav.hidden));
   });
 
   mobileNav.querySelectorAll("a").forEach((a) => {
     a.addEventListener("click", () => { mobileNav.hidden = true; });
+  });
+
+  /* Escape closes whatever is open */
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (langSelect.classList.contains("is-open")) {
+      langSelect.classList.remove("is-open");
+      langCurrent.setAttribute("aria-expanded", "false");
+      langCurrent.focus();
+    }
+    if (!mobileNav.hidden) {
+      mobileNav.hidden = true;
+      mobileMenuButton.setAttribute("aria-expanded", "false");
+      mobileMenuButton.focus();
+    }
   });
 
   updateCartBadge();
@@ -165,56 +190,20 @@ function renderProductView(params) {
 
 /* =======================================================
    VIEW: PERSONALIZE
-   3 steps kept in-memory per product id (not persisted —
-   photos are compressed client-side but still too large
-   for a comfortable localStorage draft).
+   3 steps kept in memory per product id. The photo is
+   validated and re-encoded (js/photos.js); once in the cart it
+   waits in IndexedDB on this device, and is uploaded to
+   private storage only at checkout.
 ======================================================= */
 
 const MESSAGE_MAX = 240;
-const drafts = {}; // productId -> { step, photo: {dataUrl,name}|null, message }
+const drafts = {}; // productId -> { step, photo: { blob, preview } | null, message }
 
 function getDraft(productId) {
   if (!drafts[productId]) {
     drafts[productId] = { step: 1, photo: null, message: "" };
   }
   return drafts[productId];
-}
-
-function resizeImageToDataUrl(file, maxDimension = 1400, quality = 0.85) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onerror = () => reject(new Error("read-failed"));
-
-    reader.onload = () => {
-      const img = new Image();
-
-      img.onerror = () => reject(new Error("decode-failed"));
-
-      img.onload = () => {
-        let { width, height } = img;
-
-        if (width > maxDimension || height > maxDimension) {
-          const scale = maxDimension / Math.max(width, height);
-          width = Math.round(width * scale);
-          height = Math.round(height * scale);
-        }
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-
-      img.src = reader.result;
-    };
-
-    reader.readAsDataURL(file);
-  });
 }
 
 function renderPersonalizeView(params) {
@@ -264,12 +253,12 @@ function renderPersonalizeStep(product, draft) {
         <div class="upload-zone" id="uploadZone">
           ${
             draft.photo
-              ? `<img src="${draft.photo.dataUrl}" alt="" class="upload-preview">`
+              ? `<img src="${draft.photo.preview}" alt="" class="upload-preview">`
               : `<p>${t(lang, "personalize.uploadTitle")}</p><span>${t(lang, "personalize.uploadHint")}</span>`
           }
         </div>
 
-        <input type="file" id="photoInput" accept="image/png, image/jpeg" hidden>
+        <input type="file" id="photoInput" accept="${PHOTO_ACCEPT}" hidden>
 
         <p class="upload-error" id="uploadError" hidden></p>
 
@@ -303,28 +292,17 @@ function renderPersonalizeStep(product, draft) {
 
     async function handleFile(file) {
       errorEl.hidden = true;
-
-      if (!["image/jpeg", "image/png"].includes(file.type)) {
-        errorEl.textContent = t(lang, "personalize.errorFileType");
-        errorEl.hidden = false;
-        return;
-      }
-
-      if (file.size > 20 * 1024 * 1024) {
-        errorEl.textContent = t(lang, "personalize.errorFileSize");
-        errorEl.hidden = false;
-        return;
-      }
-
       zone.classList.add("is-loading");
 
       try {
-        const dataUrl = await resizeImageToDataUrl(file);
-        draft.photo = { dataUrl, name: file.name };
+        draft.photo = await preparePhoto(file);
         renderPersonalizeStep(product, draft);
       } catch (error) {
-        console.warn("ALVOXIS upload error:", error);
-        errorEl.textContent = t(lang, "personalize.errorGeneric");
+        const key = !(error instanceof PhotoError) ? "personalize.errorGeneric"
+          : error.code === "type" ? "personalize.errorFileType"
+          : error.code === "size" ? "personalize.errorFileSize"
+          : `photo.${error.code}`;
+        errorEl.textContent = t(lang, key);
         errorEl.hidden = false;
         zone.classList.remove("is-loading");
       }
@@ -356,12 +334,12 @@ function renderPersonalizeStep(product, draft) {
           <p>${t(lang, "personalize.messageExplain")}</p>
         </div>
 
-        <textarea id="messageInput" maxlength="${MESSAGE_MAX}" placeholder="${t(lang, "personalize.placeholder")}">${draft.message}</textarea>
+        <textarea id="messageInput" maxlength="${MESSAGE_MAX}" placeholder="${t(lang, "personalize.placeholder")}">${esc(draft.message)}</textarea>
         <span class="char-count" id="charCount">${draft.message.length} / ${MESSAGE_MAX} ${t(lang, "personalize.charLimit")}</span>
 
         <div class="card-preview">
           <span class="card-preview-format">${t(lang, "personalize.messageLabel")}</span>
-          <p id="cardPreviewText">${draft.message || t(lang, "personalize.placeholder")}</p>
+          <p id="cardPreviewText">${esc(draft.message) || t(lang, "personalize.placeholder")}</p>
         </div>
 
         <div class="step-actions">
@@ -419,14 +397,14 @@ function renderPersonalizeStep(product, draft) {
       <div class="preview-row">
         <span class="preview-label">${t(lang, "personalize.puzzleSection")} · ${product.personalization.puzzleFormat} · ${product.personalization.puzzlePieces}</span>
         <div class="preview-photo">
-          <img src="${draft.photo.dataUrl}" alt="">
+          <img src="${draft.photo.preview}" alt="">
         </div>
         <button class="text-link" id="editPhotoBtn">${t(lang, "personalize.editPhoto")}</button>
       </div>
 
       <div class="preview-row">
         <span class="preview-label">${t(lang, "personalize.cardSection")} · ${product.personalization.cardFormat}</span>
-        <p class="preview-message">${draft.message || "—"}</p>
+        <p class="preview-message">${esc(draft.message) || "—"}</p>
         <button class="text-link" id="editMessageBtn">${t(lang, "personalize.editMessage")}</button>
       </div>
 
@@ -445,12 +423,25 @@ function renderPersonalizeStep(product, draft) {
     renderPersonalizeStep(product, draft);
   });
 
-  document.getElementById("addToCartBtn").addEventListener("click", () => {
+  const addButton = document.getElementById("addToCartBtn");
+  addButton.addEventListener("click", async () => {
+    if (addButton.disabled) return;
+    addButton.disabled = true;
+
+    const photoKey = `photo_${crypto.randomUUID()}`;
+    try {
+      await saveDraftPhoto(photoKey, draft.photo.blob);
+    } catch (error) {
+      addButton.disabled = false;
+      alert(t(lang, "personalize.errorGeneric"));
+      return;
+    }
+
     addToCart({
       productId: product.id,
       price: product.price,
       currency: product.currency,
-      photo: draft.photo,
+      photo: { key: photoKey, preview: draft.photo.preview },
       message: draft.message,
       puzzleFormat: product.personalization.puzzleFormat,
       puzzlePieces: product.personalization.puzzlePieces,
@@ -500,6 +491,8 @@ function renderCartView() {
 
   root.querySelectorAll("[data-remove-line]").forEach((btn) => {
     btn.addEventListener("click", () => {
+      const line = getState().cart.find((l) => l.lineId === btn.dataset.removeLine);
+      if (line && line.photo && line.photo.key) deleteDraftPhoto(line.photo.key);
       removeFromCart(btn.dataset.removeLine);
       updateCartBadge();
       renderCartView();
@@ -532,11 +525,11 @@ function renderCartLine(line, lang) {
 
       <div class="cart-line-info">
         <strong>${name}</strong>
-        <span>${formatPrice(line.price, line.currency)}</span>
+        <span>${formatPrice(product ? product.price : 0, "EUR")}</span>
 
         <div class="cart-line-personalization">
           <span>${t(lang, "cart.puzzle")}</span>
-          <span>${t(lang, "cart.card")}: “${line.message || "—"}”</span>
+          <span>${t(lang, "cart.card")}: “${esc(line.message) || "—"}”</span>
         </div>
 
         <div class="cart-line-controls">
@@ -549,7 +542,7 @@ function renderCartLine(line, lang) {
         </div>
       </div>
 
-      ${line.photo ? `<img src="${line.photo.dataUrl}" alt="" class="cart-line-photo">` : ""}
+      ${line.photo ? `<img src="${esc(line.photo.preview || line.photo.dataUrl)}" alt="" class="cart-line-photo">` : ""}
 
     </div>
   `;
@@ -558,43 +551,91 @@ function renderCartLine(line, lang) {
 
 /* =======================================================
    VIEW: CHECKOUT
+   Delivery details here; payment on Stripe Checkout. The
+   server (create-checkout-session) prices the order from its
+   own catalog — nothing the browser sends can change it.
 ======================================================= */
+
+const SHIPPING_KEY = "alvoxis_shipping_draft";
+const SHIPPING_FIELDS = ["fullName", "address", "city", "postalCode", "country"];
+
+function loadShippingDraft() {
+  try { return JSON.parse(sessionStorage.getItem(SHIPPING_KEY)) || {}; } catch (error) { return {}; }
+}
+
+function saveShippingDraft(form) {
+  const draft = {};
+  SHIPPING_FIELDS.forEach((name) => { draft[name] = form[name].value; });
+  try { sessionStorage.setItem(SHIPPING_KEY, JSON.stringify(draft)); } catch (error) { /* private mode */ }
+  return draft;
+}
+
+/* same cart -> same attempt id -> a double click can never create two payments */
+let checkoutAttempt = { signature: "", id: "" };
+
+function attemptFor(items, shipping) {
+  const signature = JSON.stringify([items, shipping]);
+  if (checkoutAttempt.signature !== signature) checkoutAttempt = { signature, id: crypto.randomUUID() };
+  return checkoutAttempt.id;
+}
+
+async function uploadCartPhotos(user) {
+  for (const line of getState().cart) {
+    if (line.uploaded && line.uploaded.userId === user.id) continue;
+
+    let blob = null;
+    if (line.photo && line.photo.key) blob = await loadDraftPhoto(line.photo.key).catch(() => null);
+    if (!blob && line.photo && line.photo.dataUrl) blob = await dataUrlToBlob(line.photo.dataUrl); // older carts
+    if (!blob) throw new AppError("errors.photoMissing");
+
+    const path = await uploadOrderPhoto(blob);
+    updateCartLine(line.lineId, { uploaded: { userId: user.id, path } });
+  }
+}
 
 function renderCheckoutView() {
   const lang = getState().language;
-  const { cart } = getState();
+  const { cart, user } = getState();
   const root = document.getElementById("checkoutContent");
 
   if (cart.length === 0) {
-    root.innerHTML = `<p class="empty-note">${t(lang, "cart.empty")}</p>`;
+    root.innerHTML = `<h1>${t(lang, "checkout.title")}</h1><p class="empty-note">${t(lang, "cart.empty")}</p>`;
     return;
   }
+
+  const draft = loadShippingDraft();
+  const field = (name, label, autocomplete) =>
+    `<label>${t(lang, label)} <input type="text" name="${name}" autocomplete="${autocomplete}" required maxlength="120" value="${esc(draft[name] || "")}"></label>`;
 
   root.innerHTML = `
     <h1>${t(lang, "checkout.title")}</h1>
 
-    <form id="checkoutForm" class="checkout-form">
+    <form id="checkoutForm" class="checkout-form" novalidate>
 
       <h2>${t(lang, "checkout.delivery")}</h2>
 
-      <label>${t(lang, "checkout.fullName")} <input type="text" name="fullName" required></label>
-      <label>${t(lang, "checkout.address")} <input type="text" name="address" required></label>
+      ${field("fullName", "checkout.fullName", "name")}
+      ${field("address", "checkout.address", "street-address")}
 
       <div class="form-row">
-        <label>${t(lang, "checkout.city")} <input type="text" name="city" required></label>
-        <label>${t(lang, "checkout.postalCode")} <input type="text" name="postalCode" required></label>
+        ${field("city", "checkout.city", "address-level2")}
+        ${field("postalCode", "checkout.postalCode", "postal-code")}
       </div>
 
-      <label>${t(lang, "checkout.country")} <input type="text" name="country" required></label>
+      ${field("country", "checkout.country", "country-name")}
 
       <h2>${t(lang, "checkout.payment")}</h2>
 
       <p class="stripe-notice">${t(lang, "checkout.stripeNotice")}</p>
 
+      ${user ? "" : `<p class="checkout-signin">${t(lang, "checkout.signInFirst")} <a class="text-link" href="#/account" id="checkoutSignIn">${t(lang, "account.signIn")}</a></p>`}
+
       <div class="checkout-summary">
         <span>${t(lang, "cart.total")}</span>
         <strong>${formatPrice(getCartTotal(), "EUR")}</strong>
       </div>
+
+      <p class="form-error" id="checkoutError" role="alert" hidden></p>
 
       <div class="step-actions">
         <a class="ghost-action" href="#/cart">${t(lang, "checkout.backToCart")}</a>
@@ -605,180 +646,159 @@ function renderCheckoutView() {
   `;
 
   const form = document.getElementById("checkoutForm");
+  const errorEl = document.getElementById("checkoutError");
+  const payButton = document.getElementById("payNowBtn");
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("input", () => saveShippingDraft(form));
+
+  const signIn = document.getElementById("checkoutSignIn");
+  if (signIn) signIn.addEventListener("click", () => rememberNext("#/checkout"));
+
+  const fail = (key) => {
+    errorEl.textContent = t(getState().language, key);
+    errorEl.hidden = false;
+  };
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    // Real submission is intentionally NOT implemented here.
-    // This is the wire-up point for a secure backend call to
-    // create a Stripe Checkout Session — see README.
-    alert(t(lang, "checkout.stripeNotice"));
+    if (payButton.disabled) return;
+    errorEl.hidden = true;
+
+    if (!form.reportValidity()) return;
+    const shipping = saveShippingDraft(form);
+
+    if (!backendConfigured) return fail("errors.paymentsUnavailable");
+
+    const currentUser = getState().user;
+    if (!currentUser) {
+      rememberNext("#/checkout");
+      return fail("checkout.signInFirst");
+    }
+
+    payButton.disabled = true;
+    payButton.setAttribute("aria-busy", "true");
+    payButton.textContent = t(getState().language, "checkout.preparing");
+
+    try {
+      await uploadCartPhotos(currentUser);
+      const items = getState().cart.map((line) => ({
+        product_id: line.productId,
+        quantity: line.quantity,
+        message: line.message || "",
+        photo_path: line.uploaded.path
+      }));
+      payButton.textContent = t(getState().language, "support.redirecting");
+      await startCheckout({ kind: "order", attempt_id: attemptFor(items, shipping), items, shipping });
+      // the browser is leaving for Stripe
+    } catch (error) {
+      payButton.disabled = false;
+      payButton.removeAttribute("aria-busy");
+      payButton.textContent = t(getState().language, "checkout.payNow");
+      fail(error instanceof AppError ? error.key : "errors.generic");
+    }
   });
 }
 
 
 /* =======================================================
-   VIEW: ACCOUNT
+   VIEW: PAYMENT RESULT  (#/payment/success | #/payment/cancel)
+   Read-only. Shows what the Stripe webhook has recorded; it
+   never marks anything as paid itself.
 ======================================================= */
 
-function renderAccountView() {
+let paymentPoll = null;
+
+function renderPaymentView(params) {
   const lang = getState().language;
-  const { user } = getState();
-  const root = document.getElementById("accountContent");
+  const root = document.getElementById("paymentContent");
+  const query = getQuery();
+  const kind = query.get("kind") === "support" ? "support" : "order";
+  const sessionId = query.get("session_id") || "";
 
-  if (user) {
-    const orders = getOrders();
+  clearTimeout(paymentPoll);
 
-    root.innerHTML = `
-      <h1>${t(lang, "account.dashboard")}</h1>
-
-      <div class="account-section">
-        <h2>${t(lang, "account.profile")}</h2>
-        <p>${user.name}</p>
-        <p>${user.email}</p>
-      </div>
-
-      <div class="account-section">
-        <h2>${t(lang, "account.myOrders")}</h2>
-        ${
-          orders.length === 0
-            ? `<p class="empty-note">${t(lang, "account.noOrders")}</p>`
-            : orders.map((order) => `
-                <div class="order-row">
-                  <span>#${order.orderId}</span>
-                  <span>${new Date(order.date).toLocaleDateString(lang)}</span>
-                  <span>${formatPrice(order.total, "EUR")}</span>
-                  <span class="order-status">${t(lang, `account.orderStatus.${order.status}`) || order.status}</span>
-                </div>
-              `).join("")
-        }
-      </div>
-
-      <button class="ghost-action" id="logoutBtn">${t(lang, "account.logOut")}</button>
-    `;
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      logoutUser();
-      renderAccountView();
-    });
-
-    return;
-  }
-
-  root.innerHTML = `
-    <div class="account-auth">
-
-      <p class="account-notice">${t(lang, "account.localNotice")}</p>
-
-      <div class="auth-providers">
-        <button class="provider-btn" id="googleBtn">${t(lang, "account.google")}</button>
-        <button class="provider-btn" id="appleBtn">${t(lang, "account.apple")}</button>
-      </div>
-
-      <div class="auth-forms">
-
-        <form id="loginForm" class="auth-form">
-          <h2>${t(lang, "account.loginTitle")}</h2>
-          <label>${t(lang, "account.email")} <input type="email" name="email" required></label>
-          <label>${t(lang, "account.password")} <input type="password" name="password" required></label>
-          <p class="form-error" id="loginError" hidden></p>
-          <button type="submit" class="primary-action">${t(lang, "account.signIn")}</button>
-        </form>
-
-        <form id="registerForm" class="auth-form">
-          <h2>${t(lang, "account.registerTitle")}</h2>
-          <label>${t(lang, "account.name")} <input type="text" name="name" required></label>
-          <label>${t(lang, "account.email")} <input type="email" name="email" required></label>
-          <label>${t(lang, "account.password")} <input type="password" name="password" required></label>
-          <label>${t(lang, "account.confirmPassword")} <input type="password" name="confirmPassword" required></label>
-          <p class="form-error" id="registerError" hidden></p>
-          <button type="submit" class="primary-action">${t(lang, "account.createAccount")}</button>
-        </form>
-
-      </div>
-
-    </div>
-  `;
-
-  document.getElementById("googleBtn").addEventListener("click", () => alert(t(lang, "account.providerNotice")));
-  document.getElementById("appleBtn").addEventListener("click", () => alert(t(lang, "account.providerNotice")));
-
-  document.getElementById("loginForm").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    const result = loginUser({ email: data.get("email"), password: data.get("password") });
-    const errorEl = document.getElementById("loginError");
-
-    if (!result.ok) {
-      errorEl.textContent = t(lang, "account.errorInvalid");
-      errorEl.hidden = false;
-      return;
-    }
-
-    renderAccountView();
-  });
-
-  document.getElementById("registerForm").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    const errorEl = document.getElementById("registerError");
-
-    if (data.get("password") !== data.get("confirmPassword")) {
-      errorEl.textContent = t(lang, "account.errorPasswordMatch");
-      errorEl.hidden = false;
-      return;
-    }
-
-    const result = registerUser({
-      name: data.get("name"),
-      email: data.get("email"),
-      password: data.get("password")
-    });
-
-    if (!result.ok) {
-      errorEl.textContent = t(lang, "account.errorExists");
-      errorEl.hidden = false;
-      return;
-    }
-
-    renderAccountView();
-  });
-}
-
-
-/* =======================================================
-   VIEW: CONFIRMATION
-======================================================= */
-
-function renderConfirmationView(params) {
-  const lang = getState().language;
-  const root = document.getElementById("confirmationContent");
-  const order = getOrders().find((entry) => entry.orderId === params.orderId);
-
-  /* never show "Order confirmed" for an order that wasn't actually placed */
-  if (!order) {
+  if (params.result !== "success") {
     root.innerHTML = `
       <div class="confirmation-block">
-        <p class="empty-note">${t(lang, "confirmation.notFound")}</p>
+        <p class="eyebrow">${t(lang, "payment.canceledEyebrow")}</p>
+        <h1>${t(lang, "payment.canceledTitle")}</h1>
+        <p class="account-lead">${t(lang, "payment.canceledText")}</p>
         <div class="step-actions">
-          <a class="primary-action" href="#/">${t(lang, "confirmation.continueShopping")}</a>
+          <a class="primary-action" href="${kind === "support" ? "#/?page=support" : "#/checkout"}">${t(lang, "payment.tryAgain")}</a>
+          <a class="ghost-action" href="#/">${t(lang, "confirmation.continueShopping")}</a>
         </div>
       </div>
     `;
     return;
   }
 
+  /* Stripe only sends the visitor here after a completed checkout:
+     the cart has become an order, so it is emptied (its photos too). */
+  if (kind === "order" && getState().cart.length) {
+    getState().cart.forEach((line) => line.photo && line.photo.key && deleteDraftPhoto(line.photo.key));
+    clearCart();
+    try { sessionStorage.removeItem(SHIPPING_KEY); } catch (error) { /* private mode */ }
+    updateCartBadge();
+  }
+  forgetAccountData();
+
   root.innerHTML = `
     <div class="confirmation-block">
-      <p class="eyebrow">${t(lang, "confirmation.eyebrow")}</p>
-      <h1>${t(lang, "confirmation.title")}</h1>
-      <p class="order-number">${t(lang, "confirmation.orderNumber")}: ${params.orderId}</p>
-
+      <p class="eyebrow">${t(lang, kind === "support" ? "payment.supportEyebrow" : "confirmation.eyebrow")}</p>
+      <h1>${t(lang, kind === "support" ? "payment.supportTitle" : "payment.orderTitle")}</h1>
+      <p class="account-lead" id="paymentStatus" role="status" aria-live="polite">${t(lang, "payment.confirming")}</p>
+      <div id="paymentGift"></div>
       <div class="step-actions">
-        <a class="ghost-action" href="#/account">${t(lang, "confirmation.viewOrder")}</a>
-        <a class="primary-action" href="#/">${t(lang, "confirmation.continueShopping")}</a>
+        <a class="primary-action" href="#/account?tab=${kind === "support" ? "support" : "orders"}">${t(lang, "payment.viewAccount")}</a>
+        <a class="ghost-action" href="#/">${t(lang, "confirmation.continueShopping")}</a>
       </div>
     </div>
   `;
+
+  const started = Date.now();
+
+  const check = async () => {
+    const statusEl = document.getElementById("paymentStatus");
+    if (!statusEl) return; // the visitor moved on
+    const lang = getState().language;
+
+    let record = null;
+    try {
+      if (backendConfigured && getState().user && /^cs_[A-Za-z0-9_]+$/.test(sessionId)) {
+        record = await paymentRecord(kind, sessionId);
+      }
+    } catch (error) { /* keep polling quietly */ }
+
+    if (record && record.payment_status === "paid") {
+      statusEl.textContent = kind === "support"
+        ? t(lang, "payment.supportConfirmed").replace("{amount}", formatPrice(record.amount_cents / 100, "EUR"))
+        : t(lang, "payment.orderConfirmed").replace("{order}", record.order_number);
+      if (kind === "support" && record.gift_eligible) {
+        document.getElementById("paymentGift").innerHTML = `
+          <div class="gift-card">
+            <p class="eyebrow">${t(lang, "gift.puzzle")}</p>
+            <h3>${t(lang, "support.giftTitle")}</h3>
+            <p class="account-lead">${t(lang, "payment.giftUnlocked")}</p>
+            <a class="primary-action" href="#/account?tab=gift">${t(lang, "gift.upload")}</a>
+          </div>`;
+      }
+      return;
+    }
+
+    if (record && ["failed", "expired", "canceled"].includes(record.payment_status)) {
+      statusEl.textContent = t(lang, "payment.failed");
+      return;
+    }
+
+    if (Date.now() - started > 60000) {
+      statusEl.textContent = t(lang, "payment.stillConfirming");
+      return;
+    }
+
+    paymentPoll = setTimeout(check, 2500);
+  };
+
+  check();
 }
 
 
@@ -788,13 +808,24 @@ function renderConfirmationView(params) {
 
 let homeExperience = null; // set at boot; the home route re-syncs it when shown
 
-registerRoute("/", { view: "home", render: () => { if (homeExperience) homeExperience.refresh(); } });
+registerRoute("/", { view: "home", render: renderHome });
 registerRoute("/product/:id", { view: "product", render: renderProductView });
 registerRoute("/personalize/:id", { view: "personalize", render: renderPersonalizeView });
 registerRoute("/cart", { view: "cart", render: renderCartView });
 registerRoute("/checkout", { view: "checkout", render: renderCheckoutView });
-registerRoute("/account", { view: "account", render: renderAccountView });
-registerRoute("/confirmation/:orderId", { view: "confirmation", render: renderConfirmationView });
+registerRoute("/account", { view: "account", render: () => { renderAccountView(); verifySession(); } });
+registerRoute("/payment/:result", { view: "payment", render: renderPaymentView });
+
+function renderHome() {
+  if (!homeExperience) return;
+  homeExperience.refresh();
+
+  /* "#/?page=support" opens the book straight at the support page */
+  if (getQuery().get("page") === "support") {
+    homeExperience.openPage(3);
+    history.replaceState(null, "", `${location.pathname}#/`);
+  }
+}
 
 
 /* =======================================================
@@ -838,6 +869,8 @@ function initValidationMessages() {
       field.setCustomValidity(t(lang, "form.required"));
     } else if (field.validity.typeMismatch && field.type === "email") {
       field.setCustomValidity(t(lang, "form.email"));
+    } else if (field.validity.tooShort) {
+      field.setCustomValidity(t(lang, "form.tooShort").replace("{min}", field.minLength));
     }
   }, true);
 
@@ -848,15 +881,40 @@ function initValidationMessages() {
   }, true);
 }
 
+/* Restore the Supabase session (and finish an OAuth / email-link
+   return) without ever holding up the film or the book. */
+async function bootAuth() {
+  const flow = await initAuth({
+    onRecovery: () => navigate("/account?mode=reset")
+  }).catch(() => null);
+
+  markAuthReady();
+
+  if (flow === "recovery") {
+    navigate("/account?mode=reset");
+  } else if (flow === "error") {
+    navigate("/account");
+  } else if ((flow === "oauth" || flow === "signup") && getState().user) {
+    afterSignIn();
+  }
+
+  const route = window.location.hash;
+  if (route.startsWith("#/account") || route.startsWith("#/checkout") || route.startsWith("#/payment")) {
+    rerenderCurrentRoute();
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   applyTranslations();
   initHeader();
   initValidationMessages();
   homeExperience = initHomeExperience();
+  initSupport();
   initRouter();
 
   let renderedLanguage = getState().language;
+  let renderedUser = null;
 
   subscribe(() => {
     applyTranslations();
@@ -865,7 +923,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (getState().language !== renderedLanguage) {
       renderedLanguage = getState().language;
       rerenderInNewLanguage();
+      return;
+    }
+
+    /* signed in / out: the screens that depend on it follow */
+    const userId = getState().user ? getState().user.id : null;
+    if (userId !== renderedUser) {
+      renderedUser = userId;
+      forgetAccountData();
+      const route = window.location.hash;
+      if (route.startsWith("#/account") || route.startsWith("#/checkout")) {
+        rerenderCurrentRoute();
+      }
     }
   });
 
+  bootAuth();
 });

@@ -8,7 +8,12 @@ export const DEFAULT_LANGUAGE = "en";
 export const translations = {
 
   en: {
-    nav: { catalog: "Catalog", account: "Account", cart: "Cart", about: "About" },
+    nav: {
+      catalog: "Catalog",
+      account: "Account",
+      cart: "Cart",
+      about: "About"
+    },
     hero: {
       eyebrow: "ALVOXIS PRESENTS",
       title: "Some moments deserve to be remembered.",
@@ -23,8 +28,6 @@ export const translations = {
       coverText: "Discover a collection created for moments worth remembering.",
       comingSoon: "Coming soon",
       nextChapter: "The next chapter",
-      nextChapterTitle: "Support the story.",
-      nextChapterCopy: "ALVOXIS is still being written — page by page. This chapter is coming soon.",
       miniEyebrow: "THE MINI COLLECTION",
       classicEyebrow: "THE CLASSIC COLLECTION",
       coverAlt: "ALVOXIS gift box"
@@ -82,10 +85,7 @@ export const translations = {
     },
     account: {
       title: "Account",
-      loginTitle: "Sign in",
-      registerTitle: "Create account",
       google: "Continue with Google",
-      apple: "Continue with Apple",
       email: "Email",
       password: "Password",
       confirmPassword: "Confirm password",
@@ -97,40 +97,59 @@ export const translations = {
       register: "Register",
       logIn: "Log in",
       dashboard: "My account",
-      profile: "Profile",
-      myOrders: "My orders",
       noOrders: "You have no orders yet.",
       logOut: "Log out",
-      localNotice: "Your account is saved on this device only.",
-      orderStatus: { pending: "Pending", paid: "Paid", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled" },
-      providerNotice: "This sign-in method requires a connected authentication backend and isn't active yet.",
-      errorInvalid: "Incorrect email or password.",
-      errorExists: "An account with this email already exists.",
-      errorPasswordMatch: "Passwords do not match."
+      errorPasswordMatch: "Passwords do not match.",
+      eyebrow: "YOUR ALVOXIS",
+      chapters: {
+        profile: "Profile",
+        orders: "Orders",
+        support: "Support",
+        gift: "Gift",
+        settings: "Settings"
+      },
+      methodEmail: "Email",
+      memberSince: "Member since",
+      signInMethod: "Signed in with",
+      noSupport: "You haven't supported the story yet. The last page of the book is waiting whenever you are.",
+      supportThanks: "Every line here helped write the next page. Thank you.",
+      supportEntry: "Support",
+      payment: {
+        pending: "Awaiting confirmation",
+        paid: "Paid",
+        failed: "Payment failed",
+        canceled: "Canceled",
+        expired: "Not completed",
+        refunded: "Refunded"
+      },
+      fulfillment: {
+        unfulfilled: "Being prepared",
+        in_production: "In production",
+        shipped: "Shipped",
+        delivered: "Delivered",
+        canceled: "Canceled"
+      },
+      displayName: "Display name",
+      saved: "Saved."
     },
     checkout: {
       title: "Checkout",
       delivery: "Delivery",
       payment: "Payment",
-      confirmation: "Confirmation",
       fullName: "Full name",
       address: "Address",
       city: "City",
       postalCode: "Postal code",
       country: "Country",
-      continueToPayment: "Continue to payment",
       payNow: "Pay now",
       backToCart: "Back to cart",
-      stripeNotice: "Payments aren't connected yet — this checkout is ready to be wired to Stripe once the backend is deployed.",
-      processing: "Processing…"
+      stripeNotice: "You'll pay securely on Stripe's checkout page. Your card details never reach ALVOXIS.",
+      signInFirst: "Please sign in to complete your order — your order and its photos stay safely in your account.",
+      preparing: "Preparing your order…"
     },
     confirmation: {
       eyebrow: "Your moment is now a gift.",
-      title: "Order confirmed",
-      orderNumber: "Order number",
-      viewOrder: "View my order",
-      continueShopping: "Continue shopping",
-      notFound: "We couldn't find this order."
+      continueShopping: "Continue shopping"
     },
     footer: {
       tagline: "Some moments deserve to be remembered.",
@@ -141,8 +160,17 @@ export const translations = {
       terms: "Terms & Conditions",
       refund: "Refund Policy"
     },
-    common: { loading: "Loading…", close: "Close", comingSoon: "Coming soon" },
-    meta: { title: "ALVOXIS — Meaningful Moments" },
+    common: {
+      loading: "Loading…",
+      close: "Close",
+      comingSoon: "Coming soon",
+      retry: "Try again",
+      save: "Save"
+    },
+    meta: {
+      title: "ALVOXIS — Meaningful Moments",
+      description: "ALVOXIS — personalised gift boxes with a photo puzzle and a greeting card. Some moments deserve to be remembered."
+    },
     about: {
       eyebrow: "THE IDEA BEHIND ALVOXIS",
       title: "Some gifts are opened. Others are remembered.",
@@ -160,17 +188,154 @@ export const translations = {
     },
     form: {
       required: "Please fill in this field.",
-      email: "Please enter a valid email address."
+      email: "Please enter a valid email address.",
+      tooShort: "Please use at least {min} characters."
     },
     products: {
-      mini: { name: "ALVOXIS Mini", tagline: "A small box. A meaningful memory." },
-      classic: { name: "ALVOXIS Classic", tagline: "Designed for unforgettable moments." },
-      signature: { name: "ALVOXIS Signature", tagline: "A new experience is coming." }
+      mini: {
+        name: "ALVOXIS Mini",
+        tagline: "A small box. A meaningful memory."
+      },
+      classic: {
+        name: "ALVOXIS Classic",
+        tagline: "Designed for unforgettable moments."
+      },
+      signature: {
+        name: "ALVOXIS Signature",
+        tagline: "A new experience is coming."
+      }
+    },
+    support: {
+      title: "The story is not over.",
+      subtitle: "Help us write the next page.",
+      text: "ALVOXIS is written one chapter at a time — by people who believe a small box can hold a big memory. If you'd like to add a line of your own, the pen is yours. And if not, turning back to the gifts is a lovely ending too.",
+      chooseAmount: "Choose an amount",
+      customAmount: "Your own amount, from €1.00 to €100.00",
+      placeholder: "Your amount",
+      prompt: "Choose an amount — every page begins with a single word.",
+      tier1: "You just added a little spark.",
+      tier2: "A small spark is already becoming part of the story.",
+      tier3: "The next page is getting closer.",
+      tier4: "Now the story is really starting to move.",
+      tier5: "You just unlocked a little secret in the story.",
+      giftTitle: "A little extra magic awaits you.",
+      giftText: "With €50 or more, we'll thank you with a keepsake puzzle made from a photo of your choice. Once your payment is confirmed, you'll upload the photo in your account.",
+      cta: "Support the story",
+      note: "Secure payment by Stripe · from €1 to €100",
+      invalidAmount: "Please choose an amount from €1.00 to €100.00 (up to two decimals).",
+      signInFirst: "Please sign in first — that's how your support, and any gift, stays safely in your account.",
+      signIn: "Sign in",
+      redirecting: "Opening secure payment…"
+    },
+    errors: {
+      generic: "Something went wrong. Please try again.",
+      network: "We couldn't reach the server. Please check your connection and try again.",
+      unavailable: "This part of ALVOXIS is being prepared and will be available very soon.",
+      invalidCredentials: "The email or password is incorrect.",
+      emailNotConfirmed: "Please confirm your email address first — the link is in your inbox.",
+      userExists: "An account with this email already exists. Try signing in.",
+      weakPassword: "Please choose a password with at least 8 characters.",
+      samePassword: "Your new password must be different from the current one.",
+      invalidEmail: "Please enter a valid email address.",
+      rateLimited: "Too many attempts. Please wait a moment and try again.",
+      sessionExpired: "Your session has ended. Please sign in again.",
+      invalidCart: "Something in your cart has changed. Please review it and try again.",
+      photoMissing: "A personalisation photo is missing. Please add the photo to the gift again.",
+      invalidShipping: "Please complete your delivery details.",
+      paymentsUnavailable: "Payments are not available at the moment. Please try again a little later.",
+      checkoutExpired: "This payment session has expired. Please start again.",
+      loadFailed: "We couldn't load this right now. Please try again.",
+      uploadFailed: "The photo couldn't be uploaded. Please try again."
+    },
+    auth: {
+      signInTitle: "Welcome back.",
+      signInLead: "Sign in to see your orders, your support and your gifts.",
+      registerTitle: "Begin your story.",
+      registerLead: "Create an account to keep your orders and gifts in one place.",
+      or: "or",
+      forgot: "Forgot your password?",
+      passwordHint: "At least 8 characters.",
+      signingIn: "Signing in…",
+      creating: "Creating your account…",
+      redirecting: "Opening Google…",
+      checkEmailTitle: "Check your email.",
+      checkEmail: "We've sent you a link to confirm your account. Open it on this device to finish signing up.",
+      forgotTitle: "Forgotten password",
+      forgotText: "Enter your email and we'll send you a link to choose a new password.",
+      sendLink: "Send reset link",
+      sending: "Sending…",
+      resetSentTitle: "Look in your inbox.",
+      resetSent: "If an account exists for this email, a reset link is on its way.",
+      backToSignIn: "Back to sign in",
+      resetTitle: "Choose a new password",
+      resetLead: "Almost there — pick a new password for your account.",
+      resetLinkInvalid: "This reset link is no longer valid. Please request a new one.",
+      newPassword: "New password",
+      savePassword: "Save password",
+      saving: "Saving…",
+      passwordUpdated: "Your password has been updated.",
+      changePassword: "Password",
+      signingOut: "Signing out…"
+    },
+    gift: {
+      puzzle: "KEEPSAKE PUZZLE",
+      title: "Your gift is waiting.",
+      text: "Choose a photo and we'll turn it into your keepsake puzzle.",
+      titleReady: "Your photo is in.",
+      textReady: "Thank you — we'll take it from here. You can still replace the photo until production starts.",
+      previewAlt: "Your photo for the keepsake puzzle",
+      noPhoto: "No photo yet",
+      upload: "Upload photo",
+      replace: "Replace photo",
+      remove: "Remove photo",
+      photoHint: "JPG, PNG, WebP or HEIC · up to 25 MB · at least 600 px. Your photo is stored privately.",
+      uploading: "Uploading…",
+      removing: "Removing…",
+      removeConfirm: "Remove this photo from your gift?",
+      locked: "Your puzzle is already being made, so the photo can no longer be changed.",
+      none: "There's no gift here yet. Supporting the story with €50 or more unlocks a keepsake puzzle.",
+      unlocked: "Gift unlocked",
+      status: {
+        photoPending: "Photo pending",
+        photoUploaded: "Photo uploaded",
+        approved: "Photo approved",
+        rejected: "Please choose another photo",
+        processing: "Processing",
+        shipped: "Shipped",
+        delivered: "Delivered"
+      }
+    },
+    photo: {
+      type: "Please choose a JPG, PNG, WebP or HEIC image.",
+      size: "This image is too large. Please choose one under 25 MB.",
+      decode: "This file couldn't be read as an image. Please choose another one.",
+      small: "This photo is too small to print well. Please choose one at least 600 px wide."
+    },
+    payment: {
+      canceledEyebrow: "PAYMENT CANCELED",
+      canceledTitle: "No harm done.",
+      canceledText: "The payment was canceled and nothing was charged. You can try again whenever you like.",
+      tryAgain: "Try again",
+      supportEyebrow: "THANK YOU",
+      supportTitle: "Your page has been written.",
+      orderTitle: "Thank you for your order.",
+      confirming: "We're confirming your payment with Stripe…",
+      stillConfirming: "Confirmation can take a minute. It will appear in your account as soon as Stripe confirms it.",
+      supportConfirmed: "Payment of {amount} confirmed. The story just grew a little.",
+      orderConfirmed: "Payment confirmed — order {order}. We'll start preparing your gift.",
+      giftUnlocked: "Your support unlocked a keepsake puzzle. Upload the photo you'd like us to use.",
+      failed: "The payment didn't go through, so nothing was charged. Please try again.",
+      viewAccount: "View in my account"
     }
   },
 
   ru: {
-    nav: { catalog: "Каталог", account: "Аккаунт", cart: "Корзина", about: "О нас" },
+    nav: {
+      catalog: "Каталог",
+      account: "Аккаунт",
+      cart: "Корзина",
+      about: "О нас"
+    },
     hero: {
       eyebrow: "ALVOXIS ПРЕДСТАВЛЯЕТ",
       title: "Некоторые моменты достойны того, чтобы их помнили.",
@@ -185,8 +350,6 @@ export const translations = {
       coverText: "Откройте коллекцию, созданную для моментов, которые стоит помнить.",
       comingSoon: "Скоро",
       nextChapter: "Следующая глава",
-      nextChapterTitle: "Поддержите историю.",
-      nextChapterCopy: "ALVOXIS всё ещё пишется — страница за страницей. Эта глава скоро откроется.",
       miniEyebrow: "КОЛЛЕКЦИЯ MINI",
       classicEyebrow: "КОЛЛЕКЦИЯ CLASSIC",
       coverAlt: "Подарочная коробка ALVOXIS"
@@ -244,10 +407,7 @@ export const translations = {
     },
     account: {
       title: "Аккаунт",
-      loginTitle: "Вход",
-      registerTitle: "Создать аккаунт",
       google: "Продолжить с Google",
-      apple: "Продолжить с Apple",
       email: "Эл. почта",
       password: "Пароль",
       confirmPassword: "Подтвердите пароль",
@@ -259,40 +419,59 @@ export const translations = {
       register: "Зарегистрироваться",
       logIn: "Войти",
       dashboard: "Мой аккаунт",
-      profile: "Профиль",
-      myOrders: "Мои заказы",
       noOrders: "У вас пока нет заказов.",
       logOut: "Выйти",
-      localNotice: "Ваш аккаунт сохраняется только на этом устройстве.",
-      orderStatus: { pending: "В обработке", paid: "Оплачен", shipped: "Отправлен", delivered: "Доставлен", cancelled: "Отменён" },
-      providerNotice: "Этот способ входа требует подключённого сервиса аутентификации и пока не активен.",
-      errorInvalid: "Неверный email или пароль.",
-      errorExists: "Аккаунт с таким email уже существует.",
-      errorPasswordMatch: "Пароли не совпадают."
+      errorPasswordMatch: "Пароли не совпадают.",
+      eyebrow: "ВАШ ALVOXIS",
+      chapters: {
+        profile: "Профиль",
+        orders: "Заказы",
+        support: "Поддержка",
+        gift: "Подарок",
+        settings: "Настройки"
+      },
+      methodEmail: "Эл. почта",
+      memberSince: "С нами с",
+      signInMethod: "Способ входа",
+      noSupport: "Вы ещё не поддерживали историю. Последняя страница книги ждёт, когда будете готовы.",
+      supportThanks: "Каждая строчка здесь помогла написать следующую страницу. Спасибо.",
+      supportEntry: "Поддержка",
+      payment: {
+        pending: "Ожидает подтверждения",
+        paid: "Оплачено",
+        failed: "Оплата не прошла",
+        canceled: "Отменено",
+        expired: "Не завершено",
+        refunded: "Возвращено"
+      },
+      fulfillment: {
+        unfulfilled: "Готовится",
+        in_production: "В производстве",
+        shipped: "Отправлено",
+        delivered: "Доставлено",
+        canceled: "Отменено"
+      },
+      displayName: "Отображаемое имя",
+      saved: "Сохранено."
     },
     checkout: {
       title: "Оформление заказа",
       delivery: "Доставка",
       payment: "Оплата",
-      confirmation: "Подтверждение",
       fullName: "Полное имя",
       address: "Адрес",
       city: "Город",
       postalCode: "Индекс",
       country: "Страна",
-      continueToPayment: "Перейти к оплате",
       payNow: "Оплатить",
       backToCart: "Назад в корзину",
-      stripeNotice: "Оплата пока не подключена — этот раздел готов к интеграции со Stripe после развёртывания бэкенда.",
-      processing: "Обработка…"
+      stripeNotice: "Оплата проходит на защищённой странице Stripe. Данные карты не попадают к ALVOXIS.",
+      signInFirst: "Войдите, чтобы оформить заказ — заказ и фотографии будут надёжно храниться в вашем аккаунте.",
+      preparing: "Готовим заказ…"
     },
     confirmation: {
       eyebrow: "Ваш момент теперь стал подарком.",
-      title: "Заказ подтверждён",
-      orderNumber: "Номер заказа",
-      viewOrder: "Посмотреть заказ",
-      continueShopping: "Продолжить покупки",
-      notFound: "Этот заказ не найден."
+      continueShopping: "Продолжить покупки"
     },
     footer: {
       tagline: "Некоторые моменты достойны того, чтобы их помнили.",
@@ -303,8 +482,17 @@ export const translations = {
       terms: "Условия использования",
       refund: "Политика возврата"
     },
-    common: { loading: "Загрузка…", close: "Закрыть", comingSoon: "Скоро" },
-    meta: { title: "ALVOXIS — Значимые моменты" },
+    common: {
+      loading: "Загрузка…",
+      close: "Закрыть",
+      comingSoon: "Скоро",
+      retry: "Попробовать снова",
+      save: "Сохранить"
+    },
+    meta: {
+      title: "ALVOXIS — Значимые моменты",
+      description: "ALVOXIS — персонализированные подарочные коробки с фотопазлом и открыткой. Некоторые моменты заслуживают того, чтобы их помнили."
+    },
     about: {
       eyebrow: "ИДЕЯ ALVOXIS",
       title: "Одни подарки открывают. Другие — помнят.",
@@ -322,17 +510,154 @@ export const translations = {
     },
     form: {
       required: "Пожалуйста, заполните это поле.",
-      email: "Введите корректный адрес эл. почты."
+      email: "Введите корректный адрес эл. почты.",
+      tooShort: "Используйте не менее {min} символов."
     },
     products: {
-      mini: { name: "ALVOXIS Mini", tagline: "Маленькая коробка. Значимая память." },
-      classic: { name: "ALVOXIS Classic", tagline: "Создано для незабываемых моментов." },
-      signature: { name: "ALVOXIS Signature", tagline: "Новый опыт уже на подходе." }
+      mini: {
+        name: "ALVOXIS Mini",
+        tagline: "Маленькая коробка. Значимая память."
+      },
+      classic: {
+        name: "ALVOXIS Classic",
+        tagline: "Создано для незабываемых моментов."
+      },
+      signature: {
+        name: "ALVOXIS Signature",
+        tagline: "Новый опыт уже на подходе."
+      }
+    },
+    support: {
+      title: "История ещё не окончена.",
+      subtitle: "Помогите написать следующую страницу.",
+      text: "ALVOXIS пишется глава за главой — людьми, которые верят, что в маленькой коробке может поместиться большое воспоминание. Если хотите добавить свою строчку — перо в ваших руках. А если нет, вернуться к подаркам — тоже прекрасный финал.",
+      chooseAmount: "Выберите сумму",
+      customAmount: "Своя сумма, от €1.00 до €100.00",
+      placeholder: "Своя сумма",
+      prompt: "Выберите сумму — каждая страница начинается с одного слова.",
+      tier1: "Вы только что добавили маленькую искру.",
+      tier2: "Маленькая искра уже становится частью истории.",
+      tier3: "Следующая страница всё ближе.",
+      tier4: "Теперь история по-настоящему пришла в движение.",
+      tier5: "Вы открыли маленький секрет истории.",
+      giftTitle: "Вас ждёт немного волшебства.",
+      giftText: "За поддержку от €50 — памятный пазл из вашей фотографии. Фото можно загрузить в аккаунте после подтверждения оплаты.",
+      cta: "Поддержать историю",
+      note: "Безопасная оплата через Stripe · от €1 до €100",
+      invalidAmount: "Выберите сумму от €1.00 до €100.00 (не более двух знаков после запятой).",
+      signInFirst: "Сначала войдите — так ваша поддержка и подарок надёжно сохранятся в аккаунте.",
+      signIn: "Войти",
+      redirecting: "Открываем безопасную оплату…"
+    },
+    errors: {
+      generic: "Что-то пошло не так. Попробуйте ещё раз.",
+      network: "Не удалось связаться с сервером. Проверьте соединение и попробуйте снова.",
+      unavailable: "Этот раздел ALVOXIS готовится и совсем скоро будет доступен.",
+      invalidCredentials: "Неверная эл. почта или пароль.",
+      emailNotConfirmed: "Сначала подтвердите адрес эл. почты — ссылка в вашем почтовом ящике.",
+      userExists: "Аккаунт с этой эл. почтой уже существует. Попробуйте войти.",
+      weakPassword: "Пароль должен содержать не менее 8 символов.",
+      samePassword: "Новый пароль должен отличаться от текущего.",
+      invalidEmail: "Введите корректный адрес эл. почты.",
+      rateLimited: "Слишком много попыток. Подождите немного и попробуйте снова.",
+      sessionExpired: "Сеанс завершён. Пожалуйста, войдите снова.",
+      invalidCart: "Что-то в корзине изменилось. Проверьте её и попробуйте снова.",
+      photoMissing: "Не хватает фотографии для персонализации. Добавьте фото к подарку ещё раз.",
+      invalidShipping: "Пожалуйста, заполните данные доставки.",
+      paymentsUnavailable: "Оплата сейчас недоступна. Попробуйте чуть позже.",
+      checkoutExpired: "Срок этой платёжной сессии истёк. Начните заново.",
+      loadFailed: "Сейчас не удалось загрузить данные. Попробуйте ещё раз.",
+      uploadFailed: "Не удалось загрузить фото. Попробуйте ещё раз."
+    },
+    auth: {
+      signInTitle: "С возвращением.",
+      signInLead: "Войдите, чтобы видеть свои заказы, поддержку и подарки.",
+      registerTitle: "Начните свою историю.",
+      registerLead: "Создайте аккаунт, чтобы заказы и подарки были в одном месте.",
+      or: "или",
+      forgot: "Забыли пароль?",
+      passwordHint: "Не менее 8 символов.",
+      signingIn: "Входим…",
+      creating: "Создаём аккаунт…",
+      redirecting: "Открываем Google…",
+      checkEmailTitle: "Проверьте почту.",
+      checkEmail: "Мы отправили ссылку для подтверждения аккаунта. Откройте её на этом устройстве, чтобы завершить регистрацию.",
+      forgotTitle: "Восстановление пароля",
+      forgotText: "Введите эл. почту — мы пришлём ссылку для выбора нового пароля.",
+      sendLink: "Отправить ссылку",
+      sending: "Отправляем…",
+      resetSentTitle: "Загляните в почту.",
+      resetSent: "Если аккаунт с этой эл. почтой существует, ссылка для сброса уже в пути.",
+      backToSignIn: "Вернуться ко входу",
+      resetTitle: "Новый пароль",
+      resetLead: "Почти готово — придумайте новый пароль для аккаунта.",
+      resetLinkInvalid: "Эта ссылка больше недействительна. Запросите новую.",
+      newPassword: "Новый пароль",
+      savePassword: "Сохранить пароль",
+      saving: "Сохраняем…",
+      passwordUpdated: "Пароль обновлён.",
+      changePassword: "Пароль",
+      signingOut: "Выходим…"
+    },
+    gift: {
+      puzzle: "ПАМЯТНЫЙ ПАЗЛ",
+      title: "Ваш подарок ждёт.",
+      text: "Выберите фото — и мы превратим его в ваш памятный пазл.",
+      titleReady: "Фото получено.",
+      textReady: "Спасибо — дальше мы сами. Заменить фото можно до начала производства.",
+      previewAlt: "Ваше фото для памятного пазла",
+      noPhoto: "Фото ещё нет",
+      upload: "Загрузить фото",
+      replace: "Заменить фото",
+      remove: "Удалить фото",
+      photoHint: "JPG, PNG, WebP или HEIC · до 25 МБ · не меньше 600 px. Фото хранится приватно.",
+      uploading: "Загружаем…",
+      removing: "Удаляем…",
+      removeConfirm: "Удалить это фото из подарка?",
+      locked: "Ваш пазл уже изготавливается, поэтому фото больше нельзя изменить.",
+      none: "Здесь пока нет подарка. Поддержка истории от €50 открывает памятный пазл.",
+      unlocked: "Подарок открыт",
+      status: {
+        photoPending: "Ожидается фото",
+        photoUploaded: "Фото загружено",
+        approved: "Фото одобрено",
+        rejected: "Пожалуйста, выберите другое фото",
+        processing: "В работе",
+        shipped: "Отправлено",
+        delivered: "Доставлено"
+      }
+    },
+    photo: {
+      type: "Выберите изображение JPG, PNG, WebP или HEIC.",
+      size: "Изображение слишком большое. Выберите файл до 25 МБ.",
+      decode: "Не удалось прочитать файл как изображение. Выберите другой.",
+      small: "Фото слишком маленькое для качественной печати. Выберите снимок шириной от 600 px."
+    },
+    payment: {
+      canceledEyebrow: "ОПЛАТА ОТМЕНЕНА",
+      canceledTitle: "Ничего страшного.",
+      canceledText: "Оплата отменена, деньги не списаны. Можно попробовать снова в любой момент.",
+      tryAgain: "Попробовать снова",
+      supportEyebrow: "СПАСИБО",
+      supportTitle: "Ваша страница написана.",
+      orderTitle: "Спасибо за заказ.",
+      confirming: "Подтверждаем оплату через Stripe…",
+      stillConfirming: "Подтверждение может занять минуту. Оно появится в аккаунте, как только Stripe его пришлёт.",
+      supportConfirmed: "Оплата {amount} подтверждена. История стала чуть больше.",
+      orderConfirmed: "Оплата подтверждена — заказ {order}. Мы начинаем готовить ваш подарок.",
+      giftUnlocked: "Ваша поддержка открыла памятный пазл. Загрузите фото, которое хотите использовать.",
+      failed: "Оплата не прошла, деньги не списаны. Попробуйте ещё раз.",
+      viewAccount: "Открыть в аккаунте"
     }
   },
 
   lv: {
-    nav: { catalog: "Katalogs", account: "Konts", cart: "Grozs", about: "Par mums" },
+    nav: {
+      catalog: "Katalogs",
+      account: "Konts",
+      cart: "Grozs",
+      about: "Par mums"
+    },
     hero: {
       eyebrow: "ALVOXIS PIEDĀVĀ",
       title: "Daži mirkļi ir pelnījuši palikt atmiņā.",
@@ -347,8 +672,6 @@ export const translations = {
       coverText: "Atklājiet kolekciju, kas radīta mirkļiem, kurus vērts atcerēties.",
       comingSoon: "Drīzumā",
       nextChapter: "Nākamā nodaļa",
-      nextChapterTitle: "Atbalsti stāstu.",
-      nextChapterCopy: "ALVOXIS joprojām tiek rakstīts — lapu pa lapai. Šī nodaļa drīzumā.",
       miniEyebrow: "MINI KOLEKCIJA",
       classicEyebrow: "CLASSIC KOLEKCIJA",
       coverAlt: "ALVOXIS dāvanu kaste"
@@ -406,11 +729,7 @@ export const translations = {
     },
     account: {
       title: "Konts",
-      loginTitle: "Pieslēgties",
-      registerTitle: "Izveidot kontu",
       google: "Turpināt ar Google",
-      apple: "Turpināt ar Apple",
-      email: "E-pasts",
       email: "E-pasts",
       password: "Parole",
       confirmPassword: "Apstipriniet paroli",
@@ -422,40 +741,59 @@ export const translations = {
       register: "Reģistrēties",
       logIn: "Pieslēgties",
       dashboard: "Mans konts",
-      profile: "Profils",
-      myOrders: "Mani pasūtījumi",
       noOrders: "Jums vēl nav neviena pasūtījuma.",
       logOut: "Izrakstīties",
-      localNotice: "Jūsu konts tiek saglabāts tikai šajā ierīcē.",
-      orderStatus: { pending: "Gaida apstrādi", paid: "Apmaksāts", shipped: "Nosūtīts", delivered: "Piegādāts", cancelled: "Atcelts" },
-      providerNotice: "Šai pieslēgšanās metodei nepieciešams pievienots autentifikācijas serviss, un tā vēl nav aktīva.",
-      errorInvalid: "Nepareizs e-pasts vai parole.",
-      errorExists: "Konts ar šo e-pastu jau pastāv.",
-      errorPasswordMatch: "Paroles nesakrīt."
+      errorPasswordMatch: "Paroles nesakrīt.",
+      eyebrow: "JŪSU ALVOXIS",
+      chapters: {
+        profile: "Profils",
+        orders: "Pasūtījumi",
+        support: "Atbalsts",
+        gift: "Dāvana",
+        settings: "Iestatījumi"
+      },
+      methodEmail: "E-pasts",
+      memberSince: "Kopā ar mums kopš",
+      signInMethod: "Pieteikšanās veids",
+      noSupport: "Jūs vēl neesat atbalstījis stāstu. Grāmatas pēdējā lappuse gaida, kad būsiet gatavs.",
+      supportThanks: "Katra rindiņa šeit palīdzēja uzrakstīt nākamo lappusi. Paldies.",
+      supportEntry: "Atbalsts",
+      payment: {
+        pending: "Gaida apstiprinājumu",
+        paid: "Apmaksāts",
+        failed: "Maksājums neizdevās",
+        canceled: "Atcelts",
+        expired: "Nav pabeigts",
+        refunded: "Atmaksāts"
+      },
+      fulfillment: {
+        unfulfilled: "Tiek gatavots",
+        in_production: "Ražošanā",
+        shipped: "Nosūtīts",
+        delivered: "Piegādāts",
+        canceled: "Atcelts"
+      },
+      displayName: "Attēlojamais vārds",
+      saved: "Saglabāts."
     },
     checkout: {
       title: "Pasūtījuma noformēšana",
       delivery: "Piegāde",
       payment: "Maksājums",
-      confirmation: "Apstiprinājums",
       fullName: "Pilns vārds",
       address: "Adrese",
       city: "Pilsēta",
       postalCode: "Pasta indekss",
       country: "Valsts",
-      continueToPayment: "Turpināt uz apmaksu",
       payNow: "Apmaksāt",
       backToCart: "Atpakaļ uz grozu",
-      stripeNotice: "Maksājumi vēl nav pievienoti — šī sadaļa ir gatava Stripe integrācijai, tiklīdz būs izvietots serveris.",
-      processing: "Apstrāde…"
+      stripeNotice: "Jūs maksāsiet droši Stripe apmaksas lapā. Jūsu kartes dati nenonāk pie ALVOXIS.",
+      signInFirst: "Lūdzu, piesakieties, lai noformētu pasūtījumu — pasūtījums un tā fotogrāfijas droši glabāsies jūsu kontā.",
+      preparing: "Gatavojam pasūtījumu…"
     },
     confirmation: {
       eyebrow: "Jūsu mirklis tagad ir dāvana.",
-      title: "Pasūtījums apstiprināts",
-      orderNumber: "Pasūtījuma numurs",
-      viewOrder: "Skatīt manu pasūtījumu",
-      continueShopping: "Turpināt iepirkšanos",
-      notFound: "Šo pasūtījumu neizdevās atrast."
+      continueShopping: "Turpināt iepirkšanos"
     },
     footer: {
       tagline: "Daži mirkļi ir pelnījuši palikt atmiņā.",
@@ -466,8 +804,17 @@ export const translations = {
       terms: "Lietošanas noteikumi",
       refund: "Atgriešanas politika"
     },
-    common: { loading: "Ielādē…", close: "Aizvērt", comingSoon: "Drīzumā" },
-    meta: { title: "ALVOXIS — Nozīmīgi mirkļi" },
+    common: {
+      loading: "Ielādē…",
+      close: "Aizvērt",
+      comingSoon: "Drīzumā",
+      retry: "Mēģināt vēlreiz",
+      save: "Saglabāt"
+    },
+    meta: {
+      title: "ALVOXIS — Nozīmīgi mirkļi",
+      description: "ALVOXIS — personalizētas dāvanu kastes ar foto puzli un apsveikuma kartīti. Daži mirkļi ir pelnījuši palikt atmiņā."
+    },
     about: {
       eyebrow: "IDEJA AIZ ALVOXIS",
       title: "Dažas dāvanas tiek atvērtas. Citas paliek atmiņā.",
@@ -485,17 +832,154 @@ export const translations = {
     },
     form: {
       required: "Lūdzu, aizpildiet šo lauku.",
-      email: "Lūdzu, ievadiet derīgu e-pasta adresi."
+      email: "Lūdzu, ievadiet derīgu e-pasta adresi.",
+      tooShort: "Lūdzu, izmantojiet vismaz {min} rakstzīmes."
     },
     products: {
-      mini: { name: "ALVOXIS Mini", tagline: "Maza kaste. Nozīmīga atmiņa." },
-      classic: { name: "ALVOXIS Classic", tagline: "Radīts neaizmirstamiem mirkļiem." },
-      signature: { name: "ALVOXIS Signature", tagline: "Drīz jauna pieredze." }
+      mini: {
+        name: "ALVOXIS Mini",
+        tagline: "Maza kaste. Nozīmīga atmiņa."
+      },
+      classic: {
+        name: "ALVOXIS Classic",
+        tagline: "Radīts neaizmirstamiem mirkļiem."
+      },
+      signature: {
+        name: "ALVOXIS Signature",
+        tagline: "Drīz jauna pieredze."
+      }
+    },
+    support: {
+      title: "Stāsts vēl nav beidzies.",
+      subtitle: "Palīdziet mums uzrakstīt nākamo lappusi.",
+      text: "ALVOXIS top nodaļu pa nodaļai — to raksta cilvēki, kuri tic, ka mazā kastītē var ietilpt liela atmiņa. Ja vēlaties pievienot savu rindiņu, spalva ir jūsu rokās. Bet arī atgriezties pie dāvanām ir jauks noslēgums.",
+      chooseAmount: "Izvēlieties summu",
+      customAmount: "Sava summa no €1.00 līdz €100.00",
+      placeholder: "Sava summa",
+      prompt: "Izvēlieties summu — katra lappuse sākas ar vienu vārdu.",
+      tier1: "Jūs tikko pievienojāt mazu dzirksteli.",
+      tier2: "Maza dzirkstele jau kļūst par stāsta daļu.",
+      tier3: "Nākamā lappuse tuvojas.",
+      tier4: "Tagad stāsts patiešām sāk kustēties.",
+      tier5: "Jūs tikko atklājāt mazu stāsta noslēpumu.",
+      giftTitle: "Jūs gaida mazliet papildu burvības.",
+      giftText: "Par atbalstu no €50 mēs pateiksimies ar piemiņas puzli no jūsu izvēlētas fotogrāfijas. Fotogrāfiju varēsiet augšupielādēt savā kontā, kad maksājums būs apstiprināts.",
+      cta: "Atbalstīt stāstu",
+      note: "Droša apmaksa ar Stripe · no €1 līdz €100",
+      invalidAmount: "Lūdzu, izvēlieties summu no €1.00 līdz €100.00 (ne vairāk kā divas zīmes aiz komata).",
+      signInFirst: "Lūdzu, vispirms piesakieties — tā jūsu atbalsts un dāvana droši saglabāsies kontā.",
+      signIn: "Pieteikties",
+      redirecting: "Atveram drošo apmaksu…"
+    },
+    errors: {
+      generic: "Kaut kas nogāja greizi. Lūdzu, mēģiniet vēlreiz.",
+      network: "Neizdevās sazināties ar serveri. Pārbaudiet savienojumu un mēģiniet vēlreiz.",
+      unavailable: "Šī ALVOXIS sadaļa tiek gatavota un drīz būs pieejama.",
+      invalidCredentials: "Nepareizs e-pasts vai parole.",
+      emailNotConfirmed: "Lūdzu, vispirms apstipriniet e-pasta adresi — saite ir jūsu pastkastītē.",
+      userExists: "Konts ar šo e-pastu jau pastāv. Mēģiniet pieteikties.",
+      weakPassword: "Parolei jābūt vismaz 8 rakstzīmes garai.",
+      samePassword: "Jaunajai parolei jāatšķiras no pašreizējās.",
+      invalidEmail: "Lūdzu, ievadiet derīgu e-pasta adresi.",
+      rateLimited: "Pārāk daudz mēģinājumu. Lūdzu, uzgaidiet brīdi un mēģiniet vēlreiz.",
+      sessionExpired: "Jūsu sesija ir beigusies. Lūdzu, piesakieties vēlreiz.",
+      invalidCart: "Kaut kas grozā ir mainījies. Lūdzu, pārbaudiet to un mēģiniet vēlreiz.",
+      photoMissing: "Trūkst personalizācijas fotogrāfijas. Lūdzu, pievienojiet fotogrāfiju dāvanai vēlreiz.",
+      invalidShipping: "Lūdzu, aizpildiet piegādes informāciju.",
+      paymentsUnavailable: "Maksājumi šobrīd nav pieejami. Lūdzu, mēģiniet nedaudz vēlāk.",
+      checkoutExpired: "Šīs maksājuma sesijas termiņš ir beidzies. Lūdzu, sāciet no jauna.",
+      loadFailed: "Šobrīd neizdevās ielādēt datus. Lūdzu, mēģiniet vēlreiz.",
+      uploadFailed: "Fotogrāfiju neizdevās augšupielādēt. Lūdzu, mēģiniet vēlreiz."
+    },
+    auth: {
+      signInTitle: "Prieks jūs atkal redzēt.",
+      signInLead: "Piesakieties, lai redzētu savus pasūtījumus, atbalstu un dāvanas.",
+      registerTitle: "Sāciet savu stāstu.",
+      registerLead: "Izveidojiet kontu, lai pasūtījumi un dāvanas būtu vienuviet.",
+      or: "vai",
+      forgot: "Aizmirsāt paroli?",
+      passwordHint: "Vismaz 8 rakstzīmes.",
+      signingIn: "Piesakāmies…",
+      creating: "Veidojam kontu…",
+      redirecting: "Atveram Google…",
+      checkEmailTitle: "Pārbaudiet e-pastu.",
+      checkEmail: "Mēs nosūtījām saiti konta apstiprināšanai. Atveriet to šajā ierīcē, lai pabeigtu reģistrāciju.",
+      forgotTitle: "Aizmirsta parole",
+      forgotText: "Ievadiet e-pastu, un mēs nosūtīsim saiti jaunas paroles izvēlei.",
+      sendLink: "Nosūtīt saiti",
+      sending: "Sūtām…",
+      resetSentTitle: "Ieskatieties pastkastītē.",
+      resetSent: "Ja konts ar šo e-pastu pastāv, atiestatīšanas saite jau ir ceļā.",
+      backToSignIn: "Atpakaļ uz pieteikšanos",
+      resetTitle: "Jauna parole",
+      resetLead: "Gandrīz gatavs — izvēlieties kontam jaunu paroli.",
+      resetLinkInvalid: "Šī saite vairs nav derīga. Lūdzu, pieprasiet jaunu.",
+      newPassword: "Jaunā parole",
+      savePassword: "Saglabāt paroli",
+      saving: "Saglabājam…",
+      passwordUpdated: "Parole ir atjaunināta.",
+      changePassword: "Parole",
+      signingOut: "Izrakstāmies…"
+    },
+    gift: {
+      puzzle: "PIEMIŅAS PUZLE",
+      title: "Jūsu dāvana gaida.",
+      text: "Izvēlieties fotogrāfiju, un mēs no tās izveidosim jūsu piemiņas puzli.",
+      titleReady: "Fotogrāfija saņemta.",
+      textReady: "Paldies — tālāk parūpēsimies paši. Fotogrāfiju varat nomainīt līdz ražošanas sākumam.",
+      previewAlt: "Jūsu fotogrāfija piemiņas puzlei",
+      noPhoto: "Fotogrāfijas vēl nav",
+      upload: "Augšupielādēt fotogrāfiju",
+      replace: "Nomainīt fotogrāfiju",
+      remove: "Noņemt fotogrāfiju",
+      photoHint: "JPG, PNG, WebP vai HEIC · līdz 25 MB · vismaz 600 px. Fotogrāfija tiek glabāta privāti.",
+      uploading: "Augšupielādējam…",
+      removing: "Noņemam…",
+      removeConfirm: "Noņemt šo fotogrāfiju no dāvanas?",
+      locked: "Jūsu puzle jau tiek izgatavota, tāpēc fotogrāfiju vairs nevar mainīt.",
+      none: "Šeit vēl nav dāvanas. Atbalsts stāstam no €50 atver piemiņas puzli.",
+      unlocked: "Dāvana atvērta",
+      status: {
+        photoPending: "Gaida fotogrāfiju",
+        photoUploaded: "Fotogrāfija augšupielādēta",
+        approved: "Fotogrāfija apstiprināta",
+        rejected: "Lūdzu, izvēlieties citu fotogrāfiju",
+        processing: "Tiek apstrādāts",
+        shipped: "Nosūtīts",
+        delivered: "Piegādāts"
+      }
+    },
+    photo: {
+      type: "Lūdzu, izvēlieties JPG, PNG, WebP vai HEIC attēlu.",
+      size: "Attēls ir pārāk liels. Lūdzu, izvēlieties failu līdz 25 MB.",
+      decode: "Šo failu neizdevās nolasīt kā attēlu. Lūdzu, izvēlieties citu.",
+      small: "Fotogrāfija ir pārāk maza kvalitatīvai drukai. Lūdzu, izvēlieties vismaz 600 px platu attēlu."
+    },
+    payment: {
+      canceledEyebrow: "MAKSĀJUMS ATCELTS",
+      canceledTitle: "Nekas ļauns nav noticis.",
+      canceledText: "Maksājums tika atcelts, un nauda netika iekasēta. Varat mēģināt vēlreiz jebkurā laikā.",
+      tryAgain: "Mēģināt vēlreiz",
+      supportEyebrow: "PALDIES",
+      supportTitle: "Jūsu lappuse ir uzrakstīta.",
+      orderTitle: "Paldies par pasūtījumu.",
+      confirming: "Apstiprinām maksājumu ar Stripe…",
+      stillConfirming: "Apstiprināšana var aizņemt minūti. Tā parādīsies jūsu kontā, tiklīdz Stripe to apstiprinās.",
+      supportConfirmed: "Maksājums {amount} apstiprināts. Stāsts tikko kļuva nedaudz lielāks.",
+      orderConfirmed: "Maksājums apstiprināts — pasūtījums {order}. Mēs sākam gatavot jūsu dāvanu.",
+      giftUnlocked: "Jūsu atbalsts atvēra piemiņas puzli. Augšupielādējiet fotogrāfiju, kuru vēlaties izmantot.",
+      failed: "Maksājums neizdevās, un nauda netika iekasēta. Lūdzu, mēģiniet vēlreiz.",
+      viewAccount: "Skatīt manā kontā"
     }
   },
 
   et: {
-    nav: { catalog: "Kataloog", account: "Konto", cart: "Ostukorv", about: "Meist" },
+    nav: {
+      catalog: "Kataloog",
+      account: "Konto",
+      cart: "Ostukorv",
+      about: "Meist"
+    },
     hero: {
       eyebrow: "ALVOXIS ESITLEB",
       title: "Mõned hetked väärivad meelespidamist.",
@@ -510,8 +994,6 @@ export const translations = {
       coverText: "Avasta kollektsioon, mis on loodud hetkedele, mida tasub meeles pidada.",
       comingSoon: "Peagi",
       nextChapter: "Järgmine peatükk",
-      nextChapterTitle: "Toeta lugu.",
-      nextChapterCopy: "ALVOXIS on alles kirjutamisel — leht lehe haaval. See peatükk tuleb peagi.",
       miniEyebrow: "MINI KOLLEKTSIOON",
       classicEyebrow: "CLASSIC KOLLEKTSIOON",
       coverAlt: "ALVOXISe kinkekarp"
@@ -569,10 +1051,7 @@ export const translations = {
     },
     account: {
       title: "Konto",
-      loginTitle: "Logi sisse",
-      registerTitle: "Loo konto",
       google: "Jätka Google'iga",
-      apple: "Jätka Apple'iga",
       email: "E-post",
       password: "Parool",
       confirmPassword: "Kinnita parool",
@@ -584,40 +1063,59 @@ export const translations = {
       register: "Registreeru",
       logIn: "Logi sisse",
       dashboard: "Minu konto",
-      profile: "Profiil",
-      myOrders: "Minu tellimused",
       noOrders: "Sul pole veel tellimusi.",
       logOut: "Logi välja",
-      localNotice: "Sinu konto salvestatakse ainult sellesse seadmesse.",
-      orderStatus: { pending: "Ootel", paid: "Makstud", shipped: "Saadetud", delivered: "Kohale toimetatud", cancelled: "Tühistatud" },
-      providerNotice: "See sisselogimisviis vajab ühendatud autentimisteenust ega ole veel aktiivne.",
-      errorInvalid: "Vale e-post või parool.",
-      errorExists: "Selle e-postiga konto on juba olemas.",
-      errorPasswordMatch: "Paroolid ei kattu."
+      errorPasswordMatch: "Paroolid ei kattu.",
+      eyebrow: "TEIE ALVOXIS",
+      chapters: {
+        profile: "Profiil",
+        orders: "Tellimused",
+        support: "Toetus",
+        gift: "Kingitus",
+        settings: "Seaded"
+      },
+      methodEmail: "E-post",
+      memberSince: "Liitunud",
+      signInMethod: "Sisselogimise viis",
+      noSupport: "Te pole veel lugu toetanud. Raamatu viimane lehekülg ootab, kui olete valmis.",
+      supportThanks: "Iga rida siin aitas kirjutada järgmise lehekülje. Aitäh.",
+      supportEntry: "Toetus",
+      payment: {
+        pending: "Ootab kinnitust",
+        paid: "Makstud",
+        failed: "Makse ebaõnnestus",
+        canceled: "Tühistatud",
+        expired: "Lõpetamata",
+        refunded: "Tagastatud"
+      },
+      fulfillment: {
+        unfulfilled: "Valmistamisel",
+        in_production: "Tootmises",
+        shipped: "Saadetud",
+        delivered: "Kohale toimetatud",
+        canceled: "Tühistatud"
+      },
+      displayName: "Kuvatav nimi",
+      saved: "Salvestatud."
     },
     checkout: {
       title: "Tellimuse vormistamine",
       delivery: "Tarne",
       payment: "Makse",
-      confirmation: "Kinnitus",
       fullName: "Täisnimi",
       address: "Aadress",
       city: "Linn",
       postalCode: "Sihtnumber",
       country: "Riik",
-      continueToPayment: "Jätka makseni",
       payNow: "Maksa nüüd",
       backToCart: "Tagasi ostukorvi",
-      stripeNotice: "Maksed pole veel ühendatud — see osa on valmis Stripe integratsiooniks, kui server on paigaldatud.",
-      processing: "Töötlemine…"
+      stripeNotice: "Maksate turvaliselt Stripe'i makselehel. Teie kaardiandmed ALVOXISeni ei jõua.",
+      signInFirst: "Tellimuse vormistamiseks palun logige sisse — tellimus ja selle fotod jäävad turvaliselt teie kontole.",
+      preparing: "Valmistame tellimust ette…"
     },
     confirmation: {
       eyebrow: "Sinu hetk on nüüd kingitus.",
-      title: "Tellimus kinnitatud",
-      orderNumber: "Tellimuse number",
-      viewOrder: "Vaata minu tellimust",
-      continueShopping: "Jätka ostlemist",
-      notFound: "Seda tellimust ei leitud."
+      continueShopping: "Jätka ostlemist"
     },
     footer: {
       tagline: "Mõned hetked väärivad meelespidamist.",
@@ -628,8 +1126,17 @@ export const translations = {
       terms: "Kasutustingimused",
       refund: "Tagastamispoliitika"
     },
-    common: { loading: "Laadimine…", close: "Sulge", comingSoon: "Peagi" },
-    meta: { title: "ALVOXIS — Tähenduslikud hetked" },
+    common: {
+      loading: "Laadimine…",
+      close: "Sulge",
+      comingSoon: "Peagi",
+      retry: "Proovi uuesti",
+      save: "Salvesta"
+    },
+    meta: {
+      title: "ALVOXIS — Tähenduslikud hetked",
+      description: "ALVOXIS — isikupärastatud kinkekarbid fotopusle ja tervituskaardiga. Mõned hetked väärivad meelespidamist."
+    },
     about: {
       eyebrow: "ALVOXISE IDEE",
       title: "Mõned kingitused avatakse. Teised jäävad meelde.",
@@ -647,17 +1154,154 @@ export const translations = {
     },
     form: {
       required: "Palun täitke see väli.",
-      email: "Palun sisestage kehtiv e-posti aadress."
+      email: "Palun sisestage kehtiv e-posti aadress.",
+      tooShort: "Palun kasutage vähemalt {min} tähemärki."
     },
     products: {
-      mini: { name: "ALVOXIS Mini", tagline: "Väike karp. Oluline mälestus." },
-      classic: { name: "ALVOXIS Classic", tagline: "Loodud unustamatuteks hetkedeks." },
-      signature: { name: "ALVOXIS Signature", tagline: "Peagi tuleb uus kogemus." }
+      mini: {
+        name: "ALVOXIS Mini",
+        tagline: "Väike karp. Oluline mälestus."
+      },
+      classic: {
+        name: "ALVOXIS Classic",
+        tagline: "Loodud unustamatuteks hetkedeks."
+      },
+      signature: {
+        name: "ALVOXIS Signature",
+        tagline: "Peagi tuleb uus kogemus."
+      }
+    },
+    support: {
+      title: "Lugu pole veel läbi.",
+      subtitle: "Aidake meil kirjutada järgmine lehekülg.",
+      text: "ALVOXIS sünnib peatükk peatüki haaval — seda kirjutavad inimesed, kes usuvad, et väikesesse karpi mahub suur mälestus. Kui soovite lisada oma rea, on sulg teie käes. Ja kui mitte, on ka kingituste juurde naasmine ilus lõpp.",
+      chooseAmount: "Valige summa",
+      customAmount: "Oma summa vahemikus €1.00 kuni €100.00",
+      placeholder: "Oma summa",
+      prompt: "Valige summa — iga lehekülg algab ühest sõnast.",
+      tier1: "Lisasite just väikese sädeme.",
+      tier2: "Väike säde on juba saamas loo osaks.",
+      tier3: "Järgmine lehekülg on lähemal.",
+      tier4: "Nüüd hakkab lugu tõeliselt liikuma.",
+      tier5: "Avasite just loo väikese saladuse.",
+      giftTitle: "Teid ootab natuke lisavõlu.",
+      giftText: "Toetuse eest alates €50 täname teid mälestuspuslega, mis on tehtud teie valitud fotost. Foto saate üles laadida oma kontol, kui makse on kinnitatud.",
+      cta: "Toeta lugu",
+      note: "Turvaline makse Stripe'i kaudu · €1 kuni €100",
+      invalidAmount: "Palun valige summa vahemikus €1.00 kuni €100.00 (kuni kaks kohta pärast koma).",
+      signInFirst: "Palun logige kõigepealt sisse — nii jäävad teie toetus ja kingitus turvaliselt teie kontole.",
+      signIn: "Logi sisse",
+      redirecting: "Avame turvalise makse…"
+    },
+    errors: {
+      generic: "Midagi läks valesti. Palun proovige uuesti.",
+      network: "Serveriga ei õnnestunud ühendust saada. Kontrollige ühendust ja proovige uuesti.",
+      unavailable: "See ALVOXISe osa on valmimas ja on peagi saadaval.",
+      invalidCredentials: "E-post või parool on vale.",
+      emailNotConfirmed: "Palun kinnitage esmalt oma e-posti aadress — link on teie postkastis.",
+      userExists: "Selle e-postiga konto on juba olemas. Proovige sisse logida.",
+      weakPassword: "Parool peab olema vähemalt 8 tähemärki pikk.",
+      samePassword: "Uus parool peab erinema praegusest.",
+      invalidEmail: "Palun sisestage kehtiv e-posti aadress.",
+      rateLimited: "Liiga palju katseid. Palun oodake hetk ja proovige uuesti.",
+      sessionExpired: "Teie seanss on lõppenud. Palun logige uuesti sisse.",
+      invalidCart: "Ostukorvis on midagi muutunud. Palun vaadake see üle ja proovige uuesti.",
+      photoMissing: "Isikupärastamise foto puudub. Palun lisage foto kingitusele uuesti.",
+      invalidShipping: "Palun täitke tarneandmed.",
+      paymentsUnavailable: "Maksed ei ole hetkel saadaval. Palun proovige veidi hiljem.",
+      checkoutExpired: "Selle makseseansi aeg on läbi. Palun alustage uuesti.",
+      loadFailed: "Andmeid ei õnnestunud praegu laadida. Palun proovige uuesti.",
+      uploadFailed: "Fotot ei õnnestunud üles laadida. Palun proovige uuesti."
+    },
+    auth: {
+      signInTitle: "Tere tulemast tagasi.",
+      signInLead: "Logige sisse, et näha oma tellimusi, toetusi ja kingitusi.",
+      registerTitle: "Alustage oma lugu.",
+      registerLead: "Looge konto, et tellimused ja kingitused oleksid ühes kohas.",
+      or: "või",
+      forgot: "Unustasite parooli?",
+      passwordHint: "Vähemalt 8 tähemärki.",
+      signingIn: "Logime sisse…",
+      creating: "Loome kontot…",
+      redirecting: "Avame Google'i…",
+      checkEmailTitle: "Kontrollige oma e-posti.",
+      checkEmail: "Saatsime teile konto kinnitamise lingi. Avage see selles seadmes, et registreerimine lõpetada.",
+      forgotTitle: "Unustatud parool",
+      forgotText: "Sisestage oma e-post ja saadame lingi uue parooli valimiseks.",
+      sendLink: "Saada link",
+      sending: "Saadame…",
+      resetSentTitle: "Vaadake oma postkasti.",
+      resetSent: "Kui selle e-postiga konto on olemas, on lähtestamise link teel.",
+      backToSignIn: "Tagasi sisselogimisse",
+      resetTitle: "Uus parool",
+      resetLead: "Peaaegu valmis — valige oma kontole uus parool.",
+      resetLinkInvalid: "See link ei kehti enam. Palun küsige uus.",
+      newPassword: "Uus parool",
+      savePassword: "Salvesta parool",
+      saving: "Salvestame…",
+      passwordUpdated: "Teie parool on uuendatud.",
+      changePassword: "Parool",
+      signingOut: "Logime välja…"
+    },
+    gift: {
+      puzzle: "MÄLESTUSPUSLE",
+      title: "Teie kingitus ootab.",
+      text: "Valige foto ja me teeme sellest teie mälestuspusle.",
+      titleReady: "Foto on käes.",
+      textReady: "Aitäh — edasi hoolitseme ise. Fotot saab vahetada kuni tootmise alguseni.",
+      previewAlt: "Teie foto mälestuspusle jaoks",
+      noPhoto: "Fotot veel pole",
+      upload: "Laadi foto üles",
+      replace: "Vaheta foto",
+      remove: "Eemalda foto",
+      photoHint: "JPG, PNG, WebP või HEIC · kuni 25 MB · vähemalt 600 px. Fotot hoitakse privaatselt.",
+      uploading: "Laadime üles…",
+      removing: "Eemaldame…",
+      removeConfirm: "Kas eemaldada see foto kingituselt?",
+      locked: "Teie puslet juba valmistatakse, seega fotot enam muuta ei saa.",
+      none: "Siin pole veel kingitust. Loo toetamine alates €50 avab mälestuspusle.",
+      unlocked: "Kingitus avatud",
+      status: {
+        photoPending: "Ootab fotot",
+        photoUploaded: "Foto üles laaditud",
+        approved: "Foto kinnitatud",
+        rejected: "Palun valige teine foto",
+        processing: "Töös",
+        shipped: "Saadetud",
+        delivered: "Kohale toimetatud"
+      }
+    },
+    photo: {
+      type: "Palun valige JPG-, PNG-, WebP- või HEIC-pilt.",
+      size: "Pilt on liiga suur. Palun valige kuni 25 MB fail.",
+      decode: "Seda faili ei õnnestunud pildina lugeda. Palun valige teine.",
+      small: "Foto on hea trüki jaoks liiga väike. Palun valige vähemalt 600 px laiune pilt."
+    },
+    payment: {
+      canceledEyebrow: "MAKSE TÜHISTATUD",
+      canceledTitle: "Midagi hullu ei juhtunud.",
+      canceledText: "Makse tühistati ja raha ei võetud. Võite igal ajal uuesti proovida.",
+      tryAgain: "Proovi uuesti",
+      supportEyebrow: "AITÄH",
+      supportTitle: "Teie lehekülg on kirjutatud.",
+      orderTitle: "Aitäh tellimuse eest.",
+      confirming: "Kinnitame makset Stripe'iga…",
+      stillConfirming: "Kinnitamine võib võtta minuti. See ilmub teie kontole kohe, kui Stripe selle kinnitab.",
+      supportConfirmed: "Makse {amount} on kinnitatud. Lugu kasvas just veidi suuremaks.",
+      orderConfirmed: "Makse kinnitatud — tellimus {order}. Hakkame teie kingitust ette valmistama.",
+      giftUnlocked: "Teie toetus avas mälestuspusle. Laadige üles foto, mida soovite kasutada.",
+      failed: "Makse ei õnnestunud ja raha ei võetud. Palun proovige uuesti.",
+      viewAccount: "Vaata minu kontol"
     }
   },
 
   lt: {
-    nav: { catalog: "Katalogas", account: "Paskyra", cart: "Krepšelis", about: "Apie mus" },
+    nav: {
+      catalog: "Katalogas",
+      account: "Paskyra",
+      cart: "Krepšelis",
+      about: "Apie mus"
+    },
     hero: {
       eyebrow: "ALVOXIS PRISTATO",
       title: "Kai kurios akimirkos verta prisiminti.",
@@ -672,8 +1316,6 @@ export const translations = {
       coverText: "Atraskite kolekciją, sukurtą akimirkoms, kurias verta prisiminti.",
       comingSoon: "Netrukus",
       nextChapter: "Kitas skyrius",
-      nextChapterTitle: "Palaikyk istoriją.",
-      nextChapterCopy: "ALVOXIS vis dar rašomas — puslapis po puslapio. Šis skyrius netrukus.",
       miniEyebrow: "MINI KOLEKCIJA",
       classicEyebrow: "CLASSIC KOLEKCIJA",
       coverAlt: "ALVOXIS dovanų dėžutė"
@@ -731,10 +1373,7 @@ export const translations = {
     },
     account: {
       title: "Paskyra",
-      loginTitle: "Prisijungti",
-      registerTitle: "Sukurti paskyrą",
       google: "Tęsti su Google",
-      apple: "Tęsti su Apple",
       email: "El. paštas",
       password: "Slaptažodis",
       confirmPassword: "Pakartokite slaptažodį",
@@ -746,40 +1385,59 @@ export const translations = {
       register: "Registruotis",
       logIn: "Prisijungti",
       dashboard: "Mano paskyra",
-      profile: "Profilis",
-      myOrders: "Mano užsakymai",
       noOrders: "Kol kas neturite užsakymų.",
       logOut: "Atsijungti",
-      localNotice: "Jūsų paskyra išsaugoma tik šiame įrenginyje.",
-      orderStatus: { pending: "Laukiama", paid: "Apmokėta", shipped: "Išsiųsta", delivered: "Pristatyta", cancelled: "Atšaukta" },
-      providerNotice: "Šiam prisijungimo būdui reikalinga prijungta autentifikavimo paslauga, ir jis dar neaktyvus.",
-      errorInvalid: "Neteisingas el. paštas arba slaptažodis.",
-      errorExists: "Paskyra su šiuo el. paštu jau egzistuoja.",
-      errorPasswordMatch: "Slaptažodžiai nesutampa."
+      errorPasswordMatch: "Slaptažodžiai nesutampa.",
+      eyebrow: "JŪSŲ ALVOXIS",
+      chapters: {
+        profile: "Profilis",
+        orders: "Užsakymai",
+        support: "Parama",
+        gift: "Dovana",
+        settings: "Nustatymai"
+      },
+      methodEmail: "El. paštas",
+      memberSince: "Su mumis nuo",
+      signInMethod: "Prisijungimo būdas",
+      noSupport: "Dar neparėmėte istorijos. Paskutinis knygos puslapis laukia, kai būsite pasiruošę.",
+      supportThanks: "Kiekviena čia esanti eilutė padėjo parašyti kitą puslapį. Ačiū.",
+      supportEntry: "Parama",
+      payment: {
+        pending: "Laukiama patvirtinimo",
+        paid: "Apmokėta",
+        failed: "Mokėjimas nepavyko",
+        canceled: "Atšaukta",
+        expired: "Neužbaigta",
+        refunded: "Grąžinta"
+      },
+      fulfillment: {
+        unfulfilled: "Ruošiama",
+        in_production: "Gaminama",
+        shipped: "Išsiųsta",
+        delivered: "Pristatyta",
+        canceled: "Atšaukta"
+      },
+      displayName: "Rodomas vardas",
+      saved: "Išsaugota."
     },
     checkout: {
       title: "Užsakymo apmokėjimas",
       delivery: "Pristatymas",
       payment: "Mokėjimas",
-      confirmation: "Patvirtinimas",
       fullName: "Vardas ir pavardė",
       address: "Adresas",
       city: "Miestas",
       postalCode: "Pašto kodas",
       country: "Šalis",
-      continueToPayment: "Tęsti į apmokėjimą",
       payNow: "Apmokėti dabar",
       backToCart: "Atgal į krepšelį",
-      stripeNotice: "Mokėjimai dar neprijungti — šis skyrius paruoštas Stripe integracijai, kai bus įdiegtas serveris.",
-      processing: "Apdorojama…"
+      stripeNotice: "Mokėsite saugiai Stripe mokėjimo puslapyje. Jūsų kortelės duomenys nepasiekia ALVOXIS.",
+      signInFirst: "Prisijunkite, kad pateiktumėte užsakymą — užsakymas ir jo nuotraukos saugiai liks jūsų paskyroje.",
+      preparing: "Ruošiame užsakymą…"
     },
     confirmation: {
       eyebrow: "Jūsų akimirka dabar yra dovana.",
-      title: "Užsakymas patvirtintas",
-      orderNumber: "Užsakymo numeris",
-      viewOrder: "Peržiūrėti užsakymą",
-      continueShopping: "Tęsti apsipirkimą",
-      notFound: "Šio užsakymo rasti nepavyko."
+      continueShopping: "Tęsti apsipirkimą"
     },
     footer: {
       tagline: "Kai kurios akimirkos verta prisiminti.",
@@ -790,8 +1448,17 @@ export const translations = {
       terms: "Naudojimo sąlygos",
       refund: "Grąžinimo politika"
     },
-    common: { loading: "Kraunama…", close: "Uždaryti", comingSoon: "Netrukus" },
-    meta: { title: "ALVOXIS — Prasmingos akimirkos" },
+    common: {
+      loading: "Kraunama…",
+      close: "Uždaryti",
+      comingSoon: "Netrukus",
+      retry: "Bandyti dar kartą",
+      save: "Išsaugoti"
+    },
+    meta: {
+      title: "ALVOXIS — Prasmingos akimirkos",
+      description: "ALVOXIS — personalizuotos dovanų dėžutės su nuotraukų dėlione ir atviruku. Kai kurios akimirkos vertos būti prisimintos."
+    },
     about: {
       eyebrow: "ALVOXIS IDĖJA",
       title: "Vienos dovanos atidaromos. Kitos – prisimenamos.",
@@ -809,12 +1476,144 @@ export const translations = {
     },
     form: {
       required: "Užpildykite šį lauką.",
-      email: "Įveskite teisingą el. pašto adresą."
+      email: "Įveskite teisingą el. pašto adresą.",
+      tooShort: "Naudokite bent {min} simbolius."
     },
     products: {
-      mini: { name: "ALVOXIS Mini", tagline: "Maža dėžutė. Prasmingas prisiminimas." },
-      classic: { name: "ALVOXIS Classic", tagline: "Sukurta neužmirštamoms akimirkoms." },
-      signature: { name: "ALVOXIS Signature", tagline: "Netrukus naujas potyris." }
+      mini: {
+        name: "ALVOXIS Mini",
+        tagline: "Maža dėžutė. Prasmingas prisiminimas."
+      },
+      classic: {
+        name: "ALVOXIS Classic",
+        tagline: "Sukurta neužmirštamoms akimirkoms."
+      },
+      signature: {
+        name: "ALVOXIS Signature",
+        tagline: "Netrukus naujas potyris."
+      }
+    },
+    support: {
+      title: "Istorija dar nesibaigė.",
+      subtitle: "Padėkite mums parašyti kitą puslapį.",
+      text: "ALVOXIS rašoma skyrius po skyriaus — ją kuria žmonės, tikintys, kad mažoje dėžutėje gali tilpti didelis prisiminimas. Jei norite pridėti savo eilutę, plunksna jūsų rankose. O jei ne — sugrįžti prie dovanų irgi graži pabaiga.",
+      chooseAmount: "Pasirinkite sumą",
+      customAmount: "Savo suma nuo €1.00 iki €100.00",
+      placeholder: "Savo suma",
+      prompt: "Pasirinkite sumą — kiekvienas puslapis prasideda nuo vieno žodžio.",
+      tier1: "Jūs ką tik pridėjote mažą kibirkštį.",
+      tier2: "Maža kibirkštis jau tampa istorijos dalimi.",
+      tier3: "Kitas puslapis vis arčiau.",
+      tier4: "Dabar istorija iš tiesų pradeda judėti.",
+      tier5: "Jūs ką tik atvėrėte mažą istorijos paslaptį.",
+      giftTitle: "Jūsų laukia truputis papildomos magijos.",
+      giftText: "Už paramą nuo €50 padėkosime atminimo dėlione iš jūsų pasirinktos nuotraukos. Nuotrauką galėsite įkelti savo paskyroje, kai mokėjimas bus patvirtintas.",
+      cta: "Paremti istoriją",
+      note: "Saugus mokėjimas per Stripe · nuo €1 iki €100",
+      invalidAmount: "Pasirinkite sumą nuo €1.00 iki €100.00 (ne daugiau kaip du skaitmenys po kablelio).",
+      signInFirst: "Pirmiausia prisijunkite — taip jūsų parama ir dovana saugiai liks paskyroje.",
+      signIn: "Prisijungti",
+      redirecting: "Atveriame saugų mokėjimą…"
+    },
+    errors: {
+      generic: "Kažkas nepavyko. Bandykite dar kartą.",
+      network: "Nepavyko susisiekti su serveriu. Patikrinkite ryšį ir bandykite dar kartą.",
+      unavailable: "Ši ALVOXIS dalis ruošiama ir netrukus bus prieinama.",
+      invalidCredentials: "Neteisingas el. paštas arba slaptažodis.",
+      emailNotConfirmed: "Pirmiausia patvirtinkite el. pašto adresą — nuoroda jūsų pašto dėžutėje.",
+      userExists: "Paskyra su šiuo el. paštu jau egzistuoja. Pabandykite prisijungti.",
+      weakPassword: "Slaptažodį turi sudaryti bent 8 simboliai.",
+      samePassword: "Naujas slaptažodis turi skirtis nuo dabartinio.",
+      invalidEmail: "Įveskite teisingą el. pašto adresą.",
+      rateLimited: "Per daug bandymų. Palaukite akimirką ir bandykite dar kartą.",
+      sessionExpired: "Jūsų sesija baigėsi. Prisijunkite dar kartą.",
+      invalidCart: "Krepšelyje kažkas pasikeitė. Peržiūrėkite jį ir bandykite dar kartą.",
+      photoMissing: "Trūksta personalizavimo nuotraukos. Pridėkite nuotrauką prie dovanos dar kartą.",
+      invalidShipping: "Užpildykite pristatymo duomenis.",
+      paymentsUnavailable: "Mokėjimai šiuo metu negalimi. Bandykite šiek tiek vėliau.",
+      checkoutExpired: "Šios mokėjimo sesijos laikas baigėsi. Pradėkite iš naujo.",
+      loadFailed: "Šiuo metu nepavyko įkelti duomenų. Bandykite dar kartą.",
+      uploadFailed: "Nuotraukos įkelti nepavyko. Bandykite dar kartą."
+    },
+    auth: {
+      signInTitle: "Sveiki sugrįžę.",
+      signInLead: "Prisijunkite, kad matytumėte savo užsakymus, paramą ir dovanas.",
+      registerTitle: "Pradėkite savo istoriją.",
+      registerLead: "Susikurkite paskyrą, kad užsakymai ir dovanos būtų vienoje vietoje.",
+      or: "arba",
+      forgot: "Pamiršote slaptažodį?",
+      passwordHint: "Bent 8 simboliai.",
+      signingIn: "Jungiamės…",
+      creating: "Kuriame paskyrą…",
+      redirecting: "Atveriame Google…",
+      checkEmailTitle: "Patikrinkite el. paštą.",
+      checkEmail: "Išsiuntėme nuorodą paskyrai patvirtinti. Atidarykite ją šiame įrenginyje, kad užbaigtumėte registraciją.",
+      forgotTitle: "Pamirštas slaptažodis",
+      forgotText: "Įveskite el. paštą ir atsiųsime nuorodą naujam slaptažodžiui pasirinkti.",
+      sendLink: "Siųsti nuorodą",
+      sending: "Siunčiame…",
+      resetSentTitle: "Pažvelkite į pašto dėžutę.",
+      resetSent: "Jei paskyra su šiuo el. paštu egzistuoja, atkūrimo nuoroda jau keliauja.",
+      backToSignIn: "Grįžti į prisijungimą",
+      resetTitle: "Naujas slaptažodis",
+      resetLead: "Beveik baigta — pasirinkite naują paskyros slaptažodį.",
+      resetLinkInvalid: "Ši nuoroda nebegalioja. Paprašykite naujos.",
+      newPassword: "Naujas slaptažodis",
+      savePassword: "Išsaugoti slaptažodį",
+      saving: "Išsaugome…",
+      passwordUpdated: "Slaptažodis atnaujintas.",
+      changePassword: "Slaptažodis",
+      signingOut: "Atsijungiame…"
+    },
+    gift: {
+      puzzle: "ATMINIMO DĖLIONĖ",
+      title: "Jūsų dovana laukia.",
+      text: "Pasirinkite nuotrauką, ir mes paversime ją jūsų atminimo dėlione.",
+      titleReady: "Nuotrauka gauta.",
+      textReady: "Ačiū — toliau pasirūpinsime patys. Nuotrauką galite pakeisti, kol neprasidėjo gamyba.",
+      previewAlt: "Jūsų nuotrauka atminimo dėlionei",
+      noPhoto: "Nuotraukos dar nėra",
+      upload: "Įkelti nuotrauką",
+      replace: "Pakeisti nuotrauką",
+      remove: "Pašalinti nuotrauką",
+      photoHint: "JPG, PNG, WebP arba HEIC · iki 25 MB · ne mažiau 600 px. Nuotrauka saugoma privačiai.",
+      uploading: "Įkeliame…",
+      removing: "Šaliname…",
+      removeConfirm: "Pašalinti šią nuotrauką iš dovanos?",
+      locked: "Jūsų dėlionė jau gaminama, todėl nuotraukos pakeisti nebegalima.",
+      none: "Čia dar nėra dovanos. Parėmus istoriją nuo €50 atsiveria atminimo dėlionė.",
+      unlocked: "Dovana atverta",
+      status: {
+        photoPending: "Laukiama nuotraukos",
+        photoUploaded: "Nuotrauka įkelta",
+        approved: "Nuotrauka patvirtinta",
+        rejected: "Pasirinkite kitą nuotrauką",
+        processing: "Vykdoma",
+        shipped: "Išsiųsta",
+        delivered: "Pristatyta"
+      }
+    },
+    photo: {
+      type: "Pasirinkite JPG, PNG, WebP arba HEIC vaizdą.",
+      size: "Vaizdas per didelis. Pasirinkite failą iki 25 MB.",
+      decode: "Šio failo nepavyko perskaityti kaip vaizdo. Pasirinkite kitą.",
+      small: "Nuotrauka per maža kokybiškam spausdinimui. Pasirinkite bent 600 px pločio vaizdą."
+    },
+    payment: {
+      canceledEyebrow: "MOKĖJIMAS ATŠAUKTAS",
+      canceledTitle: "Nieko baisaus.",
+      canceledText: "Mokėjimas atšauktas, pinigai nenuskaityti. Galite bandyti dar kartą bet kada.",
+      tryAgain: "Bandyti dar kartą",
+      supportEyebrow: "AČIŪ",
+      supportTitle: "Jūsų puslapis parašytas.",
+      orderTitle: "Ačiū už užsakymą.",
+      confirming: "Tvirtiname mokėjimą per Stripe…",
+      stillConfirming: "Patvirtinimas gali užtrukti minutę. Jis atsiras jūsų paskyroje, kai tik Stripe patvirtins.",
+      supportConfirmed: "Mokėjimas {amount} patvirtintas. Istorija ką tik šiek tiek paaugo.",
+      orderConfirmed: "Mokėjimas patvirtintas — užsakymas {order}. Pradedame ruošti jūsų dovaną.",
+      giftUnlocked: "Jūsų parama atvėrė atminimo dėlionę. Įkelkite nuotrauką, kurią norite panaudoti.",
+      failed: "Mokėjimas nepavyko, pinigai nenuskaityti. Bandykite dar kartą.",
+      viewAccount: "Peržiūrėti paskyroje"
     }
   }
 

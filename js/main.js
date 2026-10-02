@@ -669,6 +669,11 @@ export function initHomeExperience() {
       return;
     }
 
+    /* typing or selecting text in a field must never turn the page */
+    if (event.target.closest("input, textarea, select, label")) {
+      return;
+    }
+
     state.drag = {
       kind: "pointer",
       id: event.pointerId,
@@ -1010,6 +1015,24 @@ export function initHomeExperience() {
     refresh() {
       measure();
       renderAll();
+    },
+
+    /* open the book straight at a page (e.g. back from sign-in to
+       the support page) — skips the film, lays earlier pages down */
+    openPage(index) {
+      const target = clamp(index, 0, PAGE_COUNT - 1);
+      if (state.phase !== "book") {
+        finishReveal();
+      }
+      cancelAnimationFrame(settleFrame);
+      state.settling = false;
+      state.drag = null;
+      pages.forEach((page, i) => {
+        state.progress[i] = i < target ? 1 : 0;
+        renderPage(i);
+      });
+      state.currentPage = target;
+      updateChrome();
     }
   };
 }

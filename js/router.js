@@ -11,8 +11,22 @@ export function registerRoute(pattern, { view, render }) {
   routes.set(pattern, { view, render });
 }
 
+/* "#/payment/success?kind=order&session_id=…" -> path + query */
+function splitHash(hash) {
+  const raw = hash.replace(/^#/, "") || "/";
+  const index = raw.indexOf("?");
+  return {
+    path: (index === -1 ? raw : raw.slice(0, index)) || "/",
+    query: new URLSearchParams(index === -1 ? "" : raw.slice(index + 1))
+  };
+}
+
+export function getQuery() {
+  return splitHash(window.location.hash).query;
+}
+
 function matchRoute(hash) {
-  const path = hash.replace(/^#/, "") || "/";
+  const { path } = splitHash(hash);
   const segments = path.split("/").filter(Boolean);
 
   for (const [pattern, handler] of routes.entries()) {
